@@ -1,6 +1,7 @@
-from flask import Flask, render_template, make_response, flash
+from flask import Flask, render_template, make_response, flash, request, abort
 from werkzeug.exceptions import HTTPException
 from configparser import ConfigParser
+from urllib.parse import urlparse
 import logging
 import click
 import json
@@ -44,6 +45,16 @@ def home():
             items = f.read()
 
     return render_template('home.html', items=items)
+
+
+@app.route('/craft-editor')
+def craft_editor():
+    url = urlparse(request.url_root)
+
+    if url.hostname != 'localhost': # Can only edit crafts locally
+        abort(403)
+
+    return render_template('craft_editor.html')
 
 
 # -----------------------------------------------------------
