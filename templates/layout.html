@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block meta_title %}{% endblock %}{% if self.meta_title() | trim %} • {% endif %}Craft N' Escape</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/alsacreations/KNACSS/6.1.2/css/knacss.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+</head>
+<body class="man pas">
+    <header class="txtcenter mbs">
+        <div><a href="{{ url_for('home') }}" class="biggest"><img src="{{ url_for('static', filename='images/logo.png') }}"> Craft N' Escape</a></div>
+        <div class="small"><em>Because everyone loves it when a plan comes together</em></div>
+    </header>
+
+    {% with flash_messages = get_flashed_messages(with_categories=true) %}
+      {% if flash_messages %}
+        {% for category, message in flash_messages %}
+          <p class="alert {{ category }} pas">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %} {% endblock %}
+
+    <footer class="txtmuted txtcenter small pts">
+        © 2017 <a href="https://epoc.fr">Maxime "Epoc" G.</a> • <a href="https://github.com/EpocDotFr/craft-n-escape">Source code on GitHub</a><br>
+        The Escapists © 2015 - 2017 Mouldy Toof Studios and Team17 Digital Ltd<br>
+        This project isn't supported nor endorsed by Mouldy Toof Studios and Team17 Digital
+    </footer>
+</body>
+</html>
