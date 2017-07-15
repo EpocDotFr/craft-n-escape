@@ -47,10 +47,8 @@
                                 <i class="fa fa-chain-broken" v-if="item.decay" title="Can broke"></i>
                                 <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
                             </td>
-                            <td>
-                                <a :href="escapistsWikiRoot + item.name" class="name" :title="item.info">${ item.name }</a>
-                            </td>
-                            <td>${ item.buy }</td>
+                            <td><a :href="escapistsWikiRoot + item.name" class="name" :title="item.info">${ item.name }</a></td>
+                            <td><template v-if="item.buy">$${ item.buy }</template></td>
                             <td><template v-if="item.gift">+${ item.gift }</template></td>
                             <td>${ item.decay }</td>
                             <td><template v-if="item.craft">${ item.craft.intelligence }</template></td>
