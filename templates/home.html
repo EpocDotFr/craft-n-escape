@@ -13,8 +13,9 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Price</th>
-                            <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> increase<br><small>when given as gift</small></th>
+                            <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> increase<br><small>when given</small></th>
                             <th>Decay<br><small>% decrease per use</small></th>
+                            <th>Required <a href="http://theescapists.gamepedia.com/Intellect">INT</a><br><small>for crafting</small></th>
                             <th>Healing power</th>
                             <th>Attack power</th>
                             <th>Digging power</th>
@@ -38,16 +39,18 @@
                                 <i class="fa fa-crop" v-if="item.chipping" title="To chop things"></i>
                                 <i class="fa fa-wrench" v-if="item.unscrewing" title="To unscrew things"></i>
                                 <i class="fa fa-scissors" v-if="item.cutting" title="To cut things"></i>
-                                <i class="fa fa-android" v-if="item.npc_carry" title="May be carried by NPCs"></i>
-                                <i class="fa fa-desktop" v-if="item.desk" title="May be found is desks"></i>
-                                <i class="fa fa-video-camera" v-if="item.camdis" title="Can disable cameras"></i>
+                                <i class="fa fa-android" v-if="item.npc_carry" title="Can be carried by NPCs"></i>
+                                <i class="fa fa-desktop" v-if="item.desk" title="Can be found is desks"></i>
+                                <i class="fa fa-video-camera" v-if="item.camdis" title="Can disrupt cameras"></i>
                                 <i class="fa fa-male" v-if="item.outfit" title="Outif"></i>
                                 <i class="fa fa-chain-broken" v-if="item.decay" title="Can broke"></i>
-                                <a :href="escapistsWikiRoot + item.name" class="name">${ item.name }</a>
+                                <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
+                                <a :href="escapistsWikiRoot + item.name" class="name" :title="item.info">${ item.name }</a>
                             </td>
                             <td>${ item.buy }</td>
                             <td><template v-if="item.gift">+${ item.gift }</template></td>
                             <td>${ item.decay }</td>
+                            <td><template v-if="item.craft">${ item.craft.intelligence }</template></td>
                             <td><template v-if="item.hp">+${ item.hp }</template></td>
                             <td>${ item.weapon }</td>
                             <td>${ item.digging }</td>
