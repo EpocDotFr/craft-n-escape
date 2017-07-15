@@ -90,18 +90,17 @@ button,
 .btn,
 .btn:visited {
     border-radius: 0.5rem;
-    background-color: #000545;
-    border: 0.1rem solid #ccc;
-    padding: 0.2rem 0.5rem;
+    background-color: #0e3163;
+    border: 0.1rem solid #154d9e;
+    padding: 0.5rem 1rem;
     color: #FFF;
     text-decoration: none;
-    font-weight: bold;
     cursor: pointer;
 }
 
 button:hover, .btn:hover,
 button:focus, .btn:focus {
-    background-color: #3A8CB2;
+    background-color: #16407d;
     color: #FFF;
     outline: none;
 }
@@ -112,10 +111,11 @@ button:focus, .btn:focus {
 input,
 select,
 textarea {
-    background-color: #FFF;
+    background-color: #181818;
     padding: 0.5rem 1rem;
-    border: 0.1rem solid #ccc;
+    border: 0.1rem solid #303030;
     border-radius: 0.5rem;
+    color: #FFF;
 }
 
 /************************************************************************
