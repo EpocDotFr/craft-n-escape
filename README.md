@@ -6,11 +6,12 @@ _Because everyone loves it when a plan comes together_
 
 ## Features
 
-  - Display the list of all available items with all their attributes (attack power, illegal, price, etc)
-    - List can be filtered by item name
-    - (WIP) Icon for each item
-  - (WIP) Show the crafting recipes for applicable items
-  - (WIP) Given a list of items you own,you'll get the list of items you can craft
+  - Web-based
+  - List of all available items with all their attributes (attack power, illegal, price, etc)
+    - Can be filtered by item name
+    - (WIP) Items icon
+  - (WIP) Crafting recipes for applicable items
+  - (WIP) Given a list of items you own, you can get the list of items you can craft
 
 ## Prerequisites
 
