@@ -136,6 +136,11 @@ table th {
     table-layout: auto;
 }
 
+table td,
+table th {
+    padding: .4em;
+}
+
 table th {
     background-color: #0e3163;
     vertical-align: middle;

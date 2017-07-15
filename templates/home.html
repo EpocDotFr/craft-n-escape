@@ -11,10 +11,11 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Summary</th>
                             <th>Name</th>
                             <th>Price</th>
                             <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> increase<br><small>when given</small></th>
-                            <th>Decay<br><small>% decrease per use</small></th>
+                            <th>Decay<br><small>decrease % per use</small></th>
                             <th>Required <a href="http://theescapists.gamepedia.com/Intellect">INT</a><br><small>for crafting</small></th>
                             <th>Healing power</th>
                             <th>Attack power</th>
@@ -45,6 +46,8 @@
                                 <i class="fa fa-male" v-if="item.outfit" title="Outif"></i>
                                 <i class="fa fa-chain-broken" v-if="item.decay" title="Can broke"></i>
                                 <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
+                            </td>
+                            <td>
                                 <a :href="escapistsWikiRoot + item.name" class="name" :title="item.info">${ item.name }</a>
                             </td>
                             <td>${ item.buy }</td>
@@ -61,6 +64,9 @@
                             <td><template v-if="item.fat">-${ item.fat }</template></td>
                             <td><template v-if="item.camdis">${ item.camdis / 1000 }</template></td>
                             <!--<td><i class="fa fa-check" v-if="item.carry"></i></td>-->
+                        </tr>
+                        <tr v-show="filteredItems.length == 0">
+                            <td colspan="16" class="txtcenter">Nothing to display.</td>
                         </tr>
                     </tbody>
                 </table>
