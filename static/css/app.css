@@ -1,6 +1,11 @@
 /************************************************************************
  * Global styles */
 
+body {
+    color: #FFF;
+    background-color: #00191B;
+}
+
 .txtmuted {
     color: #AAA;
 }
@@ -11,11 +16,12 @@
 a,
 a:visited {
     text-decoration: underline;
-    color: inherit;
+    color: #ffdb0c;
 }
 
 a:hover,
 a:focus {
+    color: #ffdb0c;
     text-decoration: none;
     outline: none;
 }
@@ -122,19 +128,19 @@ textarea {
 table,
 table td,
 table th {
-    border: 0.1rem solid #ccc;
+    border: 0.1rem solid #303030;
     table-layout: auto;
 }
 
 table th {
-    background-color: #e0e0e0;
+    background-color: #0e3163;
     vertical-align: middle;
 }
 
 table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #022023;
 }
 
 table tbody > tr:hover {
-    background-color: #EEE;
+    background-color: #03282c;
 }
