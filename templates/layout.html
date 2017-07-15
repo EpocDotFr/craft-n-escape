@@ -17,8 +17,8 @@
 </head>
 <body class="man pas">
     <header class="txtcenter mbs">
-        <div><a href="{{ url_for('home') }}" class="biggest"><img src="{{ url_for('static', filename='images/logo.png') }}"> Craft N' Escape</a></div>
-        <div class="small"><em>Because everyone loves it when a plan comes together</em></div>
+        <h1 class="mbn"><a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"> Craft N' Escape</a></h1>
+        <div class="small">Because everyone loves it when a plan comes together</div>
     </header>
 
     {% with flash_messages = get_flashed_messages(with_categories=true) %}
