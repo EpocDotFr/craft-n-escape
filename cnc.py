@@ -38,7 +38,7 @@ def home():
     items = None
 
     if not os.path.isfile('storage/data/items.json'):
-        flash('The storage/data/items.json file does not exists. Run the "build" command first.', 'error')
+        flash('The storage/data/items.json file does not exists. Run the "flask build" command first.', 'error')
     else:
         with open('storage/data/items.json', 'r') as f:
             items = f.read()
@@ -111,11 +111,11 @@ class ItemsParser:
             item = item.strip().rsplit(' x', maxsplit=1)
 
             if len(item) == 1:
-                item_name = item[0]
+                item_name = item[0].strip()
                 amount = 1
             else:
-                item_name = item[0]
-                amount = int(item[1])
+                item_name = item[0].strip()
+                amount = int(item[1].strip())
 
             craft['items'].append({
                 'name': item_name,

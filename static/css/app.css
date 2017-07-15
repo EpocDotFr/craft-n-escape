@@ -73,6 +73,15 @@ a:focus {
 /************************************************************************
  * Header */
 
+header {
+    border-left: 0.1rem solid #303030;
+    border-right: 0.1rem solid #303030;
+    border-bottom: 0.1rem solid #303030;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    background-color: #0e3163;
+}
+
 header h1 {
     font-family: monospace, monospace;
 }
@@ -146,10 +155,10 @@ table th {
     vertical-align: middle;
 }
 
-table tr:nth-child(even) {
+table tr:nth-child(even) td {
     background-color: #022023;
 }
 
-table tbody > tr:hover {
+table tbody > tr:hover td {
     background-color: #03282c;
 }
