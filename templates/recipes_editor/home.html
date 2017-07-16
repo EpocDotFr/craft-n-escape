@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block meta_title %}Recipes editor{% endblock %}
+
+{% block content %}
+    <div class="pas center w1140p">
+        <p><span class="txtred">Red items</span> have a crafting recipe in the game's file but isn't defined in the Craft N' Escape recipes file.</p>
+        <p><span class="txtblue">Blue items</span> seems to have their crafting recipe update in the game's file. It has to be updated in the Craft N' Escape recipes file.</p>
+        <p>Items that doesn't have a crafting recipe at all aren't listed here.</p>
+
+        <div class="table-responsive">
+            <table class="mts mbn">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td><a href="http://theescapists.gamepedia.com/Special:Search/{{ item.name }}" title="{{ item.info }}" class="{{ 'txtred' if item.do_not_exists else '' }}{{ 'txtblue' if item.updated else '' }}">{{ item.name }}</a></td>
+                            <td><a href="">Edit</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

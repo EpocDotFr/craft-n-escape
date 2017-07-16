@@ -1,7 +1,8 @@
-from flask import Flask, render_template, make_response, flash, request, abort
+from flask import Flask, render_template, make_response, request, abort
 from werkzeug.exceptions import HTTPException
 from configparser import ConfigParser
 from urllib.parse import urlparse
+from hashlib import md5
 import logging
 import click
 import json
@@ -36,13 +37,7 @@ for handler in app.logger.handlers:
 
 @app.route('/')
 def home():
-    items = None
-
-    if not os.path.isfile('storage/data/items.json'):
-        flash('The storage/data/items.json file does not exists. Run the "flask build" command first.', 'error')
-    else:
-        with open('storage/data/items.json', 'r') as f:
-            items = f.read()
+    items = load_data(app.config['ITEMS_FILE'])
 
     return render_template('home.html', items=items)
 
@@ -54,7 +49,9 @@ def recipes_editor():
     if url.hostname != 'localhost': # Can only edit crafting recipes locally
         abort(403)
 
-    return render_template('recipes_editor.html')
+    items = load_data(app.config['ITEMS_FILE'], toJson=True)
+
+    return render_template('recipes_editor/home.html', items=items)
 
 
 # -----------------------------------------------------------
@@ -112,26 +109,27 @@ class ItemsParser:
     def _parse_craft_attribute_value(self, value):
         craft = {}
 
-        intelligence, value = value.split('_', maxsplit=1)
+        intelligence, recipe = value.split('_', maxsplit=1)
 
         craft['intelligence'] = int(intelligence)
 
-        craft['items'] = []
+        craft['_recipe'] = recipe
+        craft['_recipe_hash'] = md5(recipe.encode('utf-8')).hexdigest()
 
-        for item in value.split(','):
-            item = item.strip().rsplit(' x', maxsplit=1)
+        # for item in value.split(','):
+        #     item = item.strip().rsplit(' x', maxsplit=1)
 
-            if len(item) == 1:
-                item_name = item[0].strip()
-                amount = 1
-            else:
-                item_name = item[0].strip()
-                amount = int(item[1].strip())
+        #     if len(item) == 1:
+        #         item_name = item[0].strip()
+        #         amount = 1
+        #     else:
+        #         item_name = item[0].strip()
+        #         amount = int(item[1].strip())
 
-            craft['items'].append({
-                'name': item_name,
-                'amount': amount
-            })
+        #     craft['items'].append({
+        #         'name': item_name,
+        #         'amount': amount
+        #     })
 
         return craft
 
@@ -143,7 +141,7 @@ class ItemsParser:
 @app.cli.command()
 @click.option('--gamedir', '-g', help='Game root directory')
 def build(gamedir):
-    """Parse items_eng.dat and build items.json"""
+    """Extract data from items_eng.dat """
 
     if not gamedir:
         context = click.get_current_context()
@@ -156,8 +154,7 @@ def build(gamedir):
     items_parser = ItemsParser(gamedir)
     items = items_parser.parse()
 
-    with open('storage/data/items.json', 'w') as f:
-        f.write(json.dumps(items))
+    save_data(app.config['ITEMS_FILE'], items, toJson=True)
 
     app.logger.info('Done')
 
@@ -183,3 +180,26 @@ def http_error_handler(error, without_code=False):
         return make_response(body, error)
     else:
         return make_response(body)
+
+
+# -----------------------------------------------------------
+# Helpers
+
+
+def load_data(file, toJson=False):
+    data = None
+
+    if not os.path.isfile(file):
+        raise FileNotFoundError('The {} file does not exists'.format(file))
+
+    with open(file, 'r') as f:
+        data = f.read()
+
+    return json.loads(data) if toJson and data else data
+
+
+def save_data(file, data, toJson=False):
+    data = json.dumps(data) if toJson else data
+
+    with open(file, 'w') as f:
+        f.write(data)
