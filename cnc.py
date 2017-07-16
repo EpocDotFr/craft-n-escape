@@ -49,7 +49,25 @@ def recipes_editor():
     if url.hostname != 'localhost': # Can only edit crafting recipes locally
         abort(403)
 
-    items = load_data(app.config['ITEMS_FILE'], toJson=True)
+    items = load_data(app.config['ITEMS_FILE'], parse_json=True)
+    recipes = load_data(app.config['RECIPES_FILE'], parse_json=True)
+
+    items = [item for item in items if 'craft' in item] # Remove items witout crafting recipe
+
+    # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
+    # Also highlight items with not up-to-date crafting recipe in the Craft N' Escape recipes file
+    for item in items:
+        item['do_not_exists'] = True
+        item['out_of_date'] = False
+
+        for recipe in recipes:
+            if item['id'] == recipe['id']:
+                item['do_not_exists'] = False
+
+                if item['craft']['_recipe_hash'] != recipe['_recipe_hash']:
+                    item['out_of_date'] = True
+
+                break
 
     return render_template('recipes_editor/home.html', items=items)
 
@@ -142,11 +160,13 @@ class ItemsParser:
 @click.option('--gamedir', '-g', help='Game root directory')
 def build(gamedir):
     """Extract data from items_eng.dat """
+    context = click.get_current_context()
 
     if not gamedir:
-        context = click.get_current_context()
-
         click.echo(build.get_help(context))
+        context.exit()
+
+    if not click.confirm('This will erase the {} file. Are you sure to continue?'.format(app.config['ITEMS_FILE'])):
         context.exit()
 
     app.logger.info('Build started')
@@ -154,7 +174,15 @@ def build(gamedir):
     items_parser = ItemsParser(gamedir)
     items = items_parser.parse()
 
-    save_data(app.config['ITEMS_FILE'], items, toJson=True)
+    app.logger.info('Saving {}'.format(app.config['ITEMS_FILE']))
+
+    save_data(app.config['ITEMS_FILE'], items, to_json=True)
+
+    # Initialize the recipes file as it doesn't exists
+    if not os.path.isfile(app.config['RECIPES_FILE']):
+        app.logger.info('Saving {}'.format(app.config['RECIPES_FILE']))
+
+        save_data(app.config['RECIPES_FILE'], [], to_json=True)
 
     app.logger.info('Done')
 
@@ -186,7 +214,7 @@ def http_error_handler(error, without_code=False):
 # Helpers
 
 
-def load_data(file, toJson=False):
+def load_data(file, parse_json=False):
     data = None
 
     if not os.path.isfile(file):
@@ -195,11 +223,11 @@ def load_data(file, toJson=False):
     with open(file, 'r') as f:
         data = f.read()
 
-    return json.loads(data) if toJson and data else data
+    return json.loads(data) if parse_json and data else data
 
 
-def save_data(file, data, toJson=False):
-    data = json.dumps(data) if toJson else data
+def save_data(file, data, to_json=False):
+    data = json.dumps(data) if to_json else data
 
     with open(file, 'w') as f:
         f.write(data)
