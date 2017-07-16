@@ -55,7 +55,7 @@ def recipes_editor():
     items = [item for item in items if 'craft' in item] # Remove items witout crafting recipe
 
     # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
-    # Also highlight items with not up-to-date crafting recipe in the Craft N' Escape recipes file
+    # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
     for item in items:
         item['do_not_exists'] = True
         item['out_of_date'] = False
@@ -70,6 +70,23 @@ def recipes_editor():
                 break
 
     return render_template('recipes_editor/home.html', items=items)
+
+
+@app.route('/recipes-editor/<item_id>')
+def recipes_editor_item(item_id):
+    current_item = None
+
+    items = load_data(app.config['ITEMS_FILE'], parse_json=True)
+
+    for item in items:
+        if item['id'] == item_id:
+            current_item = item
+            break
+
+    if not current_item:
+        abort(404)
+
+    return render_template('recipes_editor/item.html', item=current_item)
 
 
 # -----------------------------------------------------------
@@ -166,7 +183,7 @@ def build(gamedir):
         click.echo(build.get_help(context))
         context.exit()
 
-    if not click.confirm('This will erase the {} file. Are you sure to continue?'.format(app.config['ITEMS_FILE'])):
+    if not click.confirm('This will overwrite the {} file. Are you sure?'.format(app.config['ITEMS_FILE'])):
         context.exit()
 
     app.logger.info('Build started')
