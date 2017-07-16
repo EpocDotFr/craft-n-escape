@@ -3,8 +3,41 @@
 {% block content %}
     {% if items %}
         <div id="app">
-            <div class="txtcenter">
-                <input type="text" v-model="filters.name" placeholder="Item name">
+            <div class="grid has-gutter">
+                <div>
+                    <fieldset class="txtcenter man ptn">
+                        <legend><i class="fa fa-filter"></i> Filters</legend>
+                        <div class="grid-3">
+                            <div><label>Item name <input type="text" v-model="filters.name"></label></div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div>
+                    <fieldset class="man ptn">
+                        <legend><i class="fa fa-gavel"></i> What can I craft?</legend>
+
+                        <p class="mbs"><strong>Add an item I own:</strong></p>
+
+                        <form v-on:submit.prevent="addItemIOwn()">
+                            <select required v-model.number="whatCanICraft.addItem.item">
+                                <option value="">Select an item</option>
+                                <option v-for="item in items" :value="item">${ item.name }</option>
+                            </select>
+                            <input type="number" min="1" value="1" required v-model.number="whatCanICraft.addItem.amount">
+                            <button type="submit" title="Add to the list of items you own"><i class="fa fa-plus"></i></button>
+                        </form>
+
+                        <p class="mbs" v-show="whatCanICraft.itemsIOwn.length > 0"><strong>Items I own:</strong></p>
+
+                        <div class="what-i-have">
+                            <span class="pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
+                                <a :href="escapistsWikiRoot + itemIOwn.item.name" :title="itemIOwn.item.info" :class="[itemIOwn.item.illegal ? 'txtred' : '']">${ itemIOwn.item.name }</a>
+                                <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
+                                <a href="#" title="Remove from the list of items you own" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
+                            </span>
+                        </div>
+                    </fieldset>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="mts mbn">
@@ -66,7 +99,7 @@
                             <!--<td><i class="fa fa-check" v-if="item.carry"></i></td>-->
                         </tr>
                         <tr v-show="filteredItems.length == 0">
-                            <td colspan="17" class="txtcenter">Nothing to display.</td>
+                            <td colspan="17" class="txtcenter"><div class="alert info pas">Nothing to display.</div></td>
                         </tr>
                     </tbody>
                 </table>
@@ -85,6 +118,13 @@
                     escapistsWikiRoot: 'http://theescapists.gamepedia.com/Special:Search/',
                     filters: {
                         name: ''
+                    },
+                    whatCanICraft: {
+                        addItem: {
+                            item: '',
+                            amount: 1,
+                        },
+                        itemsIOwn: []
                     }
                 },
                 computed: {
@@ -98,11 +138,22 @@
                                 name = item.name.toLowerCase().indexOf(self.filters.name.toLowerCase()) !== -1;
                             }
 
+                            // TODO Filter by items recipes with the items I own (if specified)
+
                             return name;
                         });
                     }
                 },
                 methods: {
+                    addItemIOwn: function() {
+                        this.whatCanICraft.itemsIOwn.push({
+                            item: this.whatCanICraft.addItem.item,
+                            amount: this.whatCanICraft.addItem.amount
+                        });
+
+                        this.whatCanICraft.addItem.item = '';
+                        this.whatCanICraft.addItem.amount = 1;
+                    },
                     getFound: function(found) {
                         switch (found) {
                             case 'irongate':

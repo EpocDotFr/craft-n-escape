@@ -10,8 +10,9 @@ _Because everyone loves it when a plan comes together_
   - List of all available items with all their attributes (attack power, illegal, price, etc)
     - Can be filtered by item name
     - (WIP) Items icon
-  - (WIP) Crafting recipes for applicable items
+    - (WIP) Crafting recipes
   - (WIP) Given a list of items you own, you can get the list of items you can craft
+  - (WIP) (Internal) Crafting recipes editor
 
 ## Prerequisites
 
@@ -23,7 +24,8 @@ _Because everyone loves it when a plan comes together_
 
   1. Clone this repo somewhere
   2. `pip install -r requirements.txt`
-  3. `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
+  3. (Optional) `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
+  4. (Optional) `flask build --gamedir="path to the game root directory"`
 
 ## Configuration
 

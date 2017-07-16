@@ -47,14 +47,14 @@ def home():
     return render_template('home.html', items=items)
 
 
-@app.route('/craft-editor')
-def craft_editor():
+@app.route('/recipes-editor')
+def recipes_editor():
     url = urlparse(request.url_root)
 
-    if url.hostname != 'localhost': # Can only edit crafts locally
+    if url.hostname != 'localhost': # Can only edit crafting recipes locally
         abort(403)
 
-    return render_template('craft_editor.html')
+    return render_template('recipes_editor.html')
 
 
 # -----------------------------------------------------------

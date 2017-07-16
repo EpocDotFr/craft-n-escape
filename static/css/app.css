@@ -42,6 +42,14 @@ a:focus {
 }
 
 /************************************************************************
+ * Forms */
+
+fieldset {
+    border: 0.1rem solid #303030;
+    border-radius: 0.5rem;
+}
+
+/************************************************************************
  * Alerts */
 
 .alert {
@@ -72,6 +80,15 @@ a:focus {
     background-color: #3493FE;
     color: #FFF;
     border-color: #345FDA;
+}
+
+/************************************************************************
+ * What can I craft */
+
+.what-i-have > span {
+    border-radius: 0.5rem;
+    border: 0.1rem solid #303030;
+    background-color: #022023;
 }
 
 /************************************************************************
@@ -129,10 +146,18 @@ input,
 select,
 textarea {
     background-color: #181818;
-    padding: 0.5rem 1rem;
     border: 0.1rem solid #303030;
     border-radius: 0.5rem;
     color: #FFF;
+}
+
+input,
+textarea {
+    padding: 0.5rem 1rem;
+}
+
+select {
+    padding: 0.2rem 1rem;
 }
 
 /************************************************************************
