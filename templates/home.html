@@ -16,7 +16,7 @@
                     <fieldset class="man ptn">
                         <legend><i class="fa fa-gavel"></i> What can I craft?</legend>
 
-                        <p class="mbs"><strong>Add an item I own:</strong></p>
+                        <p class="mbs"><strong>Add an item you own:</strong></p>
 
                         <form v-on:submit.prevent="addItemIOwn()">
                             <select required v-model.number="whatCanICraft.addItem.item">
@@ -27,11 +27,12 @@
                             <button type="submit" title="Add to the list of items you own"><i class="fa fa-plus"></i></button>
                         </form>
 
-                        <p class="mbs" v-show="whatCanICraft.itemsIOwn.length > 0"><strong>Items I own:</strong></p>
+                        <p class="mbs" v-show="whatCanICraft.itemsIOwn.length > 0"><strong>Items you own:</strong></p>
 
                         <div class="what-i-have">
                             <span class="pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
                                 <a :href="escapistsWikiRoot + itemIOwn.item.name" :title="itemIOwn.item.info" :class="[itemIOwn.item.illegal ? 'txtred' : '']">${ itemIOwn.item.name }</a>
+
                                 <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
                                 <a href="#" title="Remove from the list of items you own" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
                             </span>
@@ -81,7 +82,9 @@
                                 <i class="fa fa-chain-broken" v-if="item.decay" title="Can broke"></i>
                                 <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
                             </td>
-                            <td><a :href="escapistsWikiRoot + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a></td>
+                            <td>
+                                <a :href="escapistsWikiRoot + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
+                            </td>
                             <td><template v-if="item.buy">$${ item.buy }</template></td>
                             <td><template v-if="item.gift">+${ item.gift }</template></td>
                             <td>${ item.decay }</td>
