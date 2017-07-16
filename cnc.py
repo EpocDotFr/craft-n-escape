@@ -44,10 +44,7 @@ def home():
 
 @app.route('/recipes-editor')
 def recipes_editor():
-    url = urlparse(request.url_root)
-
-    if url.hostname != 'localhost': # Can only edit crafting recipes locally
-        abort(403)
+    check_localhost() # Can only edit crafting recipes locally
 
     items = load_data(app.config['ITEMS_FILE'], parse_json=True)
     recipes = load_data(app.config['RECIPES_FILE'], parse_json=True)
@@ -72,11 +69,15 @@ def recipes_editor():
     return render_template('recipes_editor/home.html', items=items)
 
 
-@app.route('/recipes-editor/<item_id>')
+@app.route('/recipes-editor/<int:item_id>')
 def recipes_editor_item(item_id):
+    check_localhost() # Can only edit crafting recipes locally
+
     current_item = None
+    current_recipe = None
 
     items = load_data(app.config['ITEMS_FILE'], parse_json=True)
+    recipes = load_data(app.config['RECIPES_FILE'], parse_json=True)
 
     for item in items:
         if item['id'] == item_id:
@@ -86,7 +87,17 @@ def recipes_editor_item(item_id):
     if not current_item:
         abort(404)
 
-    return render_template('recipes_editor/item.html', item=current_item)
+    for recipe in recipes:
+        if recipe['id'] == item_id:
+            current_recipe = recipe
+            break
+
+    return render_template(
+        'recipes_editor/item.html',
+        items=items,
+        current_item=current_item,
+        current_recipe=current_recipe
+    )
 
 
 # -----------------------------------------------------------
@@ -248,3 +259,10 @@ def save_data(file, data, to_json=False):
 
     with open(file, 'w') as f:
         f.write(data)
+
+
+def check_localhost():
+    url = urlparse(request.url_root)
+
+    if url.hostname != 'localhost':
+        abort(404)

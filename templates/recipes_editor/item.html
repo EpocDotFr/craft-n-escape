@@ -1,9 +1,25 @@
 {% extends 'layout.html' %}
 
-{% block meta_title %}Recipes editor › {{ item.name }}{% endblock %}
+{% block meta_title %}Recipes editor › #{{ current_item.id }} {{ current_item.name }}{% endblock %}
 
 {% block content %}
     <div class="pas center w1140p">
+        <h2 class="mbn">Recipes editor › #{{ current_item.id }} {{ current_item.name }} (INT: {{ current_item.craft.intelligence }})</h2>
 
+        <p><strong>Game's raw recipe:</strong></p>
+
+        <pre>{{ current_item.craft._recipe }}</pre>
+
+        <p><strong>Craft N' Escape recipe:</strong></p>
+
+        {% if current_recipe %}
+            <ul>
+                {% for recipe_item in current_recipe.items %}
+                    <li>#{{ item.id }} <a href="http://theescapists.gamepedia.com/Special:Search/{{ item.name }}" title="{{ item.info }}">{{ item.name }}</a> {% if recipe_item.amount and recipe_item.amount > 1 %}x {{ recipe_item.amount }}{% endif %}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>TODO</p>
+        {% endif %}
     </div>
 {% endblock %}

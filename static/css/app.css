@@ -87,9 +87,9 @@ fieldset {
 }
 
 /************************************************************************
- * What can I craft */
+ * Items list */
 
-.what-i-have > span {
+.items-list > span {
     border-radius: 0.5rem;
     border: 0.1rem solid #303030;
     background-color: #022023;

@@ -4,29 +4,18 @@
 
 {% block content %}
     <div class="pas center w1140p">
-        <p><span class="txtred">Red items</span> have a crafting recipe in the game's file but isn't defined in the Craft N' Escape recipes file.</p>
-        <p><span class="txtblue">Blue items</span> seems to have their crafting recipe updated in the game's file. It has to be updated in the Craft N' Escape recipes file as well.</p>
+        <h2 class="mbn">Recipes editor</h2>
+
+        <p><span class="txtred">Red items</span> have a crafting recipe in the game but this recipe isn't defined in Craft N' Escape.</p>
+        <p><span class="txtblue">Blue items</span> seems to have their crafting recipe updated in the game. It has to be updated in Craft N' Escape as well.</p>
         <p>Items that doesn't have a crafting recipe aren't listed.</p>
 
-        <div class="table-responsive">
-            <table class="mts mbn">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in items %}
-                        <tr>
-                            <td>{{ item.id }}</td>
-                            <td><a href="http://theescapists.gamepedia.com/Special:Search/{{ item.name }}" title="{{ item.info }}" class="{{ 'txtred' if item.do_not_exists else '' }}{{ 'txtblue' if item.out_of_date else '' }}">{{ item.name }}</a></td>
-                            <td><a href="{{ url_for('recipes_editor_item', item_id=item.id) }}">Edit</a></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="grid-4 mts">
+            {% for item in items %}
+                <div>
+                    <a href="{{ url_for('recipes_editor_item', item_id=item.id) }}" title="Edit this item crafting recipe"><i class="fa fa-pencil"></i></a> #{{ item.id }} <a href="http://theescapists.gamepedia.com/Special:Search/{{ item.name }}" title="{{ item.info }}" class="{{ 'txtred' if item.do_not_exists else '' }}{{ 'txtblue' if item.out_of_date else '' }}">{{ item.name }}</a>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
