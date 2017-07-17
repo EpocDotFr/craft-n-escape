@@ -138,28 +138,42 @@
 
                         if (self.whatCanICraft.itemsIOwn.length > 0) {
                             var what_can_i_craft = [];
+                            var items_i_own_ids = self.whatCanICraft.itemsIOwn.map(function(item_i_own) {
+                                return item_i_own.item.id;
+                            });
 
-                            for (var i = 0; i < self.whatCanICraft.itemsIOwn.length; i++) {
-                                itemIOwn = self.whatCanICraft.itemsIOwn[i];
+                            for (var j = 0; j < self.recipes.length; j++) {
+                                recipe = self.recipes[j];
+                                recipe_items_ids = recipe.items.map(function(recipe_item) {
+                                    return recipe_item.id;
+                                });
 
-                                for (var j = 0; j < self.recipes.length; j++) {
-                                    recipe = self.recipes[j];
+                                // Items I own aren't all present in the item recipe
+                                if (items_i_own_ids.sort().toString() != recipe_items_ids.sort().toString()) {
+                                    break;
+                                }
+
+                                add_to_what_can_i_craft = true;
+
+                                for (var i = 0; i < self.whatCanICraft.itemsIOwn.length; i++) {
+                                    itemIOwn = self.whatCanICraft.itemsIOwn[i];
 
                                     for (var k = 0; k < recipe.items.length; k++) {
                                         recipe_item = recipe.items[k];
 
-                                        if (itemIOwn.item.id == recipe_item.id
-                                            && (
-                                                !('amount' in recipe_item)
-                                                || (('amount' in recipe_item) && itemIOwn.amount >= recipe_item.amount)
-                                            )
-                                            && !(recipe.id in what_can_i_craft)
-                                        ) {
-                                            what_can_i_craft.push(recipe.id);
-
+                                        if (itemIOwn.item.id == recipe_item.id && ('amount' in recipe_item) && itemIOwn.amount < recipe_item.amount) {
+                                            add_to_what_can_i_craft = false;
                                             break;
                                         }
                                     }
+
+                                    if (!add_to_what_can_i_craft) {
+                                        break;
+                                    }
+                                }
+
+                                if (add_to_what_can_i_craft && !(recipe.id in what_can_i_craft)) {
+                                    what_can_i_craft.push(recipe.id);
                                 }
                             }
                         }
