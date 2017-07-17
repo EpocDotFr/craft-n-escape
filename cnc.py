@@ -42,7 +42,7 @@ def home():
 
     component_items = get_component_items(items, recipes) # Get items that can be used as components only
 
-    return render_template('home.html', items=items, component_items=component_items)
+    return render_template('home.html', items=items, recipes=recipes, component_items=component_items)
 
 
 @app.route('/recipes-editor')
@@ -86,7 +86,6 @@ def recipes_editor_item(item_id):
 
     return render_template(
         'recipes_editor/item.html',
-        items=items,
         current_item=current_item,
         current_recipe=current_recipe
     )
@@ -286,8 +285,10 @@ def get_component_items(items, recipes):
 
     for item in items:
         for recipe in recipes:
-            for recipe_items in recipe['items']:
-                if item['id'] == recipe_items['id'] and item not in filtered_items:
+            for recipe_item in recipe['items']:
+                if item['id'] == recipe_item['id'] and item not in filtered_items:
                     filtered_items.append(item)
+
+                    break
 
     return filtered_items

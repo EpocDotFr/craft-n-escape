@@ -118,6 +118,7 @@
                 el: '#app',
                 data: {
                     items: {{ items|tojson }},
+                    recipes: {{ recipes|tojson }},
                     componentItems: {{ component_items|tojson }},
                     escapistsWikiRoot: 'http://theescapists.gamepedia.com/Special:Search/',
                     filters: {
@@ -135,16 +136,40 @@
                     filteredItems: function () {
                         var self = this;
 
+                        if (self.whatCanICraft.itemsIOwn.length > 0) {
+                            var what_can_i_craft = [];
+
+                            for (var i = 0; i < self.whatCanICraft.itemsIOwn.length; i++) {
+                                itemIOwn = self.whatCanICraft.itemsIOwn[i];
+
+                                for (var j = 0; j < self.recipes.length; j++) {
+                                    recipe = self.recipes[j];
+
+                                    for (var k = 0; k < recipe.items.length; k++) {
+                                        recipe_item = recipe.items[k];
+
+                                        if (itemIOwn.item.id == recipe_item.id && !(recipe.id in what_can_i_craft)) {
+                                            what_can_i_craft.push(recipe.id);
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         return this.items.filter(function(item) {
-                            var name = true;
+                            var name = can_i_craft = true;
 
                             if (('name' in item) && self.filters.name) {
                                 name = item.name.toLowerCase().indexOf(self.filters.name.toLowerCase()) !== -1;
                             }
 
-                            // TODO Filter by items recipes with the items I own (if specified)
+                            if (self.whatCanICraft.itemsIOwn.length > 0) {
+                                can_i_craft = what_can_i_craft.indexOf(item.id) !== -1;
+                            }
 
-                            return name;
+                            return name && can_i_craft;
                         });
                     }
                 },
