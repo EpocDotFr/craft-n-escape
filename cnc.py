@@ -37,34 +37,26 @@ for handler in app.logger.handlers:
 
 @app.route('/')
 def home():
-    items = load_data(app.config['ITEMS_FILE'])
+    items = load_json(app.config['ITEMS_FILE'])
+    recipes = load_json(app.config['RECIPES_FILE'])
 
-    return render_template('home.html', items=items)
+    component_items = get_component_items(items, recipes) # Get items that can be used as components only
+
+    return render_template('home.html', items=items, component_items=component_items)
 
 
 @app.route('/recipes-editor')
 def recipes_editor():
     check_localhost() # Can only edit crafting recipes locally
 
-    items = load_data(app.config['ITEMS_FILE'], parse_json=True)
-    recipes = load_data(app.config['RECIPES_FILE'], parse_json=True)
+    items = load_json(app.config['ITEMS_FILE'])
+    recipes = load_json(app.config['RECIPES_FILE'])
 
-    items = [item for item in items if 'craft' in item] # Remove items witout crafting recipe
+    items = get_items_without_recipe(items) # Remove items without crafting recipe
 
     # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
     # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
-    for item in items:
-        item['do_not_exists'] = True
-        item['out_of_date'] = False
-
-        for recipe in recipes:
-            if item['id'] == recipe['id']:
-                item['do_not_exists'] = False
-
-                if item['craft']['_recipe_hash'] != recipe['_recipe_hash']:
-                    item['out_of_date'] = True
-
-                break
+    items = get_items_for_editor(items, recipes)
 
     return render_template('recipes_editor/home.html', items=items)
 
@@ -76,8 +68,8 @@ def recipes_editor_item(item_id):
     current_item = None
     current_recipe = None
 
-    items = load_data(app.config['ITEMS_FILE'], parse_json=True)
-    recipes = load_data(app.config['RECIPES_FILE'], parse_json=True)
+    items = load_json(app.config['ITEMS_FILE'])
+    recipes = load_json(app.config['RECIPES_FILE'])
 
     for item in items:
         if item['id'] == item_id:
@@ -204,13 +196,13 @@ def build(gamedir):
 
     app.logger.info('Saving {}'.format(app.config['ITEMS_FILE']))
 
-    save_data(app.config['ITEMS_FILE'], items, to_json=True)
+    save_json(app.config['ITEMS_FILE'], items)
 
     # Initialize the recipes file as it doesn't exists
     if not os.path.isfile(app.config['RECIPES_FILE']):
         app.logger.info('Saving {}'.format(app.config['RECIPES_FILE']))
 
-        save_data(app.config['RECIPES_FILE'], [], to_json=True)
+        save_json(app.config['RECIPES_FILE'], [])
 
     app.logger.info('Done')
 
@@ -242,7 +234,7 @@ def http_error_handler(error, without_code=False):
 # Helpers
 
 
-def load_data(file, parse_json=False):
+def load_json(file):
     data = None
 
     if not os.path.isfile(file):
@@ -251,11 +243,11 @@ def load_data(file, parse_json=False):
     with open(file, 'r') as f:
         data = f.read()
 
-    return json.loads(data) if parse_json and data else data
+    return json.loads(data) if data else data
 
 
-def save_data(file, data, to_json=False):
-    data = json.dumps(data) if to_json else data
+def save_json(file, data):
+    data = json.dumps(data)
 
     with open(file, 'w') as f:
         f.write(data)
@@ -266,3 +258,36 @@ def check_localhost():
 
     if url.hostname != 'localhost':
         abort(404)
+
+
+def get_items_without_recipe(items):
+    return [item for item in items if 'craft' in item]
+
+
+def get_items_for_editor(items, recipes):
+    for item in items:
+        item['do_not_exists'] = True
+        item['out_of_date'] = False
+
+        for recipe in recipes:
+            if item['id'] == recipe['id']:
+                item['do_not_exists'] = False
+
+                if item['craft']['_recipe_hash'] != recipe['_recipe_hash']:
+                    item['out_of_date'] = True
+
+                break
+
+    return items
+
+
+def get_component_items(items, recipes):
+    filtered_items = []
+
+    for item in items:
+        for recipe in recipes:
+            for recipe_items in recipe['items']:
+                if item['id'] == recipe_items['id'] and item not in filtered_items:
+                    filtered_items.append(item)
+
+    return filtered_items

@@ -19,9 +19,9 @@
                         <p class="mbs"><strong>Add an item you own:</strong></p>
 
                         <form v-on:submit.prevent="addItemIOwn()">
-                            <select required v-model.number="whatCanICraft.addItem.item">
+                            <select required v-model="whatCanICraft.addItem.item">
                                 <option value="">Select an item</option>
-                                <option v-for="item in items" :value="item">${ item.name }</option>
+                                <option v-for="item in componentItems" :value="item">${ item.name }</option>
                             </select>
                             <input type="number" min="1" value="1" required v-model.number="whatCanICraft.addItem.amount">
                             <button type="submit" title="Add to the list of items you own"><i class="fa fa-plus"></i></button>
@@ -117,7 +117,8 @@
                 delimiters: ['${', '}'], // Because Jinja2 already uses double brackets
                 el: '#app',
                 data: {
-                    items: {{ items|safe }},
+                    items: {{ items|tojson }},
+                    componentItems: {{ component_items|tojson }},
                     escapistsWikiRoot: 'http://theescapists.gamepedia.com/Special:Search/',
                     filters: {
                         name: ''
