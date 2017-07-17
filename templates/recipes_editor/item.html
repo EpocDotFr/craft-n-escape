@@ -3,7 +3,7 @@
 {% block meta_title %}Recipes editor › #{{ current_item.id }} {{ current_item.name }}{% endblock %}
 
 {% block content %}
-    <div class="pas center w1140p">
+    <div class="center w1140p">
         <h2 class="mbn">Recipes editor › #{{ current_item.id }} {{ current_item.name }} (INT: {{ current_item.craft.intelligence }})</h2>
 
         <p><strong>Game's raw recipe:</strong></p>
@@ -12,16 +12,24 @@
 
         <p><strong>Craft N' Escape recipe:</strong></p>
 
-        {% if current_recipe %}
-            <ul>
-                {% for recipe_item in current_recipe.get('items') %}
-                    {% set item = get_item(items, recipe_item.id) %}
+        <form method="post" action="{{ url_for('recipes_editor_item', item_id=current_item.id) }}">
+            {% if current_recipe %}
+                <ul>
+                    {% for recipe_item in current_recipe.get('items') %}
+                        {% set item = get_item(items, recipe_item.id) %}
 
-                    <li>#{{ recipe_item.id }} {{ item.name }} {% if recipe_item.amount and recipe_item.amount > 1 %}x {{ recipe_item.amount }}{% endif %}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>TODO</p>
-        {% endif %}
+                        <li>#{{ recipe_item.id }} {{ item.name }} {% if recipe_item.amount and recipe_item.amount > 1 %}x {{ recipe_item.amount }}{% endif %}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>TODO</p>
+            {% endif %}
+
+            <p>
+                <a href="{{ url_for('recipes_editor') }}" class="btn fl"><i class="fa fa-chevron-left"></i> Back</a>
+                <button type="submit" class="fr"><i class="fa fa-save"></i> Save</button>
+                <div class="clearfix"></div>
+            </p>
+        </form>
     </div>
 {% endblock %}
