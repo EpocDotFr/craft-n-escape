@@ -148,7 +148,13 @@
                                     for (var k = 0; k < recipe.items.length; k++) {
                                         recipe_item = recipe.items[k];
 
-                                        if (itemIOwn.item.id == recipe_item.id && !(recipe.id in what_can_i_craft)) {
+                                        if (itemIOwn.item.id == recipe_item.id
+                                            && (
+                                                !('amount' in recipe_item)
+                                                || (('amount' in recipe_item) && itemIOwn.amount >= recipe_item.amount)
+                                            )
+                                            && !(recipe.id in what_can_i_craft)
+                                        ) {
                                             what_can_i_craft.push(recipe.id);
 
                                             break;
