@@ -119,7 +119,6 @@
                 data: {
                     items: {{ items|tojson }},
                     recipes: {{ recipes|tojson }},
-                    componentItems: {{ component_items|tojson }},
                     escapistsWikiRoot: 'http://theescapists.gamepedia.com/Special:Search/',
                     filters: {
                         name: ''
@@ -133,18 +132,35 @@
                     }
                 },
                 computed: {
-                    filteredItems: function () {
+                    componentItems: function() {
                         var self = this;
 
-                        if (self.whatCanICraft.itemsIOwn.length > 0) {
+                        return this.items.filter(function(item) {
+                            for (var i = 0; i < self.recipes.length; i++) {
+                                var recipe = self.recipes[i];
+
+                                for (var j = 0; j < recipe.items.length; j++) {
+                                    var recipe_item = recipe.items[j];
+
+                                    if (item.id == recipe_item.id) {
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            return false;
+                        });
+                    },
+                    filteredItems: function () {
+                        if (this.whatCanICraft.itemsIOwn.length > 0) {
                             var what_can_i_craft = [];
-                            var items_i_own_ids = self.whatCanICraft.itemsIOwn.map(function(item_i_own) {
+                            var items_i_own_ids = this.whatCanICraft.itemsIOwn.map(function(item_i_own) {
                                 return item_i_own.item.id;
                             });
 
-                            for (var j = 0; j < self.recipes.length; j++) {
-                                recipe = self.recipes[j];
-                                recipe_items_ids = recipe.items.map(function(recipe_item) {
+                            for (var j = 0; j < this.recipes.length; j++) {
+                                var recipe = this.recipes[j];
+                                var recipe_items_ids = recipe.items.map(function(recipe_item) {
                                     return recipe_item.id;
                                 });
 
@@ -153,13 +169,13 @@
                                     break;
                                 }
 
-                                add_to_what_can_i_craft = true;
+                                var add_to_what_can_i_craft = true;
 
-                                for (var i = 0; i < self.whatCanICraft.itemsIOwn.length; i++) {
-                                    itemIOwn = self.whatCanICraft.itemsIOwn[i];
+                                for (var i = 0; i < this.whatCanICraft.itemsIOwn.length; i++) {
+                                    var itemIOwn = this.whatCanICraft.itemsIOwn[i];
 
                                     for (var k = 0; k < recipe.items.length; k++) {
-                                        recipe_item = recipe.items[k];
+                                        var recipe_item = recipe.items[k];
 
                                         if (itemIOwn.item.id == recipe_item.id && itemIOwn.amount < recipe_item.amount) {
                                             add_to_what_can_i_craft = false;
@@ -177,6 +193,8 @@
                                 }
                             }
                         }
+
+                        var self = this;
 
                         return this.items.filter(function(item) {
                             var name = can_i_craft = true;

@@ -63,18 +63,18 @@ def get_items_for_editor(items, recipes):
     return items
 
 
-def get_component_items(items, recipes):
-    filtered_items = []
+# def get_component_items(items, recipes):
+#     filtered_items = []
 
-    for item in items:
-        for recipe in recipes:
-            for recipe_item in recipe['items']:
-                if item['id'] == recipe_item['id'] and item not in filtered_items:
-                    filtered_items.append(item)
+#     for item in items:
+#         for recipe in recipes:
+#             for recipe_item in recipe['items']:
+#                 if item['id'] == recipe_item['id'] and item not in filtered_items:
+#                     filtered_items.append(item)
 
-                    break
+#                     break
 
-    return filtered_items
+#     return filtered_items
 
 
 def get_item(items, item_id):
@@ -156,9 +156,7 @@ def home():
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
 
-    component_items = get_component_items(items, recipes) # Get items that can be used as components only
-
-    return render_template('home.html', items=items, recipes=recipes, component_items=component_items)
+    return render_template('home.html', items=items, recipes=recipes)
 
 
 @app.route('/recipes-editor')
