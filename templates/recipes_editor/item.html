@@ -14,8 +14,10 @@
 
         {% if current_recipe %}
             <ul>
-                {% for recipe_item in current_recipe.items %}
-                    <li>#{{ item.id }} <a href="http://theescapists.gamepedia.com/Special:Search/{{ item.name }}" title="{{ item.info }}">{{ item.name }}</a> {% if recipe_item.amount and recipe_item.amount > 1 %}x {{ recipe_item.amount }}{% endif %}</li>
+                {% for recipe_item in current_recipe.get('items') %}
+                    {% set item = get_item(items, recipe_item.id) %}
+
+                    <li>#{{ recipe_item.id }} {{ item.name }} {% if recipe_item.amount and recipe_item.amount > 1 %}x {{ recipe_item.amount }}{% endif %}</li>
                 {% endfor %}
             </ul>
         {% else %}

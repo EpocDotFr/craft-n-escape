@@ -11,11 +11,95 @@ import os
 
 
 # -----------------------------------------------------------
+# Helpers
+
+
+def load_json(file):
+    data = None
+
+    if not os.path.isfile(file):
+        raise FileNotFoundError('The {} file does not exists'.format(file))
+
+    with open(file, 'r') as f:
+        data = f.read()
+
+    return json.loads(data) if data else data
+
+
+def save_json(file, data):
+    data = json.dumps(data)
+
+    with open(file, 'w') as f:
+        f.write(data)
+
+
+def check_localhost():
+    url = urlparse(request.url_root)
+
+    if url.hostname != 'localhost':
+        abort(404)
+
+
+def get_items_without_recipe(items):
+    return [item for item in items if 'craft' in item]
+
+
+def get_items_for_editor(items, recipes):
+    for item in items:
+        item['do_not_exists'] = True
+        item['out_of_date'] = False
+
+        for recipe in recipes:
+            if item['id'] == recipe['id']:
+                item['do_not_exists'] = False
+
+                if item['craft']['_recipe_hash'] != recipe['_recipe_hash']:
+                    item['out_of_date'] = True
+
+                break
+
+    return items
+
+
+def get_component_items(items, recipes):
+    filtered_items = []
+
+    for item in items:
+        for recipe in recipes:
+            for recipe_item in recipe['items']:
+                if item['id'] == recipe_item['id'] and item not in filtered_items:
+                    filtered_items.append(item)
+
+                    break
+
+    return filtered_items
+
+
+def get_item(items, item_id):
+    for item in items:
+        if item['id'] == item_id:
+            return item
+
+    return None
+
+
+def get_recipe(recipes, item_id):
+    for recipe in recipes:
+        if recipe['id'] == item_id:
+            return recipe
+
+    return None
+
+
+# -----------------------------------------------------------
 # Boot
 
 
 app = Flask(__name__, static_url_path='')
 app.config.from_pyfile('config.py')
+
+app.jinja_env.globals['get_item'] = get_item
+app.jinja_env.globals['get_recipe'] = get_recipe
 
 # Default Python logger
 logging.basicConfig(
@@ -78,7 +162,8 @@ def recipes_editor_item(item_id):
     return render_template(
         'recipes_editor/item.html',
         current_item=current_item,
-        current_recipe=current_recipe
+        current_recipe=current_recipe,
+        items=items
     )
 
 
@@ -218,84 +303,3 @@ def http_error_handler(error, without_code=False):
         return make_response(body, error)
     else:
         return make_response(body)
-
-
-# -----------------------------------------------------------
-# Helpers
-
-
-def load_json(file):
-    data = None
-
-    if not os.path.isfile(file):
-        raise FileNotFoundError('The {} file does not exists'.format(file))
-
-    with open(file, 'r') as f:
-        data = f.read()
-
-    return json.loads(data) if data else data
-
-
-def save_json(file, data):
-    data = json.dumps(data)
-
-    with open(file, 'w') as f:
-        f.write(data)
-
-
-def check_localhost():
-    url = urlparse(request.url_root)
-
-    if url.hostname != 'localhost':
-        abort(404)
-
-
-def get_items_without_recipe(items):
-    return [item for item in items if 'craft' in item]
-
-
-def get_items_for_editor(items, recipes):
-    for item in items:
-        item['do_not_exists'] = True
-        item['out_of_date'] = False
-
-        for recipe in recipes:
-            if item['id'] == recipe['id']:
-                item['do_not_exists'] = False
-
-                if item['craft']['_recipe_hash'] != recipe['_recipe_hash']:
-                    item['out_of_date'] = True
-
-                break
-
-    return items
-
-
-def get_component_items(items, recipes):
-    filtered_items = []
-
-    for item in items:
-        for recipe in recipes:
-            for recipe_item in recipe['items']:
-                if item['id'] == recipe_item['id'] and item not in filtered_items:
-                    filtered_items.append(item)
-
-                    break
-
-    return filtered_items
-
-
-def get_item(items, item_id):
-    for item in items:
-        if item['id'] == item_id:
-            return item
-
-    return None
-
-
-def get_recipe(recipes, item_id):
-    for recipe in recipes:
-        if recipe['id'] == item_id:
-            return recipe
-
-    return None
