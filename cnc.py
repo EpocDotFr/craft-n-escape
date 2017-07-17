@@ -65,24 +65,15 @@ def recipes_editor():
 def recipes_editor_item(item_id):
     check_localhost() # Can only edit crafting recipes locally
 
-    current_item = None
-    current_recipe = None
-
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
 
-    for item in items:
-        if item['id'] == item_id:
-            current_item = item
-            break
+    current_item = get_item(items, item_id)
 
     if not current_item:
         abort(404)
 
-    for recipe in recipes:
-        if recipe['id'] == item_id:
-            current_recipe = recipe
-            break
+    current_recipe = get_recipe(recipes, item_id)
 
     return render_template(
         'recipes_editor/item.html',
@@ -292,3 +283,19 @@ def get_component_items(items, recipes):
                     break
 
     return filtered_items
+
+
+def get_item(items, item_id):
+    for item in items:
+        if item['id'] == item_id:
+            return item
+
+    return None
+
+
+def get_recipe(recipes, item_id):
+    for recipe in recipes:
+        if recipe['id'] == item_id:
+            return recipe
+
+    return None
