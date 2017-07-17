@@ -69,21 +69,21 @@ fieldset {
 }
 
 .alert.success {
-    background-color: #6ead4f;
+    background-color: #266806;
     color: #FFF;
-    border-color: #187B00;
+    border-color: #31871d;
 }
 
 .alert.error {
-    background-color: #dd3b3b;
+    background-color: #770909;
     color: #FFF;
-    border-color: #AB1111;
+    border-color: #ab1c1c;
 }
 
 .alert.info {
-    background-color: #3493FE;
+    background-color: #064b99;
     color: #FFF;
-    border-color: #345FDA;
+    border-color: #0075bf;
 }
 
 /************************************************************************

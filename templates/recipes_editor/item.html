@@ -6,6 +6,12 @@
     <div class="center w1140p">
         <h2 class="mbn">Recipes editor › #{{ current_item.id }} {{ current_item.name }} (INT: {{ current_item.craft.intelligence }})</h2>
 
+        {% if current_item.do_not_exists %}
+            <div class="alert info pas mts">This recipe does not exists in the Craft N' Escape recipe list.</div>
+        {% elif current_item.out_of_date %}
+            <div class="alert info pas mts">This recipe must be updated in Craft N' Escape.</div>
+        {% endif %}
+
         <p><strong>Game's raw recipe:</strong></p>
 
         <pre>{{ current_item.craft._recipe }}</pre>
@@ -13,23 +19,47 @@
         <p><strong>Craft N' Escape recipe:</strong></p>
 
         <form method="post" action="{{ url_for('recipes_editor_item', item_id=current_item.id) }}">
-            {% if current_recipe %}
-                <ul>
-                    {% for recipe_item in current_recipe.get('items') %}
-                        {% set item = get_item(items, recipe_item.id) %}
+            <input type="hidden" name="_recipe_hash" value="{{ current_item.craft._recipe_hash }}">
 
-                        <li>#{{ recipe_item.id }} {{ item.name }} {% if recipe_item.amount and recipe_item.amount > 1 %}x {{ recipe_item.amount }}{% endif %}</li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>TODO</p>
-            {% endif %}
+            <div id="app">
+                <div v-for="recipe_item in currentRecipe.items" class="mts">
+                    <select name="id" required v-model.number="recipe_item.id">
+                        <option value="">Select an item</option>
+                        <option v-for="item in items" :value="item.id">#${ item.id } ${ item.name }</option>
+                    </select>
+                    <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount">
+                    <a href="#" @click.prevent="currentRecipe.items.splice(currentRecipe.items.indexOf(recipe_item), 1)" title="Remove this item"><i class="fa fa-remove"></i></a>
+                </div>
+                <div class="alert error pas mts" v-show="!currentRecipe.items || currentRecipe.items.length == 0">None at this moment.</div>
+                <p><a href="#" @click.prevent="addItem()"><i class="fa fa-plus"></i> Add an item</a></p>
+            </div>
 
-            <p>
-                <a href="{{ url_for('recipes_editor') }}" class="btn fl"><i class="fa fa-chevron-left"></i> Back</a>
-                <button type="submit" class="fr"><i class="fa fa-save"></i> Save</button>
-                <div class="clearfix"></div>
+            <p class="txtcenter">
+                <a href="{{ url_for('recipes_editor') }}" class="btn"><i class="fa fa-chevron-left"></i> Back</a>
+                <button type="submit"><i class="fa fa-save"></i> Save</button>
             </p>
         </form>
     </div>
+
+    <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>
+    <script>
+        Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
+
+        var app = new Vue({
+            delimiters: ['${', '}'], // Because Jinja2 already uses double brackets
+            el: '#app',
+            data: {
+                items: {{ items|tojson }},
+                currentRecipe: {{ current_recipe|tojson }}
+            },
+            methods: {
+                addItem: function() {
+                    this.currentRecipe.items.push({
+                        id: '',
+                        amount: 1
+                    });
+                }
+            }
+        });
+     </script>
 {% endblock %}

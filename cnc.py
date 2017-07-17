@@ -32,6 +32,8 @@ def save_json(file, data):
     with open(file, 'w') as f:
         f.write(data)
 
+    return data
+
 
 def check_localhost():
     url = urlparse(request.url_root)
@@ -88,7 +90,18 @@ def get_recipe(recipes, item_id):
         if recipe['id'] == item_id:
             return recipe
 
-    return None
+    return {'items': []}
+
+
+def get_form_values(names):
+    values = [request.form.getlist(h) for h in names]
+    items = [{} for i in range(len(values[0]))]
+
+    for x, i in enumerate(values):
+        for _x, _i in enumerate(i):
+            items[_x][names[x]] = _i
+
+    return items
 
 
 # -----------------------------------------------------------
@@ -145,12 +158,22 @@ def recipes_editor():
     return render_template('recipes_editor/home.html', items=items)
 
 
-@app.route('/recipes-editor/<int:item_id>')
+@app.route('/recipes-editor/<int:item_id>', methods=['GET', 'POST'])
 def recipes_editor_item(item_id):
     check_localhost() # Can only edit crafting recipes locally
 
+    if request.method == 'POST':
+        print(get_form_values(('id', 'amount')))
+        print(request.form.get('_recipe_hash'))
+
+        # save_json(app.config['RECIPES_FILE'], [])
+
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
+
+    # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
+    # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
+    items = get_items_for_editor(items, recipes)
 
     current_item = get_item(items, item_id)
 
@@ -162,7 +185,7 @@ def recipes_editor_item(item_id):
     return render_template(
         'recipes_editor/item.html',
         current_item=current_item,
-        current_recipe=current_recipe,
+        current_recipe=current_recipe if current_recipe else {},
         items=items
     )
 

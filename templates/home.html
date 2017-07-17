@@ -33,7 +33,7 @@
                             <span class="pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
                                 <a :href="escapistsWikiRoot + itemIOwn.item.name" :title="itemIOwn.item.info" :class="[itemIOwn.item.illegal ? 'txtred' : '']">${ itemIOwn.item.name }</a>
 
-                                <template v-if="itemIOwn.amount && itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
+                                <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
                                 <a href="#" title="Remove from the list of items you own" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
                             </span>
                         </div>
@@ -109,7 +109,7 @@
             </div>
         </div>
 
-        <script src="https://unpkg.com/vue@2.4.1/dist/vue.min.js"></script>
+        <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>
         <script>
             Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
 
@@ -161,7 +161,7 @@
                                     for (var k = 0; k < recipe.items.length; k++) {
                                         recipe_item = recipe.items[k];
 
-                                        if (itemIOwn.item.id == recipe_item.id && ('amount' in recipe_item) && itemIOwn.amount < recipe_item.amount) {
+                                        if (itemIOwn.item.id == recipe_item.id && itemIOwn.amount < recipe_item.amount) {
                                             add_to_what_can_i_craft = false;
                                             break;
                                         }
