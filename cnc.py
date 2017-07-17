@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response, request, abort
+from flask import Flask, render_template, make_response, request, abort, flash
 from werkzeug.exceptions import HTTPException
 from configparser import ConfigParser
 from urllib.parse import urlparse
@@ -27,10 +27,8 @@ def load_json(file):
 
 
 def save_json(file, data):
-    data = json.dumps(data)
-
     with open(file, 'w') as f:
-        f.write(data)
+        f.write(json.dumps(data))
 
     return data
 
@@ -39,7 +37,9 @@ def check_localhost():
     url = urlparse(request.url_root)
 
     if url.hostname != 'localhost':
-        abort(404)
+        return False
+
+    return True
 
 
 def get_items_without_recipe(items):
@@ -93,13 +93,35 @@ def get_recipe(recipes, item_id):
     return {'items': []}
 
 
+def create_or_update_recipe(recipes, item_id, recipe_hash, recipe_items):
+    found = False
+
+    # Update the existing recipe if it exists
+    for recipe in recipes:
+        if recipe['id'] == item_id:
+            recipe['_recipe_hash'] = recipe_hash
+            recipe['items'] = recipe_items
+
+            found = True
+
+            break
+
+    # Create a new recipe if it doesn't exists
+    if not found:
+        recipes.append({
+            'id': item_id,
+            '_recipe_hash': recipe_hash,
+            'items': recipe_items
+        })
+
+
 def get_form_values(names):
-    values = [request.form.getlist(h) for h in names]
+    values = [request.form.getlist(h[0], type=h[1]) for h in names]
     items = [{} for i in range(len(values[0]))]
 
     for x, i in enumerate(values):
         for _x, _i in enumerate(i):
-            items[_x][names[x]] = _i
+            items[_x][names[x][0]] = _i
 
     return items
 
@@ -110,9 +132,6 @@ def get_form_values(names):
 
 app = Flask(__name__, static_url_path='')
 app.config.from_pyfile('config.py')
-
-app.jinja_env.globals['get_item'] = get_item
-app.jinja_env.globals['get_recipe'] = get_recipe
 
 # Default Python logger
 logging.basicConfig(
@@ -144,7 +163,8 @@ def home():
 
 @app.route('/recipes-editor')
 def recipes_editor():
-    check_localhost() # Can only edit crafting recipes locally
+    if not check_localhost(): # Can only edit crafting recipes locally
+        abort(404)
 
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
@@ -160,13 +180,8 @@ def recipes_editor():
 
 @app.route('/recipes-editor/<int:item_id>', methods=['GET', 'POST'])
 def recipes_editor_item(item_id):
-    check_localhost() # Can only edit crafting recipes locally
-
-    if request.method == 'POST':
-        print(get_form_values(('id', 'amount')))
-        print(request.form.get('_recipe_hash'))
-
-        # save_json(app.config['RECIPES_FILE'], [])
+    if not check_localhost(): # Can only edit crafting recipes locally
+        abort(404)
 
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
@@ -179,6 +194,23 @@ def recipes_editor_item(item_id):
 
     if not current_item:
         abort(404)
+
+    if request.method == 'POST':
+        recipe_items = get_form_values([
+            ('id', int),
+            ('amount', int)
+        ])
+
+        recipe_hash = request.form.get('_recipe_hash')
+
+        try:
+            create_or_update_recipe(recipes, item_id, recipe_hash, recipe_items)
+
+            save_json(app.config['RECIPES_FILE'], recipes)
+
+            flash('Recipe saved successfully.', 'success')
+        except Exception as e:
+            flash('Error saving this recipe: {}'.format(e), 'error')
 
     current_recipe = get_recipe(recipes, item_id)
 

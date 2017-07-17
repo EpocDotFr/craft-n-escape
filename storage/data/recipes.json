@@ -1,1 +1,1 @@
-[{"id": 3, "_recipe_hash": "f8d4f91c54128e6ee4f7d5fa591b96a4", "items": [{"id": 38, "amount": 1}, {"id": 36, "amount": 1}]}]
+[{"items": [{"amount": 1, "id": 38}, {"amount": 1, "id": 36}], "id": 3, "_recipe_hash": "f8d4f91c54128e6ee4f7d5fa591b96a4"}, {"items": [{"amount": 1, "id": 114}, {"amount": 1, "id": 76}, {"amount": 1, "id": 13}], "id": 5, "_recipe_hash": "2cb61a72e54dbee750614de46e4c5e17"}]
