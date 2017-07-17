@@ -63,20 +63,6 @@ def get_items_for_editor(items, recipes):
     return items
 
 
-# def get_component_items(items, recipes):
-#     filtered_items = []
-
-#     for item in items:
-#         for recipe in recipes:
-#             for recipe_item in recipe['items']:
-#                 if item['id'] == recipe_item['id'] and item not in filtered_items:
-#                     filtered_items.append(item)
-
-#                     break
-
-#     return filtered_items
-
-
 def get_item(items, item_id):
     for item in items:
         if item['id'] == item_id:
