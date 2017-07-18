@@ -3,3 +3,4 @@ DEBUG = False
 LOGGER_HANDLER_POLICY = 'production'
 ITEMS_FILE = 'storage/data/items.json'
 RECIPES_FILE = 'storage/data/recipes.json'
+ESCAPISTS_WIKI_ROOT = 'http://theescapists.gamepedia.com/'

@@ -23,11 +23,8 @@
 
             <div id="app">
                 <div v-for="recipe_item in currentRecipe.items" class="mts">
-                    <select name="id" required v-model.number="recipe_item.id">
-                        <option value="">Select an item</option>
-                        <option v-for="item in items" :value="item.id">#${ item.id } ${ item.name }</option>
-                    </select>
-                    <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount">
+                    <itemsfilter :recipe_item_id.sync="recipe_item.id" :items="items"></itemsfilter>
+                    <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount" class="w100p">
                     <a href="#" @click.prevent="currentRecipe.items.splice(currentRecipe.items.indexOf(recipe_item), 1)" title="Remove this item"><i class="fa fa-remove"></i></a>
                 </div>
                 <div class="alert error pas mts" v-show="!currentRecipe.items || currentRecipe.items.length == 0">None at this moment.</div>
@@ -41,11 +38,47 @@
         </form>
     </div>
 
+    <template id="itemsfilter">
+        <span>
+            <input type="text" class="w200p" placeholder="Type an item ID or name" v-model="query">
+            <select name="id" required v-model.number="recipe_item_id" class="w300p">
+                <option value="">Select an item</option>
+                <option v-for="item in filteredItems" :value="item.id">#${ item.id } ${ item.name }</option>
+            </select>
+        </span>
+    </template>
+
     <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>
     <script>
         Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
 
         var vue_delimiters = ['${', '}']; // Because Jinja2 already uses double brackets
+
+        var ItemsFilter = {
+            delimiters: vue_delimiters, 
+            template: '#itemsfilter',
+            props: ['items', 'recipe_item_id'],
+            data: function() {
+                return {
+                    query: ''
+                };
+            },
+            computed: {
+                filteredItems: function() {
+                    var self = this;
+
+                    return this.items.filter(function(item) {
+                        var match = true;
+
+                        if (self.query) {
+                            match = (item.name.toLowerCase().indexOf(self.query.toLowerCase()) !== -1) || item.id == self.query;
+                        }
+
+                        return match;
+                    });
+                }
+            }
+        };
 
         var app = new Vue({
             delimiters: vue_delimiters,
@@ -53,6 +86,9 @@
             data: {
                 items: {{ items|tojson }},
                 currentRecipe: {{ current_recipe|tojson }}
+            },
+            components: {
+                'itemsfilter': ItemsFilter
             },
             methods: {
                 addItem: function() {

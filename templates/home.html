@@ -19,11 +19,11 @@
                         <p class="mbs"><strong>Add an item you own:</strong></p>
 
                         <form v-on:submit.prevent="addItemIOwn()">
-                            <select required v-model="whatCanICraft.addItem.item">
+                            <select required v-model="whatCanICraft.addItem.item" class="w300p">
                                 <option value="">Select an item</option>
                                 <option v-for="item in componentItems" :value="item">${ item.name }</option>
                             </select>
-                            <input type="number" min="1" value="1" required v-model.number="whatCanICraft.addItem.amount">
+                            <input type="number" min="1" value="1" required v-model.number="whatCanICraft.addItem.amount" class="w100p">
                             <button type="submit" title="Add to the list of items you own"><i class="fa fa-plus"></i></button>
                         </form>
 
@@ -31,7 +31,7 @@
 
                         <div class="items-list">
                             <span class="pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
-                                <itemname :item="itemIOwn.item"></itemname>
+                                <itemname :item="itemIOwn.item" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
                                 <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
                                 <a href="#" title="Remove from the list of items you own" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
@@ -83,7 +83,7 @@
                                 <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
                             </td>
                             <td>
-                                <itemname :item="item"></itemname>
+                                <itemname :item="item" :escapistswikisearch="escapistsWikiSearch"></itemname>
                             </td>
                             <td><template v-if="item.buy">$${ item.buy }</template></td>
                             <td><template v-if="item.gift">+${ item.gift }</template></td>
@@ -96,7 +96,7 @@
                             <td>${ item.chipping }</td>
                             <td>${ item.unscrewing }</td>
                             <td>${ item.cutting }</td>
-                            <td><template v-if="item.found"><a :href="escapistsWikiRoot + getFound(item.found)">${ getFound(item.found) }</a></template></td>
+                            <td><template v-if="item.found"><a :href="escapistsWikiSearch + getFound(item.found)">${ getFound(item.found) }</a></template></td>
                             <td><template v-if="item.fat">-${ item.fat }</template></td>
                             <td><template v-if="item.camdis">${ item.camdis / 1000 }</template></td>
                             <!--<td><i class="fa fa-check" v-if="item.carry"></i></td>-->
@@ -110,7 +110,7 @@
         </div>
 
         <template id="itemname">
-            <a :href="escapistsWikiRoot + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
+            <a :href="escapistswikisearch + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
         </template>
 
         <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>
@@ -122,10 +122,7 @@
             var ItemName = {
                 delimiters: vue_delimiters, 
                 template: '#itemname',
-                props: ['item'],
-                data: function() {
-                    return this.$root.$data;
-                }
+                props: ['item', 'escapistswikisearch']
             };
 
             var app = new Vue({
@@ -134,7 +131,7 @@
                 data: {
                     items: {{ items|tojson }},
                     recipes: {{ recipes|tojson }},
-                    escapistsWikiRoot: 'http://theescapists.gamepedia.com/Special:Search/',
+                    escapistsWikiSearch: '{{ config['ESCAPISTS_WIKI_ROOT'] }}Special:Search/',
                     filters: {
                         name: ''
                     },
