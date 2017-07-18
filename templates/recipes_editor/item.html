@@ -45,8 +45,10 @@
     <script>
         Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
 
+        var vue_delimiters = ['${', '}']; // Because Jinja2 already uses double brackets
+
         var app = new Vue({
-            delimiters: ['${', '}'], // Because Jinja2 already uses double brackets
+            delimiters: vue_delimiters,
             el: '#app',
             data: {
                 items: {{ items|tojson }},

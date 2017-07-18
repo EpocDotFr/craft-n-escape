@@ -231,10 +231,26 @@
                 },
                 methods: {
                     addItemIOwn: function() {
-                        this.whatCanICraft.itemsIOwn.push({
-                            item: this.whatCanICraft.addItem.item,
-                            amount: this.whatCanICraft.addItem.amount
-                        });
+                        // If the item to add is already present in the items I own list, just increment its amount
+                        var already_present = false;
+
+                        for (var i = 0; i < this.whatCanICraft.itemsIOwn.length; i++) {
+                            var itemIOwn = this.whatCanICraft.itemsIOwn[i];
+
+                            if (itemIOwn.item.id == this.whatCanICraft.addItem.item.id) {
+                                already_present = i;
+                                break;
+                            }
+                        }
+
+                        if (already_present === false) {
+                            this.whatCanICraft.itemsIOwn.push({
+                                item: this.whatCanICraft.addItem.item,
+                                amount: this.whatCanICraft.addItem.amount
+                            });
+                        } else {
+                            this.whatCanICraft.itemsIOwn[already_present].amount += this.whatCanICraft.addItem.amount;
+                        }
 
                         this.whatCanICraft.addItem.item = '';
                         this.whatCanICraft.addItem.amount = 1;
