@@ -31,7 +31,7 @@
 
                         <div class="items-list">
                             <span class="pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
-                                <a :href="escapistsWikiRoot + itemIOwn.item.name" :title="itemIOwn.item.info" :class="[itemIOwn.item.illegal ? 'txtred' : '']">${ itemIOwn.item.name }</a>
+                                <itemname :item="itemIOwn.item"></itemname>
 
                                 <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
                                 <a href="#" title="Remove from the list of items you own" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
@@ -83,7 +83,7 @@
                                 <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
                             </td>
                             <td>
-                                <a :href="escapistsWikiRoot + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
+                                <itemname :item="item"></itemname>
                             </td>
                             <td><template v-if="item.buy">$${ item.buy }</template></td>
                             <td><template v-if="item.gift">+${ item.gift }</template></td>
@@ -109,12 +109,27 @@
             </div>
         </div>
 
+        <template id="itemname">
+            <a :href="escapistsWikiRoot + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
+        </template>
+
         <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>
         <script>
             Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
 
+            var vue_delimiters = ['${', '}']; // Because Jinja2 already uses double brackets
+
+            var ItemName = {
+                delimiters: vue_delimiters, 
+                template: '#itemname',
+                props: ['item'],
+                data: function() {
+                    return this.$root.$data;
+                }
+            };
+
             var app = new Vue({
-                delimiters: ['${', '}'], // Because Jinja2 already uses double brackets
+                delimiters: vue_delimiters,
                 el: '#app',
                 data: {
                     items: {{ items|tojson }},
@@ -130,6 +145,9 @@
                         },
                         itemsIOwn: []
                     }
+                },
+                components: {
+                    'itemname': ItemName
                 },
                 computed: {
                     componentItems: function() {
