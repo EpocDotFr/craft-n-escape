@@ -23,7 +23,7 @@
 
             <div id="app">
                 <div v-for="recipe_item in currentRecipe.items" class="mts">
-                    <itemsfilter :recipe_item_id.sync="recipe_item.id" :items="items"></itemsfilter>
+                    <itemsfilter :recipe_item.sync="recipe_item" :items="items"></itemsfilter>
                     <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount" class="w100p">
                     <a href="#" @click.prevent="currentRecipe.items.splice(currentRecipe.items.indexOf(recipe_item), 1)" title="Remove this item"><i class="fa fa-remove"></i></a>
                 </div>
@@ -41,7 +41,7 @@
     <template id="itemsfilter">
         <span>
             <input type="text" class="w200p" placeholder="Type an item ID or name" v-model="query">
-            <select name="id" required v-model.number="recipe_item_id" class="w300p">
+            <select name="id" required v-model.number="recipe_item.id" class="w300p">
                 <option value="">Select an item</option>
                 <option v-for="item in filteredItems" :value="item.id">#${ item.id } ${ item.name }</option>
             </select>
@@ -57,7 +57,7 @@
         var ItemsFilter = {
             delimiters: vue_delimiters, 
             template: '#itemsfilter',
-            props: ['items', 'recipe_item_id'],
+            props: ['items', 'recipe_item'],
             data: function() {
                 return {
                     query: ''
