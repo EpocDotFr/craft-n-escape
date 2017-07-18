@@ -170,15 +170,6 @@ def recipes_editor_item(item_id):
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
 
-    # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
-    # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
-    items = get_items_for_editor(items, recipes)
-
-    current_item = get_item(items, item_id)
-
-    if not current_item:
-        abort(404)
-
     if request.method == 'POST':
         recipe_items = get_form_values([
             ('id', int),
@@ -195,6 +186,15 @@ def recipes_editor_item(item_id):
             flash('Recipe saved successfully.', 'success')
         except Exception as e:
             flash('Error saving this recipe: {}'.format(e), 'error')
+
+    # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
+    # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
+    items = get_items_for_editor(items, recipes)
+
+    current_item = get_item(items, item_id)
+
+    if not current_item:
+        abort(404)
 
     current_recipe = get_recipe(recipes, item_id)
 
