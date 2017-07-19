@@ -19,10 +19,7 @@
                         <p class="mbs"><strong>Add an item you own:</strong></p>
 
                         <form v-on:submit.prevent="addItemIOwn()">
-                            <select required v-model="whatCanICraft.addItem.item" class="w300p">
-                                <option value="">Select an item</option>
-                                <option v-for="item in componentItems" :value="item">${ item.name }</option>
-                            </select>
+                            <itemsiownfilter :add_item.sync="whatCanICraft.addItem" :items="componentItems"></itemsiownfilter>
                             <input type="number" min="1" value="1" required v-model.number="whatCanICraft.addItem.amount" class="w100p">
                             <button type="submit" title="Add to the list of items you own"><i class="fa fa-plus"></i></button>
                         </form>
@@ -113,6 +110,17 @@
             <a :href="escapistswikisearch + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
         </template>
 
+        <template id="itemsiownfilter">
+            <span>
+                <a href="#" title="Clear filter" @click.prevent="query = ''"><i class="fa fa-eraser"></i></a>
+                <input type="text" class="w200p" placeholder="Filter by item name" v-model="query">
+                <select name="id" required v-model="add_item.item" class="w300p">
+                    <option value="">Select an item</option>
+                    <option v-for="item in filteredItems" :value="item">${ item.name }</option>
+                </select>
+            </span>
+        </template>
+
         <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>
         <script>
             Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
@@ -120,9 +128,35 @@
             var vue_delimiters = ['${', '}']; // Because Jinja2 already uses double brackets
 
             var ItemName = {
-                delimiters: vue_delimiters, 
+                delimiters: vue_delimiters,
                 template: '#itemname',
                 props: ['item', 'escapistswikisearch']
+            };
+
+            var ItemsIOwnFilter = {
+                delimiters: vue_delimiters,
+                template: '#itemsiownfilter',
+                props: ['items', 'add_item'],
+                data: function() {
+                    return {
+                        query: ''
+                    };
+                },
+                computed: {
+                    filteredItems: function() {
+                        var self = this;
+
+                        return this.items.filter(function(item) {
+                            var match = true;
+
+                            if (self.query) {
+                                match = (item.name.toLowerCase().indexOf(self.query.toLowerCase()) !== -1);
+                            }
+
+                            return match;
+                        });
+                    }
+                }
             };
 
             var app = new Vue({
@@ -144,7 +178,8 @@
                     }
                 },
                 components: {
-                    'itemname': ItemName
+                    'itemname': ItemName,
+                    'itemsiownfilter': ItemsIOwnFilter
                 },
                 computed: {
                     componentItems: function() {

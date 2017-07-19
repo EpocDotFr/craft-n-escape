@@ -40,7 +40,8 @@
 
     <template id="itemsfilter">
         <span>
-            <input type="text" class="w200p" placeholder="Type an item ID or name" v-model="query">
+            <a href="#" title="Clear filter" @click.prevent="query = ''"><i class="fa fa-eraser"></i></a>
+            <input type="text" class="w200p" placeholder="Filter by item ID or name" v-model="query">
             <select name="id" required v-model.number="recipe_item.id" class="w300p">
                 <option value="">Select an item</option>
                 <option v-for="item in filteredItems" :value="item.id">#${ item.id } ${ item.name }</option>
@@ -55,7 +56,7 @@
         var vue_delimiters = ['${', '}']; // Because Jinja2 already uses double brackets
 
         var ItemsFilter = {
-            delimiters: vue_delimiters, 
+            delimiters: vue_delimiters,
             template: '#itemsfilter',
             props: ['items', 'recipe_item'],
             data: function() {
