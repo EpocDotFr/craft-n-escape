@@ -11,6 +11,7 @@ _Because everyone loves it when a plan comes together_
     - Can be filtered by item name
     - (WIP) Items icon
     - Crafting recipes
+    - Links to [The Escapists wiki](http://theescapists.gamepedia.com/)
   - Given a list of items you own, you can get the list of items you can craft
   - (Internal) Crafting recipes editor
   - (WIP) (Internal) Items image editor
