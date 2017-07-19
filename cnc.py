@@ -283,21 +283,6 @@ class ItemsParser:
         craft['_recipe'] = recipe
         craft['_recipe_hash'] = md5(recipe.encode('utf-8')).hexdigest()
 
-        # for item in value.split(','):
-        #     item = item.strip().rsplit(' x', maxsplit=1)
-
-        #     if len(item) == 1:
-        #         item_name = item[0].strip()
-        #         amount = 1
-        #     else:
-        #         item_name = item[0].strip()
-        #         amount = int(item[1].strip())
-
-        #     craft['items'].append({
-        #         'name': item_name,
-        #         'amount': amount
-        #     })
-
         return craft
 
 

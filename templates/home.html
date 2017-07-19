@@ -226,7 +226,7 @@
 
                                 // Items I own aren't all present in the item recipe
                                 if (items_i_own_ids.sort().toString() != recipe_items_ids.sort().toString()) {
-                                    break;
+                                    continue;
                                 }
 
                                 var add_to_what_can_i_craft = true;
