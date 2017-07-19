@@ -10,9 +10,10 @@ _Because everyone loves it when a plan comes together_
   - List of all available items with all their attributes (attack power, illegal, price, etc)
     - Can be filtered by item name
     - (WIP) Items icon
-    - (WIP) Crafting recipes
-  - (WIP) Given a list of items you own, you can get the list of items you can craft
-  - (WIP) (Internal) Crafting recipes editor
+    - Crafting recipes
+  - Given a list of items you own, you can get the list of items you can craft
+  - (Internal) Crafting recipes editor
+  - (WIP) (Internal) Items image editor
 
 ## Prerequisites
 
