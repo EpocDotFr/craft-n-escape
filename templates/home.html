@@ -48,6 +48,7 @@
                             <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> increase<br><small>when given</small></th>
                             <th>Decay<br><small>decrease % per use</small></th>
                             <th>Required <a href="http://theescapists.gamepedia.com/Intellect">INT</a><br><small>for crafting</small></th>
+                            <th>Crafting recipe</th>
                             <th>Defense power</th>
                             <th>Healing power</th>
                             <th>Attack power</th>
@@ -86,6 +87,15 @@
                             <td><template v-if="item.gift">+${ item.gift }</template></td>
                             <td>${ item.decay }</td>
                             <td><template v-if="item.craft">${ item.craft.intelligence }</template></td>
+                            <td>
+                                <div class="items-list" v-if="item.craft && item.craft.recipe_items">
+                                    <span class="pas inbl mrs" v-for="recipe_item in item.craft.recipe_items">
+                                        <itemname :item="getItem(recipe_item.id)" :escapistswikisearch="escapistsWikiSearch"></itemname>
+
+                                        <template v-if="recipe_item.amount > 1">x ${ recipe_item.amount }</template>
+                                    </span>
+                                </div>
+                            </td>
                             <td>${ item.outfit }</td>
                             <td><template v-if="item.hp">+${ item.hp }</template></td>
                             <td>${ item.weapon }</td>
@@ -316,6 +326,17 @@
                             default:
                                 return null;
                         }
+                    },
+                    getItem: function(item_id) {
+                        for (var i = 0; i < this.items.length; i++) {
+                            var item = this.items[i];
+
+                            if (item.id == item_id) {
+                                return item;
+                            }
+                        }
+
+                        return null;
                     }
                 }
             });

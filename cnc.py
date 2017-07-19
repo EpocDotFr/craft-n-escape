@@ -71,12 +71,25 @@ def get_item(items, item_id):
     return None
 
 
+def merge_recipe_items_in_items(items, recipes):
+    for item in items:
+        if 'craft' not in item:
+            continue
+
+        recipe = get_recipe(recipes, item['id'])
+
+        if recipe:
+            item['craft']['recipe_items'] = recipe['items']
+
+    return items
+
+
 def get_recipe(recipes, item_id):
     for recipe in recipes:
         if recipe['id'] == item_id:
             return recipe
 
-    return {'items': []}
+    return None
 
 
 def create_or_update_recipe(recipes, item_id, recipe_hash, recipe_items):
@@ -141,6 +154,8 @@ for handler in app.logger.handlers:
 def home():
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
+
+    items = merge_recipe_items_in_items(items, recipes)
 
     return render_template('home.html', items=items, recipes=recipes)
 
