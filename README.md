@@ -9,7 +9,7 @@ _Because everyone loves it when a plan comes together_
   - Web-based
   - List of all available items with all their attributes (attack power, illegal, price, etc)
     - Can be filtered by item name
-    - (WIP) Items icon
+    - (WIP) Items image
     - Crafting recipes
     - Links to [The Escapists wiki](http://theescapists.gamepedia.com/)
   - Given a list of items you own, you can get the list of items you can craft
@@ -20,7 +20,7 @@ _Because everyone loves it when a plan comes together_
 
   - Should work on any Python 3.x version. Feel free to test with another Python version and give me feedback
   - A [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/)-capable web server (optional, but recommended)
-  - The Escapists game
+  - (Optional) The Escapists game, if you need to parse the game files
 
 ## Installation
 

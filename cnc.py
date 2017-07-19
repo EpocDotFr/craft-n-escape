@@ -209,6 +209,12 @@ def build(gamedir):
 
         save_json(app.config['RECIPES_FILE'], [])
 
+    # Initialize the images file as it doesn't exists
+    if not os.path.isfile(app.config['IMAGES_FILE']):
+        app.logger.info('Saving {}'.format(app.config['IMAGES_FILE']))
+
+        save_json(app.config['IMAGES_FILE'], [])
+
     app.logger.info('Done')
 
 
