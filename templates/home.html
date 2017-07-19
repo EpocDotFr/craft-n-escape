@@ -175,6 +175,7 @@
                 data: {
                     items: {{ items|tojson }},
                     recipes: {{ recipes|tojson }},
+                    escapistsWikiSearch: 'http://{{ config['ESCAPISTS_WIKI_DOMAIN'] }}/Special:Search/',
                     filters: {
                         name: ''
                     },
@@ -191,9 +192,6 @@
                     'itemsiownfilter': ItemsIOwnFilter
                 },
                 computed: {
-                    escapistsWikiSearch: function() {
-                        return 'http://{{ config['ESCAPISTS_WIKI_DOMAIN'] }}/Special:Search/';
-                    },
                     componentItems: function() {
                         var self = this;
 
