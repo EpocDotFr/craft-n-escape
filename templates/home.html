@@ -8,7 +8,7 @@
                     <fieldset class="man ptn">
                         <legend><i class="fa fa-filter"></i> Filters</legend>
                         <div class="grid-3">
-                            <div><label>Item name <input type="text" v-model="filters.name"></label></div>
+                            <div><label>Item name <input type="text" v-model="filters.name"> <a href="#" title="Clear filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></label></div>
                         </div>
                     </fieldset>
                 </div>
