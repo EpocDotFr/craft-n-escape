@@ -1,1 +1,3 @@
 flask
+mwclient
+Flask-Cache

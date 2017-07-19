@@ -1,128 +1,14 @@
 from flask import Flask, render_template, make_response, request, abort, flash
 from werkzeug.exceptions import HTTPException
 from configparser import ConfigParser
-from urllib.parse import urlparse
 from hashlib import md5
+from flask_cache import Cache
+from urllib.parse import urlparse
+from helpers import *
 import logging
 import click
-import json
 import sys
 import os
-
-
-# -----------------------------------------------------------
-# Helpers
-
-
-def load_json(file):
-    data = None
-
-    if not os.path.isfile(file):
-        raise FileNotFoundError('The {} file does not exists'.format(file))
-
-    with open(file, 'r') as f:
-        data = f.read()
-
-    return json.loads(data) if data else data
-
-
-def save_json(file, data):
-    with open(file, 'w') as f:
-        f.write(json.dumps(data))
-
-    return data
-
-
-def check_localhost():
-    url = urlparse(request.url_root)
-
-    if url.hostname != 'localhost':
-        return False
-
-    return True
-
-
-def get_items_without_recipe(items):
-    return [item for item in items if 'craft' in item]
-
-
-def get_items_for_editor(items, recipes):
-    for item in items:
-        item['do_not_exists'] = True
-        item['out_of_date'] = False
-
-        for recipe in recipes:
-            if item['id'] == recipe['id']:
-                item['do_not_exists'] = False
-
-                if item['craft']['_recipe_hash'] != recipe['_recipe_hash']:
-                    item['out_of_date'] = True
-
-                break
-
-    return items
-
-
-def get_item(items, item_id):
-    for item in items:
-        if item['id'] == item_id:
-            return item
-
-    return None
-
-
-def merge_recipe_items_in_items(items, recipes):
-    for item in items:
-        if 'craft' not in item:
-            continue
-
-        recipe = get_recipe(recipes, item['id'])
-
-        if recipe:
-            item['craft']['recipe_items'] = recipe['items']
-
-    return items
-
-
-def get_recipe(recipes, item_id):
-    for recipe in recipes:
-        if recipe['id'] == item_id:
-            return recipe
-
-    return None
-
-
-def create_or_update_recipe(recipes, item_id, recipe_hash, recipe_items):
-    found = False
-
-    # Update the existing recipe if it exists
-    for recipe in recipes:
-        if recipe['id'] == item_id:
-            recipe['_recipe_hash'] = recipe_hash
-            recipe['items'] = recipe_items
-
-            found = True
-
-            break
-
-    # Create a new recipe if it doesn't exists
-    if not found:
-        recipes.append({
-            'id': item_id,
-            '_recipe_hash': recipe_hash,
-            'items': recipe_items
-        })
-
-
-def get_form_values(names):
-    values = [request.form.getlist(h[0], type=h[1]) for h in names]
-    items = [{} for i in range(len(values[0]))]
-
-    for x, i in enumerate(values):
-        for _x, _i in enumerate(i):
-            items[_x][names[x][0]] = _i
-
-    return items
 
 
 # -----------------------------------------------------------
@@ -131,6 +17,11 @@ def get_form_values(names):
 
 app = Flask(__name__, static_url_path='')
 app.config.from_pyfile('config.py')
+
+app.config['CACHE_TYPE'] = 'filesystem'
+app.config['CACHE_DIR'] = 'storage/cache'
+
+cache = Cache(app)
 
 # Default Python logger
 logging.basicConfig(
@@ -342,3 +233,32 @@ def http_error_handler(error, without_code=False):
         return make_response(body, error)
     else:
         return make_response(body)
+
+
+# -----------------------------------------------------------
+# Local helpers
+
+
+def check_localhost():
+    url = urlparse(request.url_root)
+
+    if url.hostname != 'localhost':
+        return False
+
+    return True
+
+
+def get_form_values(names):
+    values = [request.form.getlist(h[0], type=h[1]) for h in names]
+    items = [{} for i in range(len(values[0]))]
+
+    for x, i in enumerate(values):
+        for _x, _i in enumerate(i):
+            items[_x][names[x][0]] = _i
+
+    return items
+
+
+@cache.cached(timeout=60 * 6)
+def get_wiki_images():
+    pass
