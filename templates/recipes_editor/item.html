@@ -86,7 +86,7 @@
             el: '#app',
             data: {
                 items: {{ items|tojson }},
-                currentRecipe: {{ current_recipe|tojson if current_recipe else '{"items": []}'|safe }}
+                currentRecipe: {{ current_recipe|tojson }}
             },
             components: {
                 'itemsfilter': ItemsFilter

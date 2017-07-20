@@ -106,12 +106,12 @@ def recipes_editor_item(item_id):
     if item_id in recipes:
         current_recipe = recipes[item_id]
     else:
-        current_recipe = None
+        current_recipe = {'items': []}
 
     return render_template(
         'recipes_editor/item.html',
         current_item=current_item,
-        current_recipe=current_recipe if current_recipe else {},
+        current_recipe=current_recipe,
         items=items
     )
 
