@@ -26,13 +26,19 @@ def load_json(file):
 
 def save_json(file, data):
     with open(file, 'w') as f:
-        f.write(json.dumps(data, sort_keys=True))
+        f.write(json.dumps(data))
 
     return data
 
 
 def get_items_without_recipe(items):
-    return {item_id: item for item_id, item in items.items() if 'craft' in item}
+    items_without_recipe = OrderedDict()
+
+    for item_id, item in items.items():
+        if 'craft' in item:
+            items_without_recipe[item_id] = item
+
+    return items_without_recipe
 
 
 def get_items_for_editor(items, recipes):
