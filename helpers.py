@@ -7,10 +7,7 @@ __all__ = [
     'save_json',
     'get_items_without_recipe',
     'get_items_for_editor',
-    'get_item',
-    'merge_recipe_items_in_items',
-    'get_recipe',
-    'create_or_update_recipe'
+    'merge_recipe_items_in_items'
 ]
 
 
@@ -34,72 +31,31 @@ def save_json(file, data):
 
 
 def get_items_without_recipe(items):
-    return [item for item in items if 'craft' in item]
+    return {item_id: item for item_id, item in items.items() if 'craft' in item}
 
 
 def get_items_for_editor(items, recipes):
-    for item in items:
+    for item_id, item in items.items():
         item['do_not_exists'] = True
         item['out_of_date'] = False
 
-        for recipe in recipes:
-            if item['id'] == recipe['id']:
-                item['do_not_exists'] = False
+        if item_id not in recipes:
+            continue
 
-                if item['craft']['_recipe_hash'] != recipe['_recipe_hash']:
-                    item['out_of_date'] = True
+        item['do_not_exists'] = False
 
-                break
+        if item['craft']['_recipe_hash'] != recipes[item_id]['_recipe_hash']:
+            item['out_of_date'] = True
 
     return items
-
-
-def get_item(items, item_id):
-    for item in items:
-        if item['id'] == item_id:
-            return item
-
-    return None
 
 
 def merge_recipe_items_in_items(items, recipes):
-    for item in items:
+    for item_id, item in items.items():
         if 'craft' not in item:
             continue
 
-        recipe = get_recipe(recipes, item['id'])
-
-        if recipe:
-            item['craft']['recipe_items'] = recipe['items']
+        if item_id in recipes:
+            item['craft']['recipe_items'] = recipes[item_id]['items']
 
     return items
-
-
-def get_recipe(recipes, item_id):
-    for recipe in recipes:
-        if recipe['id'] == item_id:
-            return recipe
-
-    return None
-
-
-def create_or_update_recipe(recipes, item_id, recipe_hash, recipe_items):
-    found = False
-
-    # Update the existing recipe if it exists
-    for recipe in recipes:
-        if recipe['id'] == item_id:
-            recipe['_recipe_hash'] = recipe_hash
-            recipe['items'] = recipe_items
-
-            found = True
-
-            break
-
-    # Create a new recipe if it doesn't exists
-    if not found:
-        recipes.append({
-            'id': item_id,
-            '_recipe_hash': recipe_hash,
-            'items': recipe_items
-        })

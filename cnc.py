@@ -85,7 +85,8 @@ def recipes_editor_item(item_id):
         recipe_hash = request.form.get('_recipe_hash')
 
         try:
-            create_or_update_recipe(recipes, item_id, recipe_hash, recipe_items)
+            recipes[item_id]['_recipe_hash'] = recipe_hash
+            recipes[item_id]['items'] = recipe_items
 
             save_json(app.config['RECIPES_FILE'], recipes)
 
@@ -97,12 +98,15 @@ def recipes_editor_item(item_id):
     # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
     items = get_items_for_editor(items, recipes)
 
-    current_item = get_item(items, item_id)
-
-    if not current_item:
+    if item_id not in items:
         abort(404)
 
-    current_recipe = get_recipe(recipes, item_id)
+    current_item = items[item_id]
+
+    if item_id in recipes:
+        current_recipe = recipes[item_id]
+    else:
+        current_recipe = None
 
     return render_template(
         'recipes_editor/item.html',
