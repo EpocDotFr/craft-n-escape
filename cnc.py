@@ -4,6 +4,7 @@ from configparser import ConfigParser
 from hashlib import md5
 from flask_cache import Cache
 from urllib.parse import urlparse
+from collections import OrderedDict
 from helpers import *
 import logging
 import click
@@ -137,7 +138,7 @@ class ItemsParser:
         if not os.path.isfile(items_file):
             raise FileNotFoundError(items_file + ' does not exists')
 
-        items = {}
+        items = OrderedDict()
 
         with open(items_file, 'r') as f:
             items_file_content = f.readlines()[1:] # Removes the first line
