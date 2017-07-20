@@ -5,6 +5,8 @@ from hashlib import md5
 from flask_cache import Cache
 from urllib.parse import urlparse
 from collections import OrderedDict
+from mwclient import Site
+from mwclient.image import Image
 from helpers import *
 import logging
 import click
@@ -38,6 +40,7 @@ app.config['ITEMS_FILE'] = 'storage/data/items.json'
 app.config['RECIPES_FILE'] = 'storage/data/recipes.json'
 app.config['IMAGES_FILE'] = 'storage/data/images.json'
 app.config['ESCAPISTS_WIKI_DOMAIN'] = 'theescapists.gamepedia.com'
+app.config['ESCAPISTS_WIKI_ITEM_IMAGES_CAT'] = 'Item images'
 
 app.jinja_env.globals.update(is_local=is_local)
 
@@ -79,11 +82,11 @@ def recipes_editor():
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
 
-    items = get_items_without_recipe(items) # Remove items without crafting recipe
+    items = get_items_with_recipe(items) # Only get items with a crafting recipe
 
     # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
     # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
-    items = get_items_for_editor(items, recipes)
+    items = get_items_for_recipes_editor(items, recipes)
 
     return render_template('recipes_editor/home.html', items=items)
 
@@ -98,7 +101,7 @@ def recipes_editor_item(item_id):
 
     # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
     # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
-    items = get_items_for_editor(items, recipes)
+    items = get_items_for_recipes_editor(items, recipes)
 
     if item_id not in items:
         abort(404)
@@ -143,6 +146,11 @@ def items_image_editor():
         abort(404)
 
     items = load_json(app.config['ITEMS_FILE'])
+    images = load_json(app.config['IMAGES_FILE'])
+    wiki_images = get_wiki_images()
+
+    # Highlight items without image
+    items = get_items_for_items_image_editor(items, images, wiki_images)
 
     return render_template('items_image_editor/home.html', items=items)
 
@@ -300,4 +308,16 @@ def get_form_values(names):
 
 @cache.cached(timeout=60 * 6)
 def get_wiki_images():
-    pass
+    wiki_images = OrderedDict()
+
+    site = Site(app.config['ESCAPISTS_WIKI_DOMAIN'], path='/')
+    site.login(app.config['ESCAPISTS_WIKI_USERNAME'], app.config['ESCAPISTS_WIKI_PASSWORD'])
+
+    for img in site.Categories[app.config['ESCAPISTS_WIKI_ITEM_IMAGES_CAT']]:
+        if isinstance(img, Image):
+            wiki_images[Image.strip_namespace(img.name)] = {
+                'url': img.imageinfo['url'],
+                '_image_hash': img.imageinfo['sha1']
+            }
+
+    return wiki_images

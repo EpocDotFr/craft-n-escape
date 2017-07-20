@@ -6,9 +6,10 @@ import os
 __all__ = [
     'load_json',
     'save_json',
-    'get_items_without_recipe',
-    'get_items_for_editor',
-    'merge_recipe_items_in_items'
+    'get_items_with_recipe',
+    'get_items_for_recipes_editor',
+    'merge_recipe_items_in_items',
+    'get_items_for_items_image_editor'
 ]
 
 
@@ -31,28 +32,28 @@ def save_json(file, data):
     return data
 
 
-def get_items_without_recipe(items):
-    items_without_recipe = OrderedDict()
+def get_items_with_recipe(items):
+    items_with_recipe = OrderedDict()
 
     for item_id, item in items.items():
         if 'craft' in item:
-            items_without_recipe[item_id] = item
+            items_with_recipe[item_id] = item
 
-    return items_without_recipe
+    return items_with_recipe
 
 
-def get_items_for_editor(items, recipes):
+def get_items_for_recipes_editor(items, recipes):
     for item_id, item in items.items():
-        item['do_not_exists'] = True
-        item['out_of_date'] = False
+        item['recipe_do_not_exists'] = True
+        item['recipe_out_of_date'] = False
 
         if item_id not in recipes:
             continue
 
-        item['do_not_exists'] = False
+        item['recipe_do_not_exists'] = False
 
         if item['craft']['_recipe_hash'] != recipes[item_id]['_recipe_hash']:
-            item['out_of_date'] = True
+            item['recipe_out_of_date'] = True
 
     return items
 
@@ -64,5 +65,21 @@ def merge_recipe_items_in_items(items, recipes):
 
         if item_id in recipes:
             item['craft']['recipe_items'] = recipes[item_id]['items']
+
+    return items
+
+
+def get_items_for_items_image_editor(items, images, wiki_images):
+    for item_id, item in items.items():
+        item['image_do_not_exists'] = True
+        item['image_out_of_date'] = False
+
+        if item_id not in images:
+            continue
+
+        item['image_do_not_exists'] = False
+
+        if images[item_id]['name'] not in wiki_images or images[item_id]['_image_hash'] != wiki_images[images[item_id]['name']]['_image_hash']:
+            item['image_out_of_date'] = True
 
     return items

@@ -13,7 +13,7 @@
         <div class="grid-4 mts">
             {% for item_id, item in items.items() %}
                 <div>
-                    <a href="{{ url_for('recipes_editor_item', item_id=item_id) }}" title="Edit this item crafting recipe"><i class="fa fa-pencil"></i></a> #{{ item_id }} <a href="http://theescapists.gamepedia.com/Special:Search/{{ item.name }}" title="{{ item.info }}" class="{{ 'txtred' if item.do_not_exists else '' }}{{ 'txtblue' if item.out_of_date else '' }}">{{ item.name }}</a>
+                    <a href="{{ url_for('recipes_editor_item', item_id=item_id) }}" title="Edit this item crafting recipe"><i class="fa fa-pencil"></i></a> #{{ item_id }} <a href="http://theescapists.gamepedia.com/Special:Search/{{ item.name }}" title="{{ item.info }}" class="{{ 'txtred' if item.recipe_do_not_exists else '' }}{{ 'txtblue' if item.recipe_out_of_date else '' }}">{{ item.name }}</a>
                 </div>
             {% endfor %}
         </div>

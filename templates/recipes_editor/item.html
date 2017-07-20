@@ -6,9 +6,9 @@
     <div class="center w1140p">
         <h2 class="mbn">Recipes editor › #{{ current_item_id }} {{ current_item.name }} (INT: {{ current_item.craft.intelligence }})</h2>
 
-        {% if current_item.do_not_exists %}
+        {% if current_item.recipe_do_not_exists %}
             <div class="alert info pas mts">This recipe does not exists in the Craft N' Escape recipe list.</div>
-        {% elif current_item.out_of_date %}
+        {% elif current_item.recipe_out_of_date %}
             <div class="alert info pas mts">This recipe must be updated in Craft N' Escape.</div>
         {% endif %}
 
