@@ -34,6 +34,10 @@ app.config.from_pyfile('config.py')
 
 app.config['CACHE_TYPE'] = 'filesystem'
 app.config['CACHE_DIR'] = 'storage/cache'
+app.config['ITEMS_FILE'] = 'storage/data/items.json'
+app.config['RECIPES_FILE'] = 'storage/data/recipes.json'
+app.config['IMAGES_FILE'] = 'storage/data/images.json'
+app.config['ESCAPISTS_WIKI_DOMAIN'] = 'theescapists.gamepedia.com'
 
 app.jinja_env.globals.update(is_local=is_local)
 

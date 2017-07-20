@@ -41,6 +41,9 @@ Available configuration parameters are:
 
 More informations on the three above can be found [here](http://flask.pocoo.org/docs/0.12/config/#builtin-configuration-values).
 
+  - `ESCAPISTS_WIKI_USERNAME` and `ESCAPISTS_WIKI_PASSWORD` Bot credentials to use The Escapists Wiki API
+  - `GAUGES_SITE_ID` A Gauges site ID used to track visits on Craft N' Escape (optional)
+
 I'll let you search yourself about how to configure a web server along uWSGI.
 
 ## Usage
@@ -82,5 +85,5 @@ For more information, I suggest you do dive into the code starting with the `cnc
 
 ## Credits
 
-  - Logo © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
-  - The Escapists © 2015 - 2017 Mouldy Toof Studios / Team17 Digital. This project isn't supported nor endorsed by Mouldy Toof Studios / Team17 Digital
+  - Logo, items image, The Escapists © 2015 - 2017 Mouldy Toof Studios / Team17 Digital (items image are pulled from [The Escapists wiki](http://theescapists.gamepedia.com/))
+  - This project isn't supported nor endorsed by Mouldy Toof Studios / Team17 Digital
