@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block meta_title %}Items image editor{% endblock %}
+
+{% block content %}
+    <div class="center w1140p">
+        <h2 class="mbn">Items image editor</h2>
+
+        <p><span class="txtred">Red items</span> doesn't have image.</p>
+        <p><span class="txtblue">Blue items</span> have an image, but it is out of date compared to the one from the game's wiki.</p>
+
+        <div class="grid-4 mts">
+            {% for item_id, item in items.items() %}
+                <div>
+                    <a href="{{ url_for('items_image_editor_item', item_id=item_id) }}" title="Edit this item image"><i class="fa fa-pencil"></i></a> #{{ item_id }} <a href="http://theescapists.gamepedia.com/Special:Search/{{ item.name }}" title="{{ item.info }}" class="{{ 'txtred' if item.do_not_exists else '' }}{{ 'txtblue' if item.out_of_date else '' }}">{{ item.name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

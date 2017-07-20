@@ -30,6 +30,12 @@
         </div>
     </header>
 
+    {% if is_local() %}
+        <div class="txtcenter">
+            <a href="{{ url_for('recipes_editor') }}">Recipes editor</a> • <a href="{{ url_for('items_image_editor') }}">Items image editor</a>
+        </div>
+    {% endif %}
+
     {% with flash_messages = get_flashed_messages(with_categories=true) %}
       {% if flash_messages %}
         <div class="pas center w1140p">

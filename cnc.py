@@ -13,6 +13,19 @@ import os
 
 
 # -----------------------------------------------------------
+# Local helpers
+
+
+def is_local():
+    url = urlparse(request.url_root)
+
+    if url.hostname != 'localhost':
+        return False
+
+    return True
+
+
+# -----------------------------------------------------------
 # Boot
 
 
@@ -21,6 +34,8 @@ app.config.from_pyfile('config.py')
 
 app.config['CACHE_TYPE'] = 'filesystem'
 app.config['CACHE_DIR'] = 'storage/cache'
+
+app.jinja_env.globals.update(is_local=is_local)
 
 cache = Cache(app)
 
@@ -54,7 +69,7 @@ def home():
 
 @app.route('/recipes-editor')
 def recipes_editor():
-    if not check_localhost(): # Can only edit crafting recipes locally
+    if not is_local(): # Can only edit crafting recipes locally
         abort(404)
 
     items = load_json(app.config['ITEMS_FILE'])
@@ -71,7 +86,7 @@ def recipes_editor():
 
 @app.route('/recipes-editor/<item_id>', methods=['GET', 'POST'])
 def recipes_editor_item(item_id):
-    if not check_localhost(): # Can only edit crafting recipes locally
+    if not is_local(): # Can only edit crafting recipes locally
         abort(404)
 
     items = load_json(app.config['ITEMS_FILE'])
@@ -115,6 +130,26 @@ def recipes_editor_item(item_id):
         current_item_id=item_id,
         current_recipe=current_recipe,
         items=items
+    )
+
+
+@app.route('/items-image-editor')
+def items_image_editor():
+    if not is_local(): # Can only edit items image locally
+        abort(404)
+
+    items = load_json(app.config['ITEMS_FILE'])
+
+    return render_template('items_image_editor/home.html', items=items)
+
+
+@app.route('/items-image-editor/<item_id>', methods=['GET', 'POST'])
+def items_image_editor_item(item_id):
+    if not is_local(): # Can only edit items image locally
+        abort(404)
+
+    return render_template(
+        'items_image_editor/item.html'
     )
 
 
@@ -246,15 +281,6 @@ def http_error_handler(error, without_code=False):
 
 # -----------------------------------------------------------
 # Local helpers
-
-
-def check_localhost():
-    url = urlparse(request.url_root)
-
-    if url.hostname != 'localhost':
-        return False
-
-    return True
 
 
 def get_form_values(names):
