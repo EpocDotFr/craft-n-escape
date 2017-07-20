@@ -21,14 +21,17 @@
         <form method="post" action="{{ url_for('recipes_editor_item', item_id=current_item_id) }}">
             <input type="hidden" name="_recipe_hash" value="{{ current_item.craft._recipe_hash }}">
 
-            <div id="app" v-cloak>
-                <div v-for="recipe_item in currentRecipe.items" class="mts">
-                    <itemsfilter :recipe_item.sync="recipe_item" :items="items"></itemsfilter>
-                    <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount" class="w100p">
-                    <a href="#" @click.prevent="currentRecipe.items.splice(currentRecipe.items.indexOf(recipe_item), 1)" title="Remove this item"><i class="fa fa-remove"></i></a>
+            <div id="app">
+                <div v-show="loading" class="txtcenter bigger"><i class="fa fa-cog fa-spin"></i> Loading...</div>
+                <div v-cloak>
+                    <div v-for="recipe_item in currentRecipe.items" class="mts">
+                        <itemsfilter :recipe_item.sync="recipe_item" :items="items"></itemsfilter>
+                        <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount" class="w100p">
+                        <a href="#" @click.prevent="currentRecipe.items.splice(currentRecipe.items.indexOf(recipe_item), 1)" title="Remove this item"><i class="fa fa-remove"></i></a>
+                    </div>
+                    <div class="alert error pas mts" v-show="!currentRecipe.items || currentRecipe.items.length == 0">None at this moment.</div>
+                    <p><a href="#" @click.prevent="addItem()"><i class="fa fa-plus"></i> Add an item</a></p>
                 </div>
-                <div class="alert error pas mts" v-show="!currentRecipe.items || currentRecipe.items.length == 0">None at this moment.</div>
-                <p><a href="#" @click.prevent="addItem()"><i class="fa fa-plus"></i> Add an item</a></p>
             </div>
 
             <p class="txtcenter">
@@ -91,11 +94,17 @@
             delimiters: vue_delimiters,
             el: '#app',
             data: {
+                loading: true,
                 items: {{ items|tojson }},
                 currentRecipe: {{ current_recipe|tojson }}
             },
             components: {
                 'itemsfilter': ItemsFilter
+            },
+            mounted: function() {
+                this.$nextTick(function () {
+                    this.loading = false;
+                });
             },
             methods: {
                 addItem: function() {
