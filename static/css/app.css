@@ -105,6 +105,15 @@ header {
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     background-color: #0e3163;
+    display: table;
+}
+
+header > * {
+    display: table-cell;
+}
+
+header .logo {
+    vertical-align: middle;
 }
 
 header h1 {

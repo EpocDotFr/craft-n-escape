@@ -16,11 +16,18 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 </head>
 <body class="man pls prs pbs">
-    <header class="txtcenter mbs center w400p">
-        <div class="pts pbs">
-            <h1 class="man"><a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"> Craft N' Escape</a></h1>
+    <header class="mbs pas center w400p">
+        <div class="logo txtcenter">
+            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"></a>
         </div>
-        <div class="small pbs"><em>Because everyone loves it when a plan comes together</em></div>
+        <div>
+            <div class="txtcenter">
+                <h1 class="man"><a href="{{ url_for('home') }}">Craft N' Escape</a></h1>
+            </div>
+            <div class="txtcenter small">
+                <em>Because everyone loves it when a plan comes together</em>
+            </div>
+        </div>
     </header>
 
     {% with flash_messages = get_flashed_messages(with_categories=true) %}

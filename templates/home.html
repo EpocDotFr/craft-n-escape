@@ -24,7 +24,7 @@
                             <button type="submit" title="Add to the list of items you own"><i class="fa fa-plus"></i></button>
                         </form>
 
-                        <p class="mbs" v-show="whatCanICraft.itemsIOwn.length > 0"><strong>Items you own:</strong></p>
+                        <p class="mbs" v-show="whatCanICraft.itemsIOwn.length > 0"><a href="#" title="Clear" @click.prevent="whatCanICraft.itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
 
                         <div class="items-list">
                             <span class="pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
