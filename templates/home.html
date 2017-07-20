@@ -28,7 +28,7 @@
 
                         <div class="items-list">
                             <span class="pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
-                                <itemname :item="itemIOwn.item" :escapistswikisearch="escapistsWikiSearch"></itemname>
+                                <itemname :item="items[itemIOwn.id]" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
                                 <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
                                 <a href="#" title="Remove from the list of items you own" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
@@ -63,8 +63,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in filteredItems" class="item">
-                            <td>${ item.id }</td>
+                        <tr v-for="(item, item_id) in filteredItems" class="item">
+                            <td>${ item_id }</td>
                             <td class="summary">
                                 <i class="fa fa-star" v-if="item.found" title="Map-specific"></i>
                                 <i class="fa fa-medkit" v-if="item.hp" title="Can heal you"></i>
@@ -90,7 +90,7 @@
                             <td>
                                 <div class="items-list" v-if="item.craft && item.craft.recipe_items">
                                     <span class="pas inbl mrs" v-for="recipe_item in item.craft.recipe_items">
-                                        <itemname :item="getItem(recipe_item.id)" :escapistswikisearch="escapistsWikiSearch"></itemname>
+                                        <itemname :item="items[recipe_item.id]" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
                                         <template v-if="recipe_item.amount > 1">x ${ recipe_item.amount }</template>
                                     </span>
@@ -108,8 +108,8 @@
                             <td><template v-if="item.camdis">${ item.camdis / 1000 }</template></td>
                             <!--<td><i class="fa fa-check" v-if="item.carry"></i></td>-->
                         </tr>
-                        <tr v-show="filteredItems.length == 0">
-                            <td colspan="17" class="txtcenter"><div class="alert info pas">Nothing to display.</div></td>
+                        <tr v-show="_.isEmpty(filteredItems)">
+                            <td colspan="18" class="txtcenter"><div class="alert info pas">Nothing to display.</div></td>
                         </tr>
                     </tbody>
                 </table>
@@ -124,14 +124,15 @@
             <span>
                 <a href="#" title="Clear filter" @click.prevent="query = ''"><i class="fa fa-eraser"></i></a>
                 <input type="text" class="w200p" placeholder="Filter by item name" v-model="query">
-                <select name="id" required v-model="add_item.item" class="w300p">
+                <select name="id" required v-model="add_item.id" class="w300p">
                     <option value="">Select an item</option>
-                    <option v-for="item in filteredItems" :value="item">${ item.name }</option>
+                    <option v-for="(item, item_id) in filteredItems" :value="item_id">${ item.name }</option>
                 </select>
             </span>
         </template>
 
         <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
         <script>
             Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
 
@@ -154,17 +155,22 @@
                 },
                 computed: {
                     filteredItems: function() {
-                        var self = this;
+                        var filtered_items = {};
 
-                        return this.items.filter(function(item) {
+                        for (var item_id in this.items) {
+                            var item = this.items[item_id];
                             var match = true;
 
-                            if (self.query) {
-                                match = (item.name.toLowerCase().indexOf(self.query.toLowerCase()) !== -1);
+                            if (this.query) {
+                                match = (item.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1);
                             }
 
-                            return match;
-                        });
+                            if (match) {
+                                filtered_items[item_id] = item;
+                            }
+                        }
+
+                        return filtered_items;
                     }
                 }
             };
@@ -181,7 +187,7 @@
                     },
                     whatCanICraft: {
                         addItem: {
-                            item: '',
+                            id: '',
                             amount: 1,
                         },
                         itemsIOwn: []
@@ -193,33 +199,35 @@
                 },
                 computed: {
                     componentItems: function() {
-                        var self = this;
+                        var component_items = {};
 
-                        return this.items.filter(function(item) {
-                            for (var i = 0; i < self.recipes.length; i++) {
-                                var recipe = self.recipes[i];
+                        for (var item_id in this.items) {
+                            var item = this.items[item_id];
+
+                            for (var recipe_id in this.recipes) {
+                                var recipe = this.recipes[recipe_id];
 
                                 for (var j = 0; j < recipe.items.length; j++) {
                                     var recipe_item = recipe.items[j];
 
-                                    if (item.id == recipe_item.id) {
-                                        return true;
+                                    if (item_id == recipe_item.id) {
+                                        component_items[item_id] = item;
                                     }
                                 }
                             }
-
-                            return false;
-                        });
+                        }
+                        
+                        return component_items;
                     },
                     filteredItems: function () {
                         if (this.whatCanICraft.itemsIOwn.length > 0) {
                             var what_can_i_craft = [];
                             var items_i_own_ids = this.whatCanICraft.itemsIOwn.map(function(item_i_own) {
-                                return item_i_own.item.id;
+                                return item_i_own.id;
                             });
 
-                            for (var j = 0; j < this.recipes.length; j++) {
-                                var recipe = this.recipes[j];
+                            for (var recipe_id in this.recipes) {
+                                var recipe = this.recipes[recipe_id];
                                 var recipe_items_ids = recipe.items.map(function(recipe_item) {
                                     return recipe_item.id;
                                 });
@@ -237,7 +245,7 @@
                                     for (var k = 0; k < recipe.items.length; k++) {
                                         var recipe_item = recipe.items[k];
 
-                                        if (itemIOwn.item.id == recipe_item.id && itemIOwn.amount < recipe_item.amount) {
+                                        if (itemIOwn.id == recipe_item.id && itemIOwn.amount < recipe_item.amount) {
                                             add_to_what_can_i_craft = false;
                                             break;
                                         }
@@ -248,27 +256,32 @@
                                     }
                                 }
 
-                                if (add_to_what_can_i_craft && !(recipe.id in what_can_i_craft)) {
-                                    what_can_i_craft.push(recipe.id);
+                                if (add_to_what_can_i_craft && !(recipe_id in what_can_i_craft)) {
+                                    what_can_i_craft.push(recipe_id);
                                 }
                             }
                         }
 
-                        var self = this;
+                        var filtered_items = {};
 
-                        return this.items.filter(function(item) {
+                        for (var item_id in this.items) {
+                            var item = this.items[item_id];
                             var name = can_i_craft = true;
 
-                            if (('name' in item) && self.filters.name) {
-                                name = item.name.toLowerCase().indexOf(self.filters.name.toLowerCase()) !== -1;
+                            if (('name' in item) && this.filters.name) {
+                                name = item.name.toLowerCase().indexOf(this.filters.name.toLowerCase()) !== -1;
                             }
 
-                            if (self.whatCanICraft.itemsIOwn.length > 0) {
-                                can_i_craft = what_can_i_craft.indexOf(item.id) !== -1;
+                            if (this.whatCanICraft.itemsIOwn.length > 0) {
+                                can_i_craft = what_can_i_craft.indexOf(item_id) !== -1;
                             }
 
-                            return name && can_i_craft;
-                        });
+                            if (name && can_i_craft) {
+                                filtered_items[item_id] = item;
+                            }
+                        }
+
+                        return filtered_items;
                     }
                 },
                 methods: {
@@ -279,7 +292,7 @@
                         for (var i = 0; i < this.whatCanICraft.itemsIOwn.length; i++) {
                             var itemIOwn = this.whatCanICraft.itemsIOwn[i];
 
-                            if (itemIOwn.item.id == this.whatCanICraft.addItem.item.id) {
+                            if (itemIOwn.id == this.whatCanICraft.addItem.id) {
                                 already_present = i;
                                 break;
                             }
@@ -287,14 +300,14 @@
 
                         if (already_present === false) {
                             this.whatCanICraft.itemsIOwn.push({
-                                item: this.whatCanICraft.addItem.item,
+                                id: this.whatCanICraft.addItem.id,
                                 amount: this.whatCanICraft.addItem.amount
                             });
                         } else {
                             this.whatCanICraft.itemsIOwn[already_present].amount += this.whatCanICraft.addItem.amount;
                         }
 
-                        this.whatCanICraft.addItem.item = '';
+                        this.whatCanICraft.addItem.id = '';
                         this.whatCanICraft.addItem.amount = 1;
                     },
                     getFound: function(found) {
@@ -326,17 +339,6 @@
                             default:
                                 return null;
                         }
-                    },
-                    getItem: function(item_id) {
-                        for (var i = 0; i < this.items.length; i++) {
-                            var item = this.items[i];
-
-                            if (item.id == item_id) {
-                                return item;
-                            }
-                        }
-
-                        return null;
                     }
                 }
             });

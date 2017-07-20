@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
 
-{% block meta_title %}Recipes editor › #{{ current_item.id }} {{ current_item.name }}{% endblock %}
+{% block meta_title %}Recipes editor › #{{ current_item_id }} {{ current_item.name }}{% endblock %}
 
 {% block content %}
     <div class="center w1140p">
-        <h2 class="mbn">Recipes editor › #{{ current_item.id }} {{ current_item.name }} (INT: {{ current_item.craft.intelligence }})</h2>
+        <h2 class="mbn">Recipes editor › #{{ current_item_id }} {{ current_item.name }} (INT: {{ current_item.craft.intelligence }})</h2>
 
         {% if current_item.do_not_exists %}
             <div class="alert info pas mts">This recipe does not exists in the Craft N' Escape recipe list.</div>
@@ -18,7 +18,7 @@
 
         <p><strong>Craft N' Escape recipe:</strong></p>
 
-        <form method="post" action="{{ url_for('recipes_editor_item', item_id=current_item.id) }}">
+        <form method="post" action="{{ url_for('recipes_editor_item', item_id=current_item_id) }}">
             <input type="hidden" name="_recipe_hash" value="{{ current_item.craft._recipe_hash }}">
 
             <div id="app">
@@ -44,12 +44,13 @@
             <input type="text" class="w200p" placeholder="Filter by item ID or name" v-model="query">
             <select name="id" required v-model.number="recipe_item.id" class="w300p">
                 <option value="">Select an item</option>
-                <option v-for="item in filteredItems" :value="item.id">#${ item.id } ${ item.name }</option>
+                <option v-for="(item, item_id) in filteredItems" :value="item_id">#${ item_id } ${ item.name }</option>
             </select>
         </span>
     </template>
 
     <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script>
         Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
 
@@ -66,17 +67,22 @@
             },
             computed: {
                 filteredItems: function() {
-                    var self = this;
+                    var filtered_items = {};
 
-                    return this.items.filter(function(item) {
+                    for (var item_id in this.items) {
+                        var item = this.items[item_id];
                         var match = true;
 
-                        if (self.query) {
-                            match = (item.name.toLowerCase().indexOf(self.query.toLowerCase()) !== -1) || item.id == self.query;
+                        if (this.query) {
+                            match = (item.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) || item.id == this.query;
                         }
 
-                        return match;
-                    });
+                        if (match) {
+                            filtered_items[item_id] = item;
+                        }
+                    }
+
+                    return filtered_items;
                 }
             }
         };

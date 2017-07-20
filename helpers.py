@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import json
 import os
 
@@ -20,12 +21,12 @@ def load_json(file):
     with open(file, 'r') as f:
         data = f.read()
 
-    return json.loads(data) if data else data
+    return json.loads(data, object_pairs_hook=OrderedDict) if data else data
 
 
 def save_json(file, data):
     with open(file, 'w') as f:
-        f.write(json.dumps(data))
+        f.write(json.dumps(data, sort_keys=True))
 
     return data
 

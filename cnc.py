@@ -68,13 +68,20 @@ def recipes_editor():
     return render_template('recipes_editor/home.html', items=items)
 
 
-@app.route('/recipes-editor/<int:item_id>', methods=['GET', 'POST'])
+@app.route('/recipes-editor/<item_id>', methods=['GET', 'POST'])
 def recipes_editor_item(item_id):
     if not check_localhost(): # Can only edit crafting recipes locally
         abort(404)
 
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
+
+    # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
+    # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
+    items = get_items_for_editor(items, recipes)
+
+    if item_id not in items:
+        abort(404)
 
     if request.method == 'POST':
         recipe_items = get_form_values([
@@ -94,13 +101,6 @@ def recipes_editor_item(item_id):
         except Exception as e:
             flash('Error saving this recipe: {}'.format(e), 'error')
 
-    # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
-    # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
-    items = get_items_for_editor(items, recipes)
-
-    if item_id not in items:
-        abort(404)
-
     current_item = items[item_id]
 
     if item_id in recipes:
@@ -111,6 +111,7 @@ def recipes_editor_item(item_id):
     return render_template(
         'recipes_editor/item.html',
         current_item=current_item,
+        current_item_id=item_id,
         current_recipe=current_recipe,
         items=items
     )
