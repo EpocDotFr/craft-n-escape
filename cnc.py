@@ -132,7 +132,7 @@ class ItemsParser:
         if not os.path.isfile(items_file):
             raise FileNotFoundError(items_file + ' does not exists')
 
-        items = []
+        items = {}
 
         with open(items_file, 'r') as f:
             items_file_content = f.readlines()[1:] # Removes the first line
@@ -142,15 +142,12 @@ class ItemsParser:
         items_parser.read_string(items_file_content)
 
         for item_id in items_parser.sections():
-            item = {}
-            item['id'] = int(item_id)
+            items[item_id] = {}
 
             for name, value in items_parser.items(item_id):
                 value = self._get_item_attribute_value(name, value)
 
-                item[name] = value
-
-            items.append(item)
+                items[item_id][name] = value
 
         return items
 
@@ -207,13 +204,13 @@ def build(gamedir):
     if not os.path.isfile(app.config['RECIPES_FILE']):
         app.logger.info('Saving {}'.format(app.config['RECIPES_FILE']))
 
-        save_json(app.config['RECIPES_FILE'], [])
+        save_json(app.config['RECIPES_FILE'], {})
 
     # Initialize the images file as it doesn't exists
     if not os.path.isfile(app.config['IMAGES_FILE']):
         app.logger.info('Saving {}'.format(app.config['IMAGES_FILE']))
 
-        save_json(app.config['IMAGES_FILE'], [])
+        save_json(app.config['IMAGES_FILE'], {})
 
     app.logger.info('Done')
 
