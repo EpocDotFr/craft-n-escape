@@ -5,6 +5,7 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Items and crafting recipes for The Escapists, on one searchable page.">
 
     <title>{% block meta_title %}{% endblock %}{% if self.meta_title() | trim %} • {% endif %}Craft N' Escape</title>
 
@@ -53,5 +54,22 @@
         The Escapists © 2015 - 2017 Mouldy Toof Studios / Team17 Digital<br>
         This project isn't supported nor endorsed by Mouldy Toof Studios / Team17 Digital
     </footer>
+
+    {% if config['GAUGES_SITE_ID'] %}
+        <script type="text/javascript">
+          var _gauges = _gauges || [];
+          (function() {
+            var t   = document.createElement('script');
+            t.type  = 'text/javascript';
+            t.async = true;
+            t.id    = 'gauges-tracker';
+            t.setAttribute('data-site-id', '{{ config['GAUGES_SITE_ID'] }}');
+            t.setAttribute('data-track-path', 'https://track.gaug.es/track.gif');
+            t.src = 'https://d36ee2fcip1434.cloudfront.net/track.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(t, s);
+          })();
+        </script>
+    {% endif %}
 </body>
 </html>

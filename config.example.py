@@ -7,3 +7,4 @@ IMAGES_FILE = 'storage/data/images.json'
 ESCAPISTS_WIKI_DOMAIN = 'theescapists.gamepedia.com'
 ESCAPISTS_WIKI_USERNAME = 'username'
 ESCAPISTS_WIKI_PASSWORD = 'password'
+GAUGES_SITE_ID = None
