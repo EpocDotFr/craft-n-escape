@@ -21,7 +21,7 @@
         <form method="post" action="{{ url_for('recipes_editor_item', item_id=current_item_id) }}">
             <input type="hidden" name="_recipe_hash" value="{{ current_item.craft._recipe_hash }}">
 
-            <div id="app">
+            <div id="app" v-cloak>
                 <div v-for="recipe_item in currentRecipe.items" class="mts">
                     <itemsfilter :recipe_item.sync="recipe_item" :items="items"></itemsfilter>
                     <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount" class="w100p">
