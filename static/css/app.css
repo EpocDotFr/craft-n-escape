@@ -41,13 +41,13 @@ a:focus {
 /************************************************************************
  * Items */
 
-.item .summary,
-.item .name {
+.item .summary-cell,
+.item .name-cell {
     white-space: nowrap;
 }
 
-.item .name img {
-    max-width: 48px;
+.item-name img {
+    max-width: 32px;
 }
 
 .item .fa {

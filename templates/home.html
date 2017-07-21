@@ -66,7 +66,7 @@
                     <tbody>
                         <tr v-for="(item, item_id) in filteredItems" class="item">
                             <td>${ item_id }</td>
-                            <td class="summary">
+                            <td class="summary-cell">
                                 <i class="fa fa-star" v-if="item.found" title="Map-specific"></i>
                                 <i class="fa fa-medkit" v-if="item.hp" title="Can heal you"></i>
                                 <i class="fa fa-bomb" v-if="item.weapon" title="Can hurt people"></i>
@@ -81,7 +81,7 @@
                                 <i class="fa fa-chain-broken" v-if="item.decay" title="Can broke"></i>
                                 <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
                             </td>
-                            <td class="name">
+                            <td class="name-cell">
                                 <itemname :item="item" :escapistswikisearch="escapistsWikiSearch"></itemname>
                             </td>
                             <td><template v-if="item.buy">$${ item.buy }</template></td>
@@ -119,7 +119,7 @@
     </div>
 
     <template id="itemname">
-        <span>
+        <span class="item-name">
             <img :src="'images/items/' + item.image.name" v-if="item.image"> <a :href="escapistswikisearch + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
         </span>
     </template>
