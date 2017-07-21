@@ -68,8 +68,10 @@ for handler in app.logger.handlers:
 def home():
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
+    images = load_json(app.config['IMAGES_FILE'])
 
     items = merge_recipe_items_in_items(items, recipes)
+    items = merge_images_in_items(items, images)
 
     return render_template('home.html', items=items, recipes=recipes)
 
@@ -160,8 +162,35 @@ def items_image_editor_item(item_id):
     if not is_local(): # Can only edit items image locally
         abort(404)
 
+    items = load_json(app.config['ITEMS_FILE'])
+    images = load_json(app.config['IMAGES_FILE'])
+    wiki_images = get_wiki_images()
+
+    # Highlight items without image
+    items = get_items_for_items_image_editor(items, images, wiki_images)
+
+    if item_id not in items:
+        abort(404)
+
+    current_item = items[item_id]
+
+    if item_id in images:
+        current_image = images[item_id]
+    else:
+        current_image = {}
+
+    if current_image and current_image['name'] in wiki_images:
+        current_wiki_image = wiki_images[current_image['name']]
+    else:
+        current_wiki_image = {}
+
     return render_template(
-        'items_image_editor/item.html'
+        'items_image_editor/item.html',
+        current_item=current_item,
+        current_item_id=item_id,
+        current_image=current_image,
+        wiki_images=wiki_images,
+        current_wiki_image=current_wiki_image,
     )
 
 
@@ -306,7 +335,7 @@ def get_form_values(names):
     return items
 
 
-@cache.cached(timeout=60 * 6)
+@cache.cached(timeout=60 * 60 * 6)
 def get_wiki_images():
     wiki_images = OrderedDict()
 

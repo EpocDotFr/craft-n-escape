@@ -41,12 +41,26 @@ a:focus {
 /************************************************************************
  * Items */
 
-.item .summary {
+.item .summary,
+.item .name {
     white-space: nowrap;
+}
+
+.item .name img {
+    max-width: 48px;
 }
 
 .item .fa {
     cursor: help;
+}
+
+/************************************************************************
+ * Wiki images */
+
+.wiki-image {
+    background-color: #00202f;
+    border: 0.1rem solid #003b60;
+    border-radius: 0.5rem;
 }
 
 /************************************************************************
@@ -124,10 +138,7 @@ header h1 {
     font-family: monospace, monospace;
 }
 
-header a {
-    text-decoration: none;
-}
-
+header a,
 header a:hover {
     text-decoration: none;
 }

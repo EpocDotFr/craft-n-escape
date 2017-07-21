@@ -9,6 +9,7 @@ __all__ = [
     'get_items_with_recipe',
     'get_items_for_recipes_editor',
     'merge_recipe_items_in_items',
+    'merge_images_in_items',
     'get_items_for_items_image_editor'
 ]
 
@@ -65,6 +66,14 @@ def merge_recipe_items_in_items(items, recipes):
 
         if item_id in recipes:
             item['craft']['recipe_items'] = recipes[item_id]['items']
+
+    return items
+
+
+def merge_images_in_items(items, images):
+    for item_id, item in items.items():
+        if item_id in images:
+            item['image'] = images[item_id]
 
     return items
 

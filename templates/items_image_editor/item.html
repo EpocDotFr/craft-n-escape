@@ -1,9 +1,47 @@
 {% extends 'layout.html' %}
 
-{% block meta_title %}Items image editor › {% endblock %}
+{% block meta_title %}Items image editor › #{{ current_item_id }} {{ current_item.name }}{% endblock %}
 
 {% block content %}
     <div class="center w1140p">
-        <h2 class="mbn">Items image editor › </h2>
-    </div>
+        <h2 class="mbn">Items image editor › #{{ current_item_id }} {{ current_item.name }}</h2>
+
+        {% if current_item.image_do_not_exists %}
+            <div class="alert info pas mts">This item doesn't have image.</div>
+        {% elif current_item.image_out_of_date %}
+            <div class="alert info pas mts">This item's image must be updated.</div>
+        {% endif %}
+
+        <div class="grid has-gutter">
+            <div>
+                <p class="mbs"><strong>Current Craft N' Escape image:</strong></p>
+                <div class="wiki-image txtcenter pas">
+                    <img src="{{ url_for('static', filename='images/items/' + current_image['name']) }}">
+                </div>
+            </div>
+            <div>
+                <p class="mbs"><strong>Current Wiki image:</strong></p>
+                <div class="wiki-image txtcenter pas">
+                    <img src="{{ current_wiki_image['url'] }}">
+                </div>
+            </div>
+        </div>
+
+        <p><strong>Available Wiki images:</strong></p>
+
+        <p><label>Filter by image name <input type="text" v-model="filters.name"></label> <a href="#" title="Clear filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></p>
+
+        <div class="grid-4 has-gutter mts">
+            {% for wiki_image_name, wiki_image in wiki_images.items() %}
+                <div class="wiki-image txtcenter mbs pas">
+                    <img src="{{ wiki_image['url'] }}"><br>{{ wiki_image_name }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <p class="txtcenter">
+            <a href="{{ url_for('items_image_editor') }}" class="btn"><i class="fa fa-chevron-left"></i> Back</a>
+            <button type="submit"><i class="fa fa-save"></i> Save</button>
+        </p>
+   </div>
 {% endblock %}

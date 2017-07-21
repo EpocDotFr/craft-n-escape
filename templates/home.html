@@ -9,7 +9,7 @@
                     <fieldset class="man ptn">
                         <legend><i class="fa fa-filter"></i> Filters</legend>
                         <div class="grid-2">
-                            <div><label>Item name <input type="text" v-model="filters.name"> <a href="#" title="Clear filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></label></div>
+                            <div><label>Item name <input type="text" v-model="filters.name"></label> <a href="#" title="Clear filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></div>
                         </div>
                     </fieldset>
                 </div>
@@ -81,7 +81,7 @@
                                 <i class="fa fa-chain-broken" v-if="item.decay" title="Can broke"></i>
                                 <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
                             </td>
-                            <td>
+                            <td class="name">
                                 <itemname :item="item" :escapistswikisearch="escapistsWikiSearch"></itemname>
                             </td>
                             <td><template v-if="item.buy">$${ item.buy }</template></td>
@@ -119,7 +119,9 @@
     </div>
 
     <template id="itemname">
-        <a :href="escapistswikisearch + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
+        <span>
+            <img :src="'images/items/' + item.image.name" v-if="item.image"> <a :href="escapistswikisearch + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
+        </span>
     </template>
 
     <template id="itemsiownfilter">
