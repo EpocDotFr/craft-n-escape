@@ -29,19 +29,65 @@
 
         <p><strong>Available Wiki images:</strong></p>
 
-        <p><label>Filter by image name <input type="text" v-model="filters.name"></label> <a href="#" title="Clear filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></p>
+        <div id="app">
+            <div v-show="loading" class="txtcenter bigger"><i class="fa fa-cog fa-spin"></i> Loading...</div>
+            <div v-cloak>
+                <p><label>Filter by image name <input type="text" v-model="image_name"></label> <a href="#" title="Clear filter" @click.prevent="image_name = ''"><i class="fa fa-eraser"></i></a></p>
 
-        <div class="grid-4 has-gutter mts">
-            {% for wiki_image_name, wiki_image in wiki_images.items() %}
-                <div class="wiki-image txtcenter mbs pas">
-                    <img src="{{ wiki_image['url'] }}"><br>{{ wiki_image_name }}
+                <div class="grid-4 has-gutter mts">
+                    <div v-for="(wiki_image, wiki_image_name) in filteredWikiImages" class="wiki-image txtcenter mbs pas">
+                        <img :src="wiki_image.url"><br>${ wiki_image_name }
+                    </div>
                 </div>
-            {% endfor %}
+            </div>
         </div>
 
         <p class="txtcenter">
             <a href="{{ url_for('items_image_editor') }}" class="btn"><i class="fa fa-chevron-left"></i> Back</a>
             <button type="submit"><i class="fa fa-save"></i> Save</button>
         </p>
-   </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script>
+        Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
+
+        var vue_delimiters = ['${', '}']; // Because Jinja2 already uses double brackets
+
+        var app = new Vue({
+            delimiters: vue_delimiters,
+            el: '#app',
+            data: {
+                loading: true,
+                image_name: '',
+                wiki_images: {{ wiki_images|tojson }}
+            },
+            mounted: function() {
+                this.$nextTick(function () {
+                    this.loading = false;
+                });
+            },
+            computed: {
+                filteredWikiImages: function() {
+                    var filtered_wiki_images = {};
+
+                    for (var wiki_image_name in this.wiki_images) {
+                        var wiki_image = this.wiki_images[wiki_image_name];
+                        var match = true;
+
+                        if (this.image_name) {
+                            match = (wiki_image_name.toLowerCase().indexOf(this.image_name.toLowerCase()) !== -1);
+                        }
+
+                        if (match) {
+                            filtered_wiki_images[wiki_image_name] = wiki_image;
+                        }
+                    }
+
+                    return filtered_wiki_images;
+                }
+            }
+        });
+     </script>
 {% endblock %}
