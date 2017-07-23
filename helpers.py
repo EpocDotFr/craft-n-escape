@@ -9,8 +9,7 @@ __all__ = [
     'get_items_with_recipe',
     'get_items_for_recipes_editor',
     'merge_recipe_items_in_items',
-    'merge_images_in_items',
-    'get_items_for_items_image_editor'
+    'merge_images_in_items'
 ]
 
 
@@ -73,22 +72,6 @@ def merge_recipe_items_in_items(items, recipes):
 def merge_images_in_items(items, images):
     for item_id, item in items.items():
         if item_id in images:
-            item['image'] = images[item_id]
-
-    return items
-
-
-def get_items_for_items_image_editor(items, images, wiki_images):
-    for item_id, item in items.items():
-        item['image_do_not_exists'] = True
-        item['image_out_of_date'] = False
-
-        if item_id not in images:
-            continue
-
-        item['image_do_not_exists'] = False
-
-        if images[item_id]['name'] not in wiki_images or images[item_id]['_image_hash'] != wiki_images[images[item_id]['name']]['_image_hash']:
-            item['image_out_of_date'] = True
+            item['_img_ext'] = images[item_id]
 
     return items

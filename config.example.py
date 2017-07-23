@@ -1,6 +1,4 @@
 SECRET_KEY = 'secretkeyhere'
 DEBUG = False
 LOGGER_HANDLER_POLICY = 'production'
-ESCAPISTS_WIKI_USERNAME = 'username'
-ESCAPISTS_WIKI_PASSWORD = 'password'
 GAUGES_SITE_ID = None

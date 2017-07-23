@@ -29,7 +29,7 @@
 
                         <div class="items-list">
                             <span class="pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
-                                <itemname :item="items[itemIOwn.id]" :escapistswikisearch="escapistsWikiSearch"></itemname>
+                                <itemname :item="items[itemIOwn.id]" :itemid="itemIOwn.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
                                 <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
                                 <a href="#" title="Remove from the list of items you own" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
@@ -82,7 +82,7 @@
                                 <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
                             </td>
                             <td class="name-cell">
-                                <itemname :item="item" :escapistswikisearch="escapistsWikiSearch"></itemname>
+                                <itemname :item="item" :itemid="item_id" :escapistswikisearch="escapistsWikiSearch"></itemname>
                             </td>
                             <td><template v-if="item.buy">$${ item.buy }</template></td>
                             <td><template v-if="item.gift">+${ item.gift }</template></td>
@@ -91,7 +91,7 @@
                             <td>
                                 <div class="items-list" v-if="item.craft && item.craft.recipe_items">
                                     <span class="pas inbl mrs" v-for="recipe_item in item.craft.recipe_items">
-                                        <itemname :item="items[recipe_item.id]" :escapistswikisearch="escapistsWikiSearch"></itemname>
+                                        <itemname :item="items[recipe_item.id]" :itemid="recipe_item.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
                                         <template v-if="recipe_item.amount > 1">x ${ recipe_item.amount }</template>
                                     </span>
@@ -120,7 +120,7 @@
 
     <template id="itemname">
         <span class="item-name">
-            <img :src="'images/items/' + item.image.name" v-if="item.image"> <a :href="escapistswikisearch + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
+            <img :src="'images/items/' + itemid + item._img_ext" v-if="item._img_ext"> <a :href="escapistswikisearch + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
         </span>
     </template>
 

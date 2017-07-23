@@ -5,8 +5,7 @@ from hashlib import md5
 from flask_cache import Cache
 from urllib.parse import urlparse
 from collections import OrderedDict
-from mwclient import Site
-from mwclient.image import Image
+from glob import glob
 from helpers import *
 import logging
 import click
@@ -36,11 +35,10 @@ app.config.from_pyfile('config.py')
 
 app.config['CACHE_TYPE'] = 'filesystem'
 app.config['CACHE_DIR'] = 'storage/cache'
+app.config['ITEMS_IMAGES_DIR'] = 'static/images/items'
 app.config['ITEMS_FILE'] = 'storage/data/items.json'
 app.config['RECIPES_FILE'] = 'storage/data/recipes.json'
-app.config['IMAGES_FILE'] = 'storage/data/images.json'
 app.config['ESCAPISTS_WIKI_DOMAIN'] = 'theescapists.gamepedia.com'
-app.config['ESCAPISTS_WIKI_ITEM_IMAGES_CAT'] = 'Item images'
 
 app.jinja_env.globals.update(is_local=is_local)
 
@@ -68,7 +66,7 @@ for handler in app.logger.handlers:
 def home():
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
-    images = load_json(app.config['IMAGES_FILE'])
+    images = get_images()
 
     items = merge_recipe_items_in_items(items, recipes)
     items = merge_images_in_items(items, images)
@@ -139,58 +137,6 @@ def recipes_editor_item(item_id):
         current_item_id=item_id,
         current_recipe=current_recipe,
         items=items
-    )
-
-
-@app.route('/items-image-editor')
-def items_image_editor():
-    if not is_local(): # Can only edit items image locally
-        abort(404)
-
-    items = load_json(app.config['ITEMS_FILE'])
-    images = load_json(app.config['IMAGES_FILE'])
-    wiki_images = get_wiki_images()
-
-    # Highlight items without image
-    items = get_items_for_items_image_editor(items, images, wiki_images)
-
-    return render_template('items_image_editor/home.html', items=items)
-
-
-@app.route('/items-image-editor/<item_id>', methods=['GET', 'POST'])
-def items_image_editor_item(item_id):
-    if not is_local(): # Can only edit items image locally
-        abort(404)
-
-    items = load_json(app.config['ITEMS_FILE'])
-    images = load_json(app.config['IMAGES_FILE'])
-    wiki_images = get_wiki_images()
-
-    # Highlight items without image
-    items = get_items_for_items_image_editor(items, images, wiki_images)
-
-    if item_id not in items:
-        abort(404)
-
-    current_item = items[item_id]
-
-    if item_id in images:
-        current_image = images[item_id]
-    else:
-        current_image = {}
-
-    if current_image and current_image['name'] in wiki_images:
-        current_wiki_image = wiki_images[current_image['name']]
-    else:
-        current_wiki_image = {}
-
-    return render_template(
-        'items_image_editor/item.html',
-        current_item=current_item,
-        current_item_id=item_id,
-        current_image=current_image,
-        wiki_images=wiki_images,
-        current_wiki_image=current_wiki_image,
     )
 
 
@@ -288,12 +234,6 @@ def build(gamedir):
 
         save_json(app.config['RECIPES_FILE'], {})
 
-    # Initialize the images file as it doesn't exists
-    if not os.path.isfile(app.config['IMAGES_FILE']):
-        app.logger.info('Saving {}'.format(app.config['IMAGES_FILE']))
-
-        save_json(app.config['IMAGES_FILE'], {})
-
     app.logger.info('Done')
 
 
@@ -336,17 +276,14 @@ def get_form_values(names):
 
 
 @cache.cached(timeout=60 * 60 * 6)
-def get_wiki_images():
-    wiki_images = OrderedDict()
+def get_images():
+    items_images = {}
 
-    site = Site(app.config['ESCAPISTS_WIKI_DOMAIN'], path='/')
-    site.login(app.config['ESCAPISTS_WIKI_USERNAME'], app.config['ESCAPISTS_WIKI_PASSWORD'])
+    detected_images = glob(os.path.join(app.config['ITEMS_IMAGES_DIR'], '*.*'))
 
-    for img in site.Categories[app.config['ESCAPISTS_WIKI_ITEM_IMAGES_CAT']]:
-        if isinstance(img, Image):
-            wiki_images[Image.strip_namespace(img.name)] = {
-                'url': img.imageinfo['url'],
-                '_image_hash': img.imageinfo['sha1']
-            }
+    for detected_image in detected_images:
+        detected_image = os.path.splitext(os.path.basename(detected_image))
 
-    return wiki_images
+        items_images[detected_image[0]] = detected_image[1]
+
+    return items_images

@@ -3,7 +3,7 @@ var vue_delimiters = ['${', '}']; // Because Jinja2 already uses double brackets
 var ItemName = {
     delimiters: vue_delimiters,
     template: '#itemname',
-    props: ['item', 'escapistswikisearch']
+    props: ['item', 'itemid', 'escapistswikisearch']
 };
 
 var ItemsIOwnFilter = {
