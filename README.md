@@ -20,7 +20,7 @@ _Because everyone loves it when a plan comes together_
 
   - Should work on any Python 3.x version. Feel free to test with another Python version and give me feedback
   - A [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/)-capable web server (optional, but recommended)
-  - (Optional) The Escapists game, if you need to extract the items data
+  - (Optional) The Escapists game, if you need to extract the items data or images
 
 ## Installation
 
@@ -72,7 +72,7 @@ updated.
   1. `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
   2. `flask itemsdata --gamedir="path to the game root directory"`
 
-**This command only works on Windows**.
+**This command only works on Windows**, and requires the game to be installed.
 
 ### Extracting items images
 
@@ -82,7 +82,8 @@ A Flask command (`flask itemsimages`) can be used to extract items images from t
   2. `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
   3. `flask itemsimages`
 
-**This command only works on Windows**, and requires the game to be already running in any map.
+**This command only works on Windows**, and requires the game to be already running in any map without any internal game
+window opened.
 
 ## How it works
 
@@ -95,12 +96,11 @@ Data is stored in [JSON](https://en.wikipedia.org/wiki/JSON) files:
   - `storage/data/recipes.json` contains all crafting recipes of the items contained in the file above.
 
 A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists crafting
-recipes format to the Craft N' Escape one.
+recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items ID).
 
 Items images are extracted using, huh, a brutal solution. Basically, the `flask itemsimages` command edit the game's
-memory for each existing items by assigning them in the inventory, in the weapon slot. A screenshot of the current weapon
-is then taken, the background is converted to a transparent one and the final image saved in the `static/images/items`
-directory using the item ID as its name.
+memory for each existing items by assigning them in your weapon slot. A screenshot of the current weapon is then taken,
+the background is converted to a transparent one and the final image saved in the `static/images/items/{item ID}.png` directory.
 
 For more information, I suggest you do dive into the code starting with the `cnc.py` file.
 
