@@ -14,7 +14,7 @@ _Because everyone loves it when a plan comes together_
     - (WIP) Items image
   - Given a list of items you own, you can get the list of items you can craft
   - (Internal) Crafting recipes editor (used to convert The Escapists crafting recipes format to the Craft N' Escape one)
-  - (WIP) (Internal) Items image editor (used to assign items image from The Escapists wiki)
+  - (WIP) (Internal) Items images extractor
 
 ## Prerequisites
 
@@ -26,8 +26,6 @@ _Because everyone loves it when a plan comes together_
 
   1. Clone this repo somewhere
   2. `pip install -r requirements.txt`
-  3. (Optional) `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
-  4. (Optional) `flask itemsdata --gamedir="path to the game root directory"`
 
 ## Configuration
 
@@ -41,7 +39,6 @@ Available configuration parameters are:
 
 More informations on the three above can be found [here](http://flask.pocoo.org/docs/0.12/config/#builtin-configuration-values).
 
-  - `ESCAPISTS_WIKI_USERNAME` and `ESCAPISTS_WIKI_PASSWORD` Bot credentials to use The Escapists Wiki API
   - `GAUGES_SITE_ID` A [Gauges](https://gaug.es/) site ID used to track visits on Craft N' Escape (optional)
 
 I'll let you search yourself about how to configure a web server along uWSGI.
@@ -67,8 +64,23 @@ The uWSGI file you'll have to set in your uWSGI configuration is `uwsgi.py`. The
 You'll probably have to hack with this application to make it work with one of the solutions described
 [here](http://flask.pocoo.org/docs/0.12/deploying/). Send me a pull request if you make it work.
 
+### Extracting items data
+
 A Flask command (`flask itemsdata`) can be used to regenerate the items listing file, i.e when the game has been
-updated. Run `flask itemsdata --help` for more information.
+updated.
+
+  1. `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
+  2. `flask itemsdata --gamedir="path to the game root directory"`
+
+### Extracting items images
+
+A Flask command (`flask itemsimages`) can be used to extract items images from the game itself.
+
+**This command only works on Windows**, and requires the game already running and you inventory to be shown up.
+
+  1. `pip install -r requirements-dev.txt`
+  2. `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
+  3. `flask itemsimages`
 
 ## How it works
 
@@ -79,17 +91,13 @@ Data is stored in [JSON](https://en.wikipedia.org/wiki/JSON) files:
 
   - `storage/data/items.json` is built by the `flask itemsdata` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
   - `storage/data/recipes.json` contains all crafting recipes of the items contained in the file above.
-  - `storage/data/images.json` stores the relation between an item in Craft N' Escape and an item image on The Escapists wiki. Items image are stored locally in `static/images/items`.
 
-A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert
-The Escapists crafting recipes format to the Craft N' Escape one.
-
-An items image editor (only available locally at `http://localhost:8080/items-image-editor`) is used to
-assign The Escapists wiki items image to items in Craft N' Escape.
+A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists crafting
+recipes format to the Craft N' Escape one.
 
 For more information, I suggest you do dive into the code starting with the `cnc.py` file.
 
 ## Credits
 
-  - Logo, items image, The Escapists © 2015 - 2017 Mouldy Toof Studios / Team17 Digital (items image are pulled from The Escapists wiki)
+  - Logo, items image, The Escapists © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
   - This project isn't supported nor endorsed by Mouldy Toof Studios / Team17 Digital

@@ -173,6 +173,11 @@ def itemsdata(gamedir):
     app.logger.info('Done')
 
 
+@app.cli.command()
+def itemsimages():
+    pass
+
+
 # -----------------------------------------------------------
 # HTTP errors handler
 
