@@ -156,7 +156,7 @@ def itemsdata(gamedir):
     if not click.confirm('This will overwrite the {} file. Are you sure?'.format(app.config['ITEMS_FILE'])):
         context.exit()
 
-    app.logger.info('Build started')
+    app.logger.info('Extracting started')
 
     parser = ItemsDataParser(gamedir)
     items = parser.parse()
@@ -179,8 +179,20 @@ def itemsimages():
     """Extract items images"""
     from the_escapists import ItemsImagesExtractor
 
-    extractor = ItemsImagesExtractor()
+    app.logger.info('Extracting started')
+
+    app.logger.info('Loading items')
+
+    items = load_json(app.config['ITEMS_FILE'])
+
+    item_ids = [item_id for item_id, item in items.items()]
+
+    app.logger.info('Extracting')
+
+    extractor = ItemsImagesExtractor(item_ids=item_ids, output_dir=app.config['ITEMS_IMAGES_DIR'])
     extractor.extract()
+
+    app.logger.info('Done')
 
 # -----------------------------------------------------------
 # HTTP errors handler

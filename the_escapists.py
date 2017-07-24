@@ -26,8 +26,8 @@ class ItemsDataParser:
         items = OrderedDict()
 
         with open(items_file, 'r') as f:
-            items_file_content = f.readlines()[1:] # Removes the first line
-            items_file_content = '\n'.join(items_file_content)
+            items_file_content = f.readlines()[1:] # Removes the first line, because it makes the parser to crash
+            items_file_content = '\n'.join(items_file_content) # Reconstruct the whole file
 
         items_parser = ConfigParser(interpolation=None)
         items_parser.read_string(items_file_content)
@@ -66,49 +66,73 @@ class ItemsDataParser:
 
 
 class ItemsImagesExtractor:
-    def __init__(self):
-        pass
+    current_weapon_addr = 0x0D7C5E5C # String[3]
+    weapon_slot_top = 369
+    weapon_slot_left = 484
+    weapon_slot_width = 106
+    weapon_slot_height = 103
+    item_background_color = (32, 32, 32, 255)
 
-    def extract(self):
-        # 1. Get window handle
-        # 2. Compute screeshot pos
-        # 3. Loop through every item IDs
-        # 4. Change the current weapon by writing in memory the item ID
-        # 5. Send keystrokes to show the inventory
-        # 6. Take screenshot of the weapon part and save the image with the item ID as its name
-        # 7. Send keystrokes to hide the inventory
-        # 8. Repeat 4
+    def __init__(self, item_ids, output_dir):
+        self.item_ids = item_ids
+        self.output_dir = output_dir
 
-        current_weapon_addr = 0x0D7C5E5C # String[3]
+        if not os.path.isdir(self.output_dir):
+            raise FileNotFoundError(self.output_dir + ' does not exists')
 
+        self.compute_weapon_slot_pos()
+
+    def compute_weapon_slot_pos(self):
+        # Find the game's window
         game_handle = win32gui.FindWindow(None, 'The Escapists')
 
         if not game_handle:
             raise Exception('The game does not seems to be running')
 
+        # Get the game's window dimension
         game_window = win32gui.GetWindowRect(game_handle)
 
         game_window_x = game_window[0]
         game_window_y = game_window[1]
 
-        sct = mss()
+        # Compute the weapon slot position
+        self.weapon_slot_pos = {
+            'top': game_window_y + self.weapon_slot_top,
+            'left': game_window_x + self.weapon_slot_left,
+            'width': self.weapon_slot_width,
+            'height': self.weapon_slot_height
+        }
 
-        sct_img = sct.grab({ # Screenshot the weapon part of the inventory
-            'top': game_window_y + 369,
-            'left': game_window_x + 484,
-            'width': 106,
-            'height': 103
-        })
+    def extract(self):
+        scsh = mss()
 
-        img = Image.frombytes('RGBA', sct_img.size, bytes(sct_img.raw), 'raw', 'RGBA')
+        # For each available items
+        for item_id in self.item_ids:
+            # Change the current player's weapon (by writing its ID in the game's memory)
 
-        pixdata = img.load()
-        width, height = img.size
+            # TODO
 
-        # Make the grey background transparent
-        for y in range(height):
-            for x in range(width):
-                if pixdata[x, y] == (32, 32, 32, 255):
-                    pixdata[x, y] = (32, 32, 32, 0)
+            # Show the player's inventory by sending keystrokes (required in order to be taken into account by the game)
 
-        img.save('t.png')
+            # TODO
+
+            # Take screenshot of the weapon slot
+            weapon_slot = scsh.grab(self.weapon_slot_pos)
+
+            weapon_slot_img = Image.frombytes('RGBA', weapon_slot.size, bytes(weapon_slot.raw), 'raw', 'RGBA')
+
+            pixdata = weapon_slot_img.load()
+            width, height = weapon_slot_img.size
+
+            # Make the grey background transparent
+            for y in range(height):
+                for x in range(width):
+                    if pixdata[x, y] == self.item_background_color:
+                        pixdata[x, y] = (32, 32, 32, 0)
+
+            # Save the image with the item ID as its name
+            weapon_slot_img.save(os.path.join(self.output_dir, item_id + '.png'))
+
+            # Hide the player's inventory by sending keystrokes (required in order to be taken into account by the game)
+
+            # TODO
