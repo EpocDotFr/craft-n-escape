@@ -97,6 +97,11 @@ Data is stored in [JSON](https://en.wikipedia.org/wiki/JSON) files:
 A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists crafting
 recipes format to the Craft N' Escape one.
 
+Items images are extracted using, huh, a brutal solution. Basically, the `flask itemsimages` command edit the game's
+memory for each existing items by assigning them in the inventory, in the weapon slot. A screenshot of the current weapon
+is then taken, the background is converted to a transparent one and the final image saved in the `static/images/items`
+directory using the item ID as its name.
+
 For more information, I suggest you do dive into the code starting with the `cnc.py` file.
 
 ## Credits
