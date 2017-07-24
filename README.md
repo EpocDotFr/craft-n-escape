@@ -72,15 +72,17 @@ updated.
   1. `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
   2. `flask itemsdata --gamedir="path to the game root directory"`
 
+**This command only works on Windows**.
+
 ### Extracting items images
 
 A Flask command (`flask itemsimages`) can be used to extract items images from the game itself.
 
-**This command only works on Windows**, and requires the game already running and you inventory to be shown up.
-
   1. `pip install -r requirements-dev.txt`
   2. `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
   3. `flask itemsimages`
+
+**This command only works on Windows**, and requires the game to be already running in any map.
 
 ## How it works
 

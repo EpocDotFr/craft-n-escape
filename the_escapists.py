@@ -70,6 +70,15 @@ class ItemsImagesExtractor:
         pass
 
     def extract(self):
+        # 1. Get window handle
+        # 2. Compute screeshot pos
+        # 3. Loop through every item IDs
+        # 4. Change the current weapon by writing in memory the item ID
+        # 5. Send keystrokes to show the inventory
+        # 6. Take screenshot of the weapon part and save the image with the item ID as its name
+        # 7. Send keystrokes to hide the inventory
+        # 8. Repeat 4
+
         current_weapon_addr = 0x0D7C5E5C # String[3]
 
         game_handle = win32gui.FindWindow(None, 'The Escapists')
