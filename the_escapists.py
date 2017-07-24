@@ -1,9 +1,12 @@
 from collections import OrderedDict
 from configparser import ConfigParser
-from hashlib import md5
 from mss.windows import MSS as mss
+from hashlib import md5
 from PIL import Image
+import win32process
 import win32gui
+import win32con
+import win32api
 import os
 
 
@@ -72,6 +75,7 @@ class ItemsImagesExtractor:
     weapon_slot_width = 106
     weapon_slot_height = 103
     item_background_color = (32, 32, 32, 255)
+    item_background_color_replace = (32, 32, 32, 0)
 
     def __init__(self, item_ids, output_dir):
         self.item_ids = item_ids
@@ -80,17 +84,23 @@ class ItemsImagesExtractor:
         if not os.path.isdir(self.output_dir):
             raise FileNotFoundError(self.output_dir + ' does not exists')
 
-        self.compute_weapon_slot_pos()
+        self._get_window()
+        self._get_weapon_slot_pos()
 
-    def compute_weapon_slot_pos(self):
+    def _get_window(self):
         # Find the game's window
-        game_handle = win32gui.FindWindow(None, 'The Escapists')
+        self.game_window = win32gui.FindWindow(None, 'The Escapists')
 
-        if not game_handle:
+        if not self.game_window:
             raise Exception('The game does not seems to be running')
 
+        game_window_thread_proc_id = win32process.GetWindowThreadProcessId(self.game_window)
+
+        self.game_process = win32api.OpenProcess(win32con.PROCESS_ALL_ACCESS, False, game_window_thread_proc_id[1])
+
+    def _get_weapon_slot_pos(self):
         # Get the game's window dimension
-        game_window = win32gui.GetWindowRect(game_handle)
+        game_window = win32gui.GetWindowRect(self.game_window)
 
         game_window_x = game_window[0]
         game_window_y = game_window[1]
@@ -128,7 +138,7 @@ class ItemsImagesExtractor:
             for y in range(height):
                 for x in range(width):
                     if pixdata[x, y] == self.item_background_color:
-                        pixdata[x, y] = (32, 32, 32, 0)
+                        pixdata[x, y] = self.item_background_color_replace
 
             # Save the image with the item ID as its name
             weapon_slot_img.save(os.path.join(self.output_dir, item_id + '.png'))
