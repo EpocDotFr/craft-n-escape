@@ -83,7 +83,7 @@ A Flask command (`flask itemsimages`) can be used to extract items images from t
   3. `flask itemsimages`
 
 **This command only works on Windows**, and requires the game to be already running in any map without any internal game
-window opened.
+window opened. The game's window must be visible at all times, and must not be moved or resized.
 
 ## How it works
 
