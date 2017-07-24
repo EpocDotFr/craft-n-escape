@@ -3,7 +3,6 @@ from werkzeug.exceptions import HTTPException
 from flask_cache import Cache
 from urllib.parse import urlparse
 from glob import glob
-from the_escapists import *
 from helpers import *
 import logging
 import click
@@ -146,6 +145,8 @@ def recipes_editor_item(item_id):
 @click.option('--gamedir', '-g', help='Game root directory')
 def itemsdata(gamedir):
     """Extract data from items_eng.dat"""
+    from the_escapists import ItemsDataParser
+
     context = click.get_current_context()
 
     if not gamedir:
@@ -157,8 +158,8 @@ def itemsdata(gamedir):
 
     app.logger.info('Build started')
 
-    items_data_parser = ItemsDataParser(gamedir)
-    items = items_data_parser.parse()
+    parser = ItemsDataParser(gamedir)
+    items = parser.parse()
 
     app.logger.info('Saving {}'.format(app.config['ITEMS_FILE']))
 
@@ -176,42 +177,10 @@ def itemsdata(gamedir):
 @app.cli.command()
 def itemsimages():
     """Extract items images"""
-    from mss.windows import MSS as mss
-    from PIL import Image
-    import win32gui
+    from the_escapists import ItemsImagesExtractor
 
-    game_handle = win32gui.FindWindow(None, 'The Escapists')
-
-    if not game_handle:
-        raise Exception('The game does not seems to be running')
-
-    game_window = win32gui.GetWindowRect(game_handle)
-
-    game_window_x = game_window[0]
-    game_window_y = game_window[1]
-
-    sct = mss()
-
-    sct_img = sct.grab({ # Screenshot the weapon part of the inventory
-        'top': game_window_y + 369,
-        'left': game_window_x + 484,
-        'width': 106,
-        'height': 103
-    })
-
-    img = Image.frombytes('RGBA', sct_img.size, bytes(sct_img.raw), 'raw', 'RGBA')
-
-    pixdata = img.load()
-    width, height = img.size
-
-    # Make the grey background transparent
-    for y in range(height):
-        for x in range(width):
-            if pixdata[x, y] == (32, 32, 32, 255):
-                pixdata[x, y] = (32, 32, 32, 0)
-
-    img.save('t.png')
-
+    extractor = ItemsImagesExtractor()
+    extractor.extract()
 
 # -----------------------------------------------------------
 # HTTP errors handler
