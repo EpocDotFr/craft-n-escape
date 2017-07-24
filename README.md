@@ -20,14 +20,14 @@ _Because everyone loves it when a plan comes together_
 
   - Should work on any Python 3.x version. Feel free to test with another Python version and give me feedback
   - A [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/)-capable web server (optional, but recommended)
-  - (Optional) The Escapists game, if you need to build the items file
+  - (Optional) The Escapists game, if you need to extract the items data
 
 ## Installation
 
   1. Clone this repo somewhere
   2. `pip install -r requirements.txt`
   3. (Optional) `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
-  4. (Optional) `flask build --gamedir="path to the game root directory"`
+  4. (Optional) `flask itemsdata --gamedir="path to the game root directory"`
 
 ## Configuration
 
@@ -67,8 +67,8 @@ The uWSGI file you'll have to set in your uWSGI configuration is `uwsgi.py`. The
 You'll probably have to hack with this application to make it work with one of the solutions described
 [here](http://flask.pocoo.org/docs/0.12/deploying/). Send me a pull request if you make it work.
 
-A Flask command (`flask build`) can be used to regenerate the items listing file, i.e when the game has been
-updated. Run `flask build --help` for more information.
+A Flask command (`flask itemsdata`) can be used to regenerate the items listing file, i.e when the game has been
+updated. Run `flask itemsdata --help` for more information.
 
 ## How it works
 
@@ -77,7 +77,7 @@ This project is mainly powered by [Flask](http://flask.pocoo.org/) (Python) for 
 
 Data is stored in [JSON](https://en.wikipedia.org/wiki/JSON) files:
 
-  - `storage/data/items.json` is built by the `flask build` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
+  - `storage/data/items.json` is built by the `flask itemsdata` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
   - `storage/data/recipes.json` contains all crafting recipes of the items contained in the file above.
   - `storage/data/images.json` stores the relation between an item in Craft N' Escape and an item image on The Escapists wiki. Items image are stored locally in `static/images/items`.
 
