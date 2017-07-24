@@ -145,7 +145,7 @@ def recipes_editor_item(item_id):
 @app.cli.command()
 @click.option('--gamedir', '-g', help='Game root directory')
 def itemsdata(gamedir):
-    """Extract data from items_eng.dat """
+    """Extract data from items_eng.dat"""
     context = click.get_current_context()
 
     if not gamedir:
@@ -175,7 +175,42 @@ def itemsdata(gamedir):
 
 @app.cli.command()
 def itemsimages():
-    pass
+    """Extract items images"""
+    from mss.windows import MSS as mss
+    from PIL import Image
+    import win32gui
+
+    game_handle = win32gui.FindWindow(None, 'The Escapists')
+
+    if not game_handle:
+        raise Exception('The game does not seems to be running')
+
+    game_window = win32gui.GetWindowRect(game_handle)
+
+    game_window_x = game_window[0]
+    game_window_y = game_window[1]
+
+    sct = mss()
+
+    sct_img = sct.grab({ # Screenshot the weapon part of the inventory
+        'top': game_window_y + 369,
+        'left': game_window_x + 484,
+        'width': 106,
+        'height': 103
+    })
+
+    img = Image.frombytes('RGBA', sct_img.size, bytes(sct_img.raw), 'raw', 'RGBA')
+
+    pixdata = img.load()
+    width, height = img.size
+
+    # Make the grey background transparent
+    for y in range(height):
+        for x in range(width):
+            if pixdata[x, y] == (32, 32, 32, 255):
+                pixdata[x, y] = (32, 32, 32, 0)
+
+    img.save('t.png')
 
 
 # -----------------------------------------------------------
