@@ -69,8 +69,8 @@ You'll probably have to hack with this application to make it work with one of t
 A Flask command (`flask itemsdata`) can be used to regenerate the items listing file, i.e when the game has been
 updated.
 
-  1. `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
-  2. `flask itemsdata --gamedir="path to the game root directory"`
+  1. `set FLASK_APP=cnc.py`
+  2. `flask itemsdata --gamedir="{path to the game root directory}"`
 
 **This command only works on Windows**, and requires the game to be installed.
 
@@ -79,7 +79,7 @@ updated.
 A Flask command (`flask itemsimages`) can be used to extract items images from the game itself.
 
   1. `pip install -r requirements-dev.txt`
-  2. `export FLASK_APP=cnc.py` (Windows users: `set FLASK_APP=cnc.py`)
+  2. `set FLASK_APP=cnc.py`
   3. `flask itemsimages`
 
 **This command only works on Windows**, and requires the game to be already running in any map without any internal game
