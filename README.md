@@ -99,8 +99,8 @@ A recipes editor (only available locally at `http://localhost:8080/recipes-edito
 recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items ID).
 
 Items images are extracted using, huh, a brutal solution. Basically, the `flask itemsimages` command edit the game's
-memory for each existing items by assigning them in your weapon slot. A screenshot of the current weapon is then taken,
-the background is converted to a transparent one and the final image saved in the `static/images/items/{item ID}.png` directory.
+process memory for each existing items by assigning them in your weapon slot. A screenshot of the current weapon is then
+taken, the background is converted to a transparent one and the final image saved at `static/images/items/{item ID}.png`.
 
 For more information, I suggest you do dive into the code starting with the `cnc.py` file.
 
