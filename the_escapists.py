@@ -75,6 +75,10 @@ class ItemsImagesExtractor:
     item_background_color = (32, 32, 32, 255)
     item_background_color_replace = (32, 32, 32, 0)
 
+    PROCESS_ALL_ACCESS = 0x1F0FFF
+    WM_CHAR = 0x0102
+    SEVEN_KEY = 0x37
+
     def __init__(self, item_ids, output_dir):
         self.item_ids = item_ids
         self.output_dir = output_dir
@@ -112,7 +116,7 @@ class ItemsImagesExtractor:
         if not game_window_proc_id:
             raise Exception('Unable to get the game\'s process ID')
 
-        self.game_process = windll.kernel32.OpenProcess(0x1F0FFF, False, game_window_proc_id)
+        self.game_process = windll.kernel32.OpenProcess(self.PROCESS_ALL_ACCESS, False, game_window_proc_id)
 
         if not self.game_process:
             raise Exception('Unable open the game\'s process')
@@ -123,6 +127,9 @@ class ItemsImagesExtractor:
 
         windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, current_weapon_id, buffer_size)
 
+    def _toggle_profile(self):
+        windll.user32.SendMessage(self.game_window, self.WM_CHAR, self.SEVEN_KEY, 0)
+
     def extract(self):
         scsh = mss()
 
@@ -131,9 +138,8 @@ class ItemsImagesExtractor:
             # Change the current player's weapon (by writing its ID in the game's memory)
             self._set_current_weapon(item_id)
 
-            # Show the player's inventory by sending keystrokes (required in order to be taken into account by the game)
-
-            # TODO
+            # Show the player's profile by sending keystrokes (required in order to be taken into account by the game)
+            self._toggle_profile()
 
             # Take screenshot of the weapon slot
             weapon_slot = scsh.grab(self.weapon_slot_pos)
@@ -152,6 +158,5 @@ class ItemsImagesExtractor:
             # Save the image with the item ID as its name
             weapon_slot_img.save(os.path.join(self.output_dir, item_id + '.png'))
 
-            # Hide the player's inventory by sending keystrokes (required in order to be taken into account by the game)
-
-            # TODO
+            # Hide the player's profile by sending keystrokes (required in order to be taken into account by the game)
+            self._toggle_profile()
