@@ -1,8 +1,8 @@
 from collections import OrderedDict
 from configparser import ConfigParser
 from mss.windows import MSS as mss
-from ctypes import windll, byref
-from ctypes.wintypes import RECT, DWORD, LPCSTR
+from ctypes import windll, byref, create_string_buffer
+from ctypes.wintypes import RECT, DWORD
 from hashlib import md5
 from PIL import Image
 import os
@@ -67,7 +67,7 @@ class ItemsDataParser:
 
 
 class ItemsImagesExtractor:
-    current_weapon_addr = 0x0D7C5E5C # String[3]
+    current_weapon_addr = 0x0D4C422C
     weapon_slot_top = 369
     weapon_slot_left = 484
     weapon_slot_width = 106
@@ -94,7 +94,7 @@ class ItemsImagesExtractor:
             raise Exception('The game does not seems to be running')
 
     def _set_weapon_slot_pos(self):
-        """SEt the weapon slot position in the game's window."""
+        """Set the weapon slot position in the game's window."""
         game_window_rect = RECT()
         windll.user32.GetWindowRect(self.game_window, byref(game_window_rect))
 
@@ -117,22 +117,19 @@ class ItemsImagesExtractor:
         if not self.game_process:
             raise Exception('Unable open the game\'s process')
 
+    def _set_current_weapon(self, item_id):
+        buffer_size = len(item_id)
+        current_weapon_id = create_string_buffer(bytes(item_id, 'utf8'), size=buffer_size)
+
+        windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, current_weapon_id, buffer_size)
+
     def extract(self):
-        #current_weapon_id = (LPCSTR * 3)()
-
-        #windll.kernel32.ReadProcessMemory(self.game_process, self.current_weapon_addr, current_weapon_id, 3)
-
-        #print(current_weapon_id)
-
-        #return
-
         scsh = mss()
 
         # For each available items
         for item_id in self.item_ids:
             # Change the current player's weapon (by writing its ID in the game's memory)
-
-            # TODO
+            self._set_current_weapon(item_id)
 
             # Show the player's inventory by sending keystrokes (required in order to be taken into account by the game)
 
