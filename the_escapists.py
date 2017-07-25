@@ -5,6 +5,7 @@ from ctypes import windll, byref, create_string_buffer
 from ctypes.wintypes import RECT, DWORD
 from hashlib import md5
 from PIL import Image
+from time import sleep
 import os
 
 
@@ -67,7 +68,7 @@ class ItemsDataParser:
 
 
 class ItemsImagesExtractor:
-    current_weapon_addr = 0x0D4C422C
+    current_weapon_addr = 0x03C5CF7C
     weapon_slot_top = 369
     weapon_slot_left = 484
     weapon_slot_width = 106
@@ -128,7 +129,7 @@ class ItemsImagesExtractor:
         windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, current_weapon_id, buffer_size)
 
     def _toggle_profile(self):
-        windll.user32.SendMessage(self.game_window, self.WM_CHAR, self.SEVEN_KEY, 0)
+        windll.user32.SendMessageW(self.game_window, self.WM_CHAR, self.SEVEN_KEY, 0)
 
     def extract(self):
         scsh = mss()
@@ -138,8 +139,12 @@ class ItemsImagesExtractor:
             # Change the current player's weapon (by writing its ID in the game's memory)
             self._set_current_weapon(item_id)
 
+            sleep(0.5)
+
             # Show the player's profile by sending keystrokes (required in order to be taken into account by the game)
             self._toggle_profile()
+
+            sleep(0.5)
 
             # Take screenshot of the weapon slot
             weapon_slot = scsh.grab(self.weapon_slot_pos)
@@ -160,3 +165,5 @@ class ItemsImagesExtractor:
 
             # Hide the player's profile by sending keystrokes (required in order to be taken into account by the game)
             self._toggle_profile()
+
+            sleep(0.5)
