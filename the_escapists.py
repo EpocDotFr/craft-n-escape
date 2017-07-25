@@ -1,12 +1,10 @@
 from collections import OrderedDict
 from configparser import ConfigParser
 from mss.windows import MSS as mss
+from ctypes import windll, byref
+from ctypes.wintypes import RECT, DWORD, LPCSTR
 from hashlib import md5
 from PIL import Image
-import win32process
-import win32gui
-import win32con
-import win32api
 import os
 
 
@@ -84,36 +82,50 @@ class ItemsImagesExtractor:
         if not os.path.isdir(self.output_dir):
             raise FileNotFoundError(self.output_dir + ' does not exists')
 
-        self._get_window()
-        self._get_weapon_slot_pos()
+        self._set_window()
+        self._set_weapon_slot_pos()
+        self._set_process()
 
-    def _get_window(self):
-        # Find the game's window
-        self.game_window = win32gui.FindWindow(None, 'The Escapists')
+    def _set_window(self):
+        """Set the game's window."""
+        self.game_window = windll.user32.FindWindowW(None, 'The Escapists')
 
         if not self.game_window:
             raise Exception('The game does not seems to be running')
 
-        game_window_thread_proc_id = win32process.GetWindowThreadProcessId(self.game_window)
+    def _set_weapon_slot_pos(self):
+        """SEt the weapon slot position in the game's window."""
+        game_window_rect = RECT()
+        windll.user32.GetWindowRect(self.game_window, byref(game_window_rect))
 
-        self.game_process = win32api.OpenProcess(win32con.PROCESS_ALL_ACCESS, False, game_window_thread_proc_id[1])
-
-    def _get_weapon_slot_pos(self):
-        # Get the game's window dimension
-        game_window = win32gui.GetWindowRect(self.game_window)
-
-        game_window_x = game_window[0]
-        game_window_y = game_window[1]
-
-        # Compute the weapon slot position
         self.weapon_slot_pos = {
-            'top': game_window_y + self.weapon_slot_top,
-            'left': game_window_x + self.weapon_slot_left,
+            'top': game_window_rect.top + self.weapon_slot_top,
+            'left': game_window_rect.left + self.weapon_slot_left,
             'width': self.weapon_slot_width,
             'height': self.weapon_slot_height
         }
 
+    def _set_process(self):
+        game_window_proc_id = DWORD()
+        windll.user32.GetWindowThreadProcessId(self.game_window, byref(game_window_proc_id))
+
+        if not game_window_proc_id:
+            raise Exception('Unable to get the game\'s process ID')
+
+        self.game_process = windll.kernel32.OpenProcess(0x1F0FFF, False, game_window_proc_id)
+
+        if not self.game_process:
+            raise Exception('Unable open the game\'s process')
+
     def extract(self):
+        #current_weapon_id = (LPCSTR * 3)()
+
+        #windll.kernel32.ReadProcessMemory(self.game_process, self.current_weapon_addr, current_weapon_id, 3)
+
+        #print(current_weapon_id)
+
+        #return
+
         scsh = mss()
 
         # For each available items

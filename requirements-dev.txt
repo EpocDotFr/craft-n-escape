@@ -1,3 +1,2 @@
 Pillow
-pypiwin32
 mss
