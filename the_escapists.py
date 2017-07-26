@@ -68,7 +68,7 @@ class ItemsDataParser:
 
 
 class ItemsImagesExtractor:
-    current_weapon_addr = 0x03C5CF7C
+    current_weapon_addr = 0x0E2F4D2C
     weapon_slot_top = 369
     weapon_slot_left = 484
     weapon_slot_width = 106
@@ -77,8 +77,6 @@ class ItemsImagesExtractor:
     item_background_color_replace = (32, 32, 32, 0)
 
     PROCESS_ALL_ACCESS = 0x1F0FFF
-    WM_CHAR = 0x0102
-    SEVEN_KEY = 0x37
 
     def __init__(self, item_ids, output_dir):
         self.item_ids = item_ids
@@ -97,6 +95,8 @@ class ItemsImagesExtractor:
 
         if not self.game_window:
             raise Exception('The game does not seems to be running')
+
+        windll.user32.SetForegroundWindow(self.game_window)
 
     def _set_weapon_slot_pos(self):
         """Set the weapon slot position in the game's window."""
@@ -123,13 +123,11 @@ class ItemsImagesExtractor:
             raise Exception('Unable open the game\'s process')
 
     def _set_current_weapon(self, item_id):
+        item_id = bytes(item_id, 'utf8')
         buffer_size = len(item_id)
-        current_weapon_id = create_string_buffer(bytes(item_id, 'utf8'), size=buffer_size)
+        current_weapon_id = create_string_buffer(item_id, size=buffer_size)
 
         windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, current_weapon_id, buffer_size)
-
-    def _toggle_profile(self):
-        windll.user32.SendMessageW(self.game_window, self.WM_CHAR, self.SEVEN_KEY, 0)
 
     def extract(self):
         scsh = mss()
@@ -141,8 +139,8 @@ class ItemsImagesExtractor:
 
             sleep(0.5)
 
-            # Show the player's profile by sending keystrokes (required in order to be taken into account by the game)
-            self._toggle_profile()
+            # Show the player's profile by sending key 7 (required in order to be taken into account by the game)
+            # TODO
 
             sleep(0.5)
 
@@ -163,7 +161,7 @@ class ItemsImagesExtractor:
             # Save the image with the item ID as its name
             weapon_slot_img.save(os.path.join(self.output_dir, item_id + '.png'))
 
-            # Hide the player's profile by sending keystrokes (required in order to be taken into account by the game)
-            self._toggle_profile()
+            # Hide the player's profile by sending key 7 (required in order to be taken into account by the game)
+            # TODO
 
             sleep(0.5)

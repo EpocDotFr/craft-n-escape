@@ -180,6 +180,7 @@ def itemsimages():
     from the_escapists import ItemsImagesExtractor
 
     app.logger.info('Extracting started')
+    app.logger.info('Do not touch anything until it is finished')
 
     app.logger.info('Loading items')
 
