@@ -121,11 +121,11 @@ def ReleaseKey(hexKeyCode):
 
 
 class ItemsImagesExtractor:
-    current_weapon_addr = 0x0E2F4D2C
-    weapon_slot_top = 369
+    current_weapon_addr = 0x0D8D9404
+    weapon_slot_top = 370
     weapon_slot_left = 484
     weapon_slot_width = 106
-    weapon_slot_height = 103
+    weapon_slot_height = 102
     item_background_color = (32, 32, 32, 255)
     item_background_color_replace = (32, 32, 32, 0)
 
@@ -176,11 +176,9 @@ class ItemsImagesExtractor:
             raise Exception('Unable open the game\'s process')
 
     def _set_current_weapon(self, item_id):
-        item_id = bytes(item_id, 'utf8')
-        buffer_size = len(item_id)
-        current_weapon_id = ctypes.create_string_buffer(item_id, size=buffer_size)
+        item_id = item_id.encode('ascii')
 
-        ctypes.windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, current_weapon_id, buffer_size)
+        ctypes.windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, item_id, len(item_id))
 
     def _toggle_profile(self):
         PressKey(0x08)
