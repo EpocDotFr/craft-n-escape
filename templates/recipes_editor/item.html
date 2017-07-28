@@ -24,13 +24,12 @@
             <div id="app">
                 <div v-show="loading" class="txtcenter bigger"><i class="fa fa-cog fa-spin"></i> Loading...</div>
                 <div v-cloak>
-                    <div v-for="recipe_item in currentRecipe.items" class="mts">
-                        <itemsfilter :recipe_item.sync="recipe_item" :items="items"></itemsfilter>
-                        <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount" class="w100p">
-                        <a href="#" @click.prevent="currentRecipe.items.splice(currentRecipe.items.indexOf(recipe_item), 1)" title="Remove this item"><i class="fa fa-remove"></i></a>
-                    </div>
+                    <itemslist :recipeitems.sync="currentRecipe.items" :items="items"></itemslist>
                     <div class="alert error pas mts" v-show="!currentRecipe.items || currentRecipe.items.length == 0">None at this moment.</div>
-                    <p><a href="#" @click.prevent="addItem()"><i class="fa fa-plus"></i> Add an item</a></p>
+                    <p>
+                        <a href="#" @click.prevent="addItem()"><i class="fa fa-plus"></i> Add an item</a>
+                        <a href="#" @click.prevent="addOneOfGroup()"><i class="fa fa-plus"></i> Add a "One of" group</a>
+                    </p>
                 </div>
             </div>
 
@@ -40,6 +39,16 @@
             </p>
         </form>
     </div>
+
+    <template id ="itemslist">
+        <div>
+            <div v-for="recipe_item in recipeitems" class="mts">
+                <itemsfilter :recipe_item.sync="recipe_item" :items="items"></itemsfilter>
+                <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount" class="w100p">
+                <a href="#" @click.prevent="recipeitems.splice(recipeitems.indexOf(recipe_item), 1)" title="Remove this item"><i class="fa fa-remove"></i></a>
+            </div>
+        </div>
+    </template>
 
     <template id="itemsfilter">
         <span>

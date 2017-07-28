@@ -1,6 +1,6 @@
 var vue_delimiters = ['${', '}']; // Because Jinja2 already uses double brackets
 
-var ItemsFilter = {
+Vue.component('itemsfilter', {
     delimiters: vue_delimiters,
     template: '#itemsfilter',
     props: ['items', 'recipe_item'],
@@ -29,7 +29,13 @@ var ItemsFilter = {
             return filtered_items;
         }
     }
-};
+});
+
+Vue.component('itemslist', {
+    delimiters: vue_delimiters,
+    template: '#itemslist',
+    props: ['items', 'recipeitems']
+});
 
 var app = new Vue({
     delimiters: vue_delimiters,
@@ -38,9 +44,6 @@ var app = new Vue({
         loading: true,
         items: items,
         currentRecipe: current_recipe
-    },
-    components: {
-        'itemsfilter': ItemsFilter
     },
     mounted: function() {
         this.$nextTick(function () {
@@ -53,6 +56,9 @@ var app = new Vue({
                 id: '',
                 amount: 1
             });
+        },
+        addOneOfGroup: function() {
+            this.currentRecipe.items.push([]);
         }
     }
 });
