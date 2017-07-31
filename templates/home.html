@@ -7,9 +7,23 @@
             <div class="grid has-gutter">
                 <div>
                     <fieldset class="man ptn">
-                        <legend><i class="fa fa-filter"></i> Filters</legend>
-                        <div class="grid-2 mts">
-                            <div><label>Item name <input type="text" v-model="filters.name"></label> <a href="#" title="Clear filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></div>
+                        <legend><i class="fa fa-filter"></i> Filters <a href="#" title="Clear all filters" @click.prevent="clearAllFilters()"><i class="fa fa-eraser"></i></a></legend>
+                        <div class="grid-3 mts has-gutter">
+                            <div><label>Item name <input type="text" v-model="filters.name"></label> <a href="#" title="Clear this filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></div>
+                            <div></div>
+                            <div></div>
+                            <div><label><input type="checkbox" v-model="filters.is_buyable"> <i class="fa fa-dollar fa-fw"></i> Can be bought</label></div>
+                            <div><label><input type="checkbox" v-model="filters.can_heal"> <i class="fa fa-medkit fa-fw"></i> Can heal you</label></div>
+                            <div><label><input type="checkbox" v-model="filters.can_hurt"> <i class="fa fa-bomb fa-fw"></i> Can hurt people</label></div>
+                            <div><label><input type="checkbox" v-model="filters.can_dig"> <i class="fa fa-spoon fa-fw"></i> Can dig tunnels</label></div>
+                            <div><label><input type="checkbox" v-model="filters.can_chop"> <i class="fa fa-crop fa-fw"></i> Can chop things</label></div>
+                            <div><label><input type="checkbox" v-model="filters.can_unscrew"> <i class="fa fa-wrench fa-fw"></i> Can unscrew things</label></div>
+                            <div><label><input type="checkbox" v-model="filters.can_cut"> <i class="fa fa-scissors fa-fw"></i> Can cut things</label></div>
+                            <div><label><input type="checkbox" v-model="filters.is_carried"> <i class="fa fa-android fa-fw"></i> Can be carried by NPCs</label></div>
+                            <div><label><input type="checkbox" v-model="filters.is_in_desks"> <i class="fa fa-desktop fa-fw"></i> Can be found in desks</label></div>
+                            <div><label><input type="checkbox" v-model="filters.can_disrupt_cameras"> <i class="fa fa-video-camera fa-fw"></i> Can disrupt cameras</label></div>
+                            <div><label><input type="checkbox" v-model="filters.is_outfit"> <i class="fa fa-male fa-fw"></i> Outfits (provides defense)</label></div>
+                            <div><label><input type="checkbox" v-model="filters.is_craftable"> <i class="fa fa-gavel fa-fw"></i> Can be crafted</label></div>
                         </div>
                     </fieldset>
                 </div>
@@ -22,17 +36,17 @@
                         <form v-on:submit.prevent="addItemIOwn()">
                             <itemsiownfilter :add_item.sync="whatCanICraft.addItem" :items="componentItems"></itemsiownfilter>
                             <input type="number" min="1" value="1" required v-model.number="whatCanICraft.addItem.amount" class="w100p">
-                            <button type="submit" title="Add to the list of items you own"><i class="fa fa-plus"></i></button>
+                            <button type="submit" title="Add"><i class="fa fa-plus"></i></button>
                         </form>
 
-                        <p class="mbs" v-show="whatCanICraft.itemsIOwn.length > 0"><a href="#" title="Clear" @click.prevent="whatCanICraft.itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
+                        <p class="mbs" v-show="whatCanICraft.itemsIOwn.length > 0"><a href="#" title="Remove all" @click.prevent="whatCanICraft.itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
 
                         <div class="items-list">
                             <span class="pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
                                 <itemname :item="items[itemIOwn.id]" :itemid="itemIOwn.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
                                 <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
-                                <a href="#" title="Remove from the list of items you own" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
+                                <a href="#" title="Remove" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
                             </span>
                         </div>
                     </fieldset>
@@ -68,6 +82,7 @@
                             <td>${ item_id }</td>
                             <td class="summary-cell">
                                 <i class="fa fa-star" v-if="item.found" title="Map-specific"></i>
+                                <i class="fa fa-dollar" v-if="item.buy" title="Can be bought"></i>
                                 <i class="fa fa-medkit" v-if="item.hp" title="Can heal you"></i>
                                 <i class="fa fa-bomb" v-if="item.weapon" title="Can hurt people"></i>
                                 <i class="fa fa-spoon" v-if="item.digging" title="Can dig tunnels"></i>

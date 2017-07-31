@@ -46,7 +46,19 @@ var app = new Vue({
         recipes: recipes,
         escapistsWikiSearch: 'http://' + ESCAPISTS_WIKI_DOMAIN + '/Special:Search/',
         filters: {
-            name: ''
+            name: '',
+            is_buyable: false,
+            can_heal: false,
+            can_hurt: false,
+            can_dig: false,
+            can_chop: false,
+            can_unscrew: false,
+            can_cut: false,
+            is_carried: false,
+            is_in_desks: false,
+            can_disrupt_cameras: false,
+            is_outfit: false,
+            is_craftable: false
         },
         whatCanICraft: {
             addItem: {
@@ -130,17 +142,63 @@ var app = new Vue({
 
             for (var item_id in this.items) {
                 var item = this.items[item_id];
-                var name = can_i_craft = true;
+                var name = is_buyable = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = can_i_craft = true;
 
                 if (('name' in item) && this.filters.name) {
                     name = item.name.toLowerCase().indexOf(this.filters.name.toLowerCase()) !== -1;
                 }
 
-                if (this.whatCanICraft.itemsIOwn.length > 0) {
-                    can_i_craft = what_can_i_craft.indexOf(item_id) !== -1;
+                if (this.filters.is_buyable) {
+                    is_buyable = ('buy' in item);
                 }
 
-                if (name && can_i_craft) {
+                if (this.filters.can_heal) {
+                    can_heal = ('hp' in item);
+                }
+
+                if (this.filters.can_hurt) {
+                    can_hurt = ('weapon' in item);
+                }
+
+                if (this.filters.can_dig) {
+                    can_dig = ('digging' in item);
+                }
+
+                if (this.filters.can_chop) {
+                    can_chop = ('chipping' in item);
+                }
+
+                if (this.filters.can_unscrew) {
+                    can_unscrew = ('unscrewing' in item);
+                }
+
+                if (this.filters.can_cut) {
+                    can_cut = ('cutting' in item);
+                }
+
+                if (this.filters.is_carried) {
+                    is_carried = ('npc_carry' in item);
+                }
+
+                if (this.filters.is_in_desks) {
+                    is_in_desks = ('desk' in item);
+                }
+
+                if (this.filters.can_disrupt_cameras) {
+                    can_disrupt_cameras = ('camdis' in item);
+                }
+
+                if (this.filters.is_outfit) {
+                    is_outfit = ('outfit' in item);
+                }
+
+                if (this.whatCanICraft.itemsIOwn.length > 0) {
+                    can_i_craft = what_can_i_craft.indexOf(item_id) !== -1;
+                } else if (this.filters.is_craftable) {
+                    is_craftable = ('craft' in item);
+                }
+
+                if (name && is_buyable && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && can_i_craft) {
                     filtered_items[item_id] = item;
                 }
             }
@@ -173,6 +231,21 @@ var app = new Vue({
 
             this.whatCanICraft.addItem.id = '';
             this.whatCanICraft.addItem.amount = 1;
+        },
+        clearAllFilters: function() {
+            this.filters.name = '';
+            this.filters.is_buyable = false;
+            this.filters.can_heal = false;
+            this.filters.can_hurt = false;
+            this.filters.can_dig = false;
+            this.filters.can_chop = false;
+            this.filters.can_unscrew = false;
+            this.filters.can_cut = false;
+            this.filters.is_carried = false;
+            this.filters.is_in_desks = false;
+            this.filters.can_disrupt_cameras = false;
+            this.filters.is_outfit = false;
+            this.filters.is_craftable = false;
         },
         getFound: function(found) {
             switch (found) {
