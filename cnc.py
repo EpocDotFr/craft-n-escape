@@ -109,6 +109,9 @@ def recipes_editor_item(item_id):
         recipe_items = json.loads(request.form.get('recipe_items'))
 
         try:
+            if item_id not in recipes:
+                recipes[item_id] = {}
+
             recipes[item_id]['_recipe_hash'] = recipe_hash
             recipes[item_id]['items'] = recipe_items
 
