@@ -24,6 +24,7 @@
             <div id="app">
                 <div v-show="loading" class="txtcenter bigger"><i class="fa fa-cog fa-spin"></i> Loading...</div>
                 <div v-cloak>
+                    <input type="hidden" name="recipe_items" :value="JSON.stringify(currentRecipe.items)">
                     <template v-for="(recipe_item, index) in currentRecipe.items">
                         <item :recipe_items.sync="currentRecipe.items" :items="items" :recipe_item="recipe_item" :key="index" v-if="!_.isArray(recipe_item)"></item>
                         <div v-if="_.isArray(recipe_item)">
@@ -46,8 +47,6 @@
                         <a href="#" @click.prevent="addOneOfGroup()"><i class="fa fa-plus"></i> Add a "One of" group</a>
                     </p>
                 </div>
-
-                ${ currentRecipe.items }
             </div>
 
             <p class="txtcenter">
@@ -60,7 +59,7 @@
     <template id ="item">
         <div class="mts">
             <itemsfilter :recipe_item.sync="recipe_item" :items="items"></itemsfilter>
-            <input name="amount" type="number" min="1" required v-model.number="recipe_item.amount" class="w100p">
+            <input type="number" min="1" required v-model.number="recipe_item.amount" class="w100p">
             <a href="#" @click.prevent="recipe_items.splice(recipe_items.indexOf(recipe_item), 1)" title="Remove this item"><i class="fa fa-remove"></i></a>
         </div>
     </template>
@@ -69,7 +68,7 @@
         <span>
             <a href="#" title="Clear filter" @click.prevent="query = ''"><i class="fa fa-eraser"></i></a>
             <input type="text" class="w200p" placeholder="Filter by item ID or name" v-model="query">
-            <select name="id" required v-model.number="recipe_item.id" class="w300p">
+            <select required v-model.number="recipe_item.id" class="w300p">
                 <option value="">Select an item</option>
                 <option v-for="(item, item_id) in filteredItems" :value="item_id">#${ item_id } ${ item.name }</option>
             </select>

@@ -6,6 +6,7 @@ from glob import glob
 from helpers import *
 import logging
 import click
+import json
 import sys
 import os
 
@@ -104,12 +105,8 @@ def recipes_editor_item(item_id):
         abort(404)
 
     if request.method == 'POST':
-        recipe_items = get_form_values([
-            ('id', int),
-            ('amount', int)
-        ])
-
         recipe_hash = request.form.get('_recipe_hash')
+        recipe_items = json.loads(request.form.get('recipe_items'))
 
         try:
             recipes[item_id]['_recipe_hash'] = recipe_hash
@@ -220,17 +217,6 @@ def http_error_handler(error, without_code=False):
 
 # -----------------------------------------------------------
 # Local helpers
-
-
-def get_form_values(names):
-    values = [request.form.getlist(h[0], type=h[1]) for h in names]
-    items = [{} for i in range(len(values[0]))]
-
-    for x, i in enumerate(values):
-        for _x, _i in enumerate(i):
-            items[_x][names[x][0]] = _i
-
-    return items
 
 
 @cache.cached(timeout=60 * 60 * 6)
