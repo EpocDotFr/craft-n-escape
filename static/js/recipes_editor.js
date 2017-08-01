@@ -51,8 +51,8 @@ var app = new Vue({
         });
     },
     methods: {
-        addItem: function() {
-            this.currentRecipe.items.push({
+        addItem: function(parent) {
+            parent.push({
                 id: '',
                 amount: 1
             });

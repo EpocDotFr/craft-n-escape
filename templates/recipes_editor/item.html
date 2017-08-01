@@ -24,13 +24,30 @@
             <div id="app">
                 <div v-show="loading" class="txtcenter bigger"><i class="fa fa-cog fa-spin"></i> Loading...</div>
                 <div v-cloak>
-                    <item :recipe_items.sync="currentRecipe.items" :items="items" :recipe_item="recipe_item" :key="index" v-for="(recipe_item, index) in currentRecipe.items"></item>
+                    <template v-for="(recipe_item, index) in currentRecipe.items">
+                        <item :recipe_items.sync="currentRecipe.items" :items="items" :recipe_item="recipe_item" :key="index" v-if="!_.isArray(recipe_item)"></item>
+                        <div v-if="_.isArray(recipe_item)">
+                            <fieldset>
+                                <legend>One of</legend>
+
+                                <item :recipe_items.sync="recipe_item" :items="items" :recipe_item="one_of_recipe_item" :key="one_of_index" v-for="(one_of_recipe_item, one_of_index) in recipe_item"></item>
+                                <div class="alert error pas mts" v-show="!recipe_item || recipe_item.length == 0">None at this moment.</div>
+
+                                <p>
+                                    <a href="#" @click.prevent="addItem(recipe_item)"><i class="fa fa-plus"></i> Add an item</a>
+                                    <a href="#" @click.prevent="currentRecipe.items.splice(currentRecipe.items.indexOf(recipe_item), 1)"><i class="fa fa-remove"></i> Remove this group</a>
+                                </p>
+                            </fieldset>
+                        </div>
+                    </template>
                     <div class="alert error pas mts" v-show="!currentRecipe.items || currentRecipe.items.length == 0">None at this moment.</div>
                     <p>
-                        <a href="#" @click.prevent="addItem()"><i class="fa fa-plus"></i> Add an item</a>
+                        <a href="#" @click.prevent="addItem(currentRecipe.items)"><i class="fa fa-plus"></i> Add an item</a>
                         <a href="#" @click.prevent="addOneOfGroup()"><i class="fa fa-plus"></i> Add a "One of" group</a>
                     </p>
                 </div>
+
+                ${ currentRecipe.items }
             </div>
 
             <p class="txtcenter">
