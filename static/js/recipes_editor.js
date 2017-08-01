@@ -31,10 +31,10 @@ Vue.component('itemsfilter', {
     }
 });
 
-Vue.component('itemslist', {
+Vue.component('item', {
     delimiters: vue_delimiters,
-    template: '#itemslist',
-    props: ['items', 'recipeitems']
+    template: '#item',
+    props: ['items', 'recipe_items', 'recipe_item']
 });
 
 var app = new Vue({
