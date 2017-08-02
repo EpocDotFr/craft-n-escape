@@ -54,6 +54,12 @@ a:focus {
     cursor: help;
 }
 
+.recipe-item {
+    border-radius: 0.5rem;
+    border: 0.1rem solid #00454b;
+    background-color: #002b2f;
+}
+
 /************************************************************************
  * Forms */
 
@@ -93,15 +99,6 @@ fieldset {
     background-color: #064b99;
     color: #FFF;
     border-color: #0075bf;
-}
-
-/************************************************************************
- * Items list */
-
-.items-list > span {
-    border-radius: 0.5rem;
-    border: 0.1rem solid #00454b;
-    background-color: #002b2f;
 }
 
 /************************************************************************

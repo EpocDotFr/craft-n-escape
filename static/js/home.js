@@ -1,5 +1,11 @@
 var vue_delimiters = ['${', '}']; // Because Jinja2 already uses double brackets
 
+Vue.component('recipeitem', {
+    delimiters: vue_delimiters,
+    template: '#recipeitem',
+    props: ['items', 'recipe_item', 'escapistswikisearch']
+});
+
 Vue.component('itemname', {
     delimiters: vue_delimiters,
     template: '#itemname',
