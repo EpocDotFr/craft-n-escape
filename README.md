@@ -1,6 +1,6 @@
 # Craft N' Escape
 
-Items and crafting recipes for [The Escapists](http://escapistgame.com/), on one searchable page. Available at [craft-n-escape.epoc.fr](https://craft-n-escape.epoc.fr/).
+Items and crafting recipes for [The Escapists](http://escapistgame.com/), on one filterable page. Available at [craft-n-escape.epoc.fr](https://craft-n-escape.epoc.fr/).
 
 _Because everyone loves it when a plan comes together_
 
