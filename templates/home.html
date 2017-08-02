@@ -42,7 +42,7 @@
                         <p class="mbs" v-show="whatCanICraft.itemsIOwn.length > 0"><a href="#" title="Remove all" @click.prevent="whatCanICraft.itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
 
                         <p>
-                            <span class="recipe-item pas inbl mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
+                            <span class="recipe-item pas mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
                                 <itemname :item="items[itemIOwn.id]" :itemid="itemIOwn.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
                                 <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
@@ -107,6 +107,14 @@
                                 <template v-if="item.craft">
                                     <template v-for="(recipe_item, index) in item.craft.recipe_items">
                                         <recipeitem :escapistswikisearch="escapistsWikiSearch" :items="items" :recipe_item="recipe_item" :key="index" v-if="!_.isArray(recipe_item)"></recipeitem>
+                                        <template v-if="_.isArray(recipe_item)">
+                                            <template v-for="(one_of_recipe_item, one_of_index) in recipe_item">
+                                                <recipeitem :escapistswikisearch="escapistsWikiSearch" :items="items" :recipe_item="one_of_recipe_item" :key="one_of_index"></recipeitem>
+                                                <template v-if="one_of_index < (recipe_item.length - 1)"> or </template>
+                                            </template>
+                                        </template>
+
+                                        <template v-if="index < (item.craft.recipe_items.length - 1)"> + </template>
                                     </template>
                                 </template>
                             </td>
@@ -132,7 +140,7 @@
     </div>
 
     <template id="recipeitem">
-        <span class="recipe-item pas inbl mrs">
+        <span class="recipe-item pas">
             <itemname :item="items[recipe_item.id]" :itemid="recipe_item.id" :escapistswikisearch="escapistswikisearch"></itemname>
 
             <template v-if="recipe_item.amount > 1">x ${ recipe_item.amount }</template>

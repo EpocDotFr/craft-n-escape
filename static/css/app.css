@@ -58,6 +58,8 @@ a:focus {
     border-radius: 0.5rem;
     border: 0.1rem solid #00454b;
     background-color: #002b2f;
+    white-space: nowrap;
+    display: inline-block;
 }
 
 /************************************************************************
