@@ -8,10 +8,10 @@
                 <div>
                     <fieldset class="man ptn">
                         <legend><i class="fa fa-filter"></i> Filters <a href="#" title="Clear all filters" @click.prevent="clearAllFilters()"><i class="fa fa-eraser"></i></a></legend>
-                        <div class="grid-3 mts has-gutter">
-                            <div><label>Item name <input type="text" v-model="filters.name"></label> <a href="#" title="Clear this filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></div>
-                            <div></div>
-                            <div></div>
+
+                        <div><label>Item name <input type="text" v-model="filters.name"></label> <a href="#" title="Clear this filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></div>
+
+                        <div class="grid-3 has-gutter">
                             <div><label><input type="checkbox" v-model="filters.is_buyable"> <i class="fa fa-dollar fa-fw"></i> Can be bought</label></div>
                             <div><label><input type="checkbox" v-model="filters.can_heal"> <i class="fa fa-medkit fa-fw"></i> Can heal you</label></div>
                             <div><label><input type="checkbox" v-model="filters.can_hurt"> <i class="fa fa-bomb fa-fw"></i> Can hurt people</label></div>
