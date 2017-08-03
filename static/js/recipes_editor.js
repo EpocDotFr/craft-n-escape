@@ -13,18 +13,17 @@ Vue.component('itemsfilter', {
         filteredItems: function() {
             var filtered_items = {};
 
-            for (var item_id in this.items) {
-                var item = this.items[item_id];
+            _.each(this.items, function(item, item_id) {
                 var match = true;
 
                 if (this.query) {
-                    match = (item.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) || item.id == this.query;
+                    match = (item.name.toLowerCase().indexOf(this.query.toLowerCase()) !== -1) || item_id == this.query;
                 }
 
                 if (match) {
                     filtered_items[item_id] = item;
                 }
-            }
+            }, this);
 
             return filtered_items;
         }

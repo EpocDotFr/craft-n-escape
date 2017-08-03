@@ -31,7 +31,7 @@
                             <legend>One of</legend>
 
                             <item :recipe_items.sync="recipe_item" :items="items" :recipe_item="one_of_recipe_item" :key="one_of_index" v-for="(one_of_recipe_item, one_of_index) in recipe_item"></item>
-                            <div class="alert error pas mts" v-show="!recipe_item || recipe_item.length == 0">None at this moment.</div>
+                            <div class="alert error pas mts" v-show="!recipe_item || _.isEmpty(recipe_item)">None at this moment.</div>
 
                             <p>
                                 <a href="#" @click.prevent="addItem(recipe_item)"><i class="fa fa-plus"></i> Add an item</a>
@@ -39,7 +39,7 @@
                             </p>
                         </fieldset>
                     </template>
-                    <div class="alert error pas mts" v-show="!currentRecipe.items || currentRecipe.items.length == 0">None at this moment.</div>
+                    <div class="alert error pas mts" v-show="!currentRecipe.items || _.isEmpty(currentRecipe.items)">None at this moment.</div>
                     <p>
                         <a href="#" @click.prevent="addItem(currentRecipe.items)"><i class="fa fa-plus"></i> Add an item</a>
                         <a href="#" @click.prevent="addOneOfGroup()"><i class="fa fa-plus"></i> Add a "One of" group</a>
