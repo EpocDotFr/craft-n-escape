@@ -69,7 +69,7 @@ def home():
     items = merge_recipe_items_in_items(items, recipes)
     items = merge_images_in_items(items, images)
 
-    return render_template('home.html', items=items, recipes=recipes)
+    return render_template('home.html', items=items)
 
 
 @app.route('/recipes-editor')

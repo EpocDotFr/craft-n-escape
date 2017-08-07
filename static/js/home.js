@@ -48,7 +48,6 @@ var app = new Vue({
     data: {
         loading: true,
         items: items,
-        recipes: recipes,
         escapistsWikiSearch: 'http://' + ESCAPISTS_WIKI_DOMAIN + '/Special:Search/',
         filters: {
             name: '',
@@ -100,26 +99,42 @@ var app = new Vue({
 
             if (!_.isEmpty(this.whatCanICraft.itemsIOwn)) {
                 _.each(this.items, function(item, item_id) {
-                    if (('craft' in item)) {
+                    if (('craft' in item) && !(item_id in item_ids_i_can_craft)) {
                         // Check if I own all the items at least one time each, and at least one of the One of groups
-                        if (!(item_id in item_ids_i_can_craft)) {
-                            var item_i_can_craft = _.find(this.whatCanICraft.itemsIOwn, function(itemIOwn) {
-                                return _.find(item.craft.recipe_items, function(recipe_item) {
-                                    if (_.isArray(recipe_item)) {
-                                        // TODO Handle One of groups
-                                    } else {
-                                        if (itemIOwn.id == recipe_item.id && itemIOwn.amount < recipe_item.amount) {
-                                            return false;
-                                        } else {
+                        var item_i_can_craft = _.find(this.whatCanICraft.itemsIOwn, function(itemIOwn) {
+                            var res_recipe_items = _.find(item.craft.recipe_items, function(recipe_item) {
+                                if (_.isArray(recipe_item)) {
+                                    var res_one_of_recipe_items = _.find(recipe_item, function(one_of_recipe_item) {
+                                        if (itemIOwn.id == one_of_recipe_item.id && itemIOwn.amount >= one_of_recipe_item.amount) {
                                             return true;
+                                        } else {
+                                            return false;
                                         }
+                                    }, this);
+
+                                    if (_.isUndefined(res_one_of_recipe_items)) {
+                                        return false;
+                                    } else {
+                                        return true;
                                     }
-                                }, this);
+                                } else {
+                                    if (itemIOwn.id == recipe_item.id && itemIOwn.amount >= recipe_item.amount) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                }
                             }, this);
 
-                            if (item_i_can_craft) {
-                                item_ids_i_can_craft.push(item_id);
+                            if (_.isUndefined(res_recipe_items)) {
+                                return false;
+                            } else {
+                                return true;
                             }
+                        }, this);
+
+                        if (!_.isUndefined(item_i_can_craft)) {
+                            item_ids_i_can_craft.push(item_id);
                         }
                     }
                 }, this);
@@ -186,7 +201,7 @@ var app = new Vue({
                 }
 
                 if (!_.isEmpty(this.whatCanICraft.itemsIOwn)) {
-                    can_i_craft = (item_id in this.itemIdsICanCraft);
+                    can_i_craft = this.itemIdsICanCraft.indexOf(item_id) !== -1;
                 } else if (this.filters.is_craftable) {
                     is_craftable = ('craft' in item);
                 }
