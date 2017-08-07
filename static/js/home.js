@@ -98,42 +98,38 @@ var app = new Vue({
             var item_ids_i_can_craft = [];
 
             if (!_.isEmpty(this.whatCanICraft.itemsIOwn)) {
-                _.each(this.items, function(item, item_id) {
-                    if (('craft' in item) && !(item_id in item_ids_i_can_craft)) {
-                        // Check if I own all the items at least one time each, and at least one of the One of groups
-                        var item_i_can_craft = _.find(this.whatCanICraft.itemsIOwn, function(itemIOwn) {
-                            var res_recipe_items = _.find(item.craft.recipe_items, function(recipe_item) {
-                                if (_.isArray(recipe_item)) {
-                                    var res_one_of_recipe_items = _.find(recipe_item, function(one_of_recipe_item) {
-                                        if (itemIOwn.id == one_of_recipe_item.id && itemIOwn.amount >= one_of_recipe_item.amount) {
-                                            return true;
-                                        } else {
-                                            return false;
-                                        }
-                                    }, this);
+                _.each(this.items, function(item, item_id) { // For each available items
+                    // First make sure this item:
+                    //   - Has a crafting recipe
+                    //   - Hasn't been added yet to our items I can craft list
+                    if (('craft' in item) && item_ids_i_can_craft.indexOf(item_id) === -1) {
+                        var valid_items_count = 0;
 
-                                    if (_.isUndefined(res_one_of_recipe_items)) {
+                        // Check if I own all the items at least one time each, and at least one of the One of groups
+                        _.find(this.whatCanICraft.itemsIOwn, function(itemIOwn) {
+                            _.find(item.craft.recipe_items, function(recipe_item) {
+                                if (_.isArray(recipe_item)) { // One of those recipe items are required, so break when we found one
+                                    _.find(recipe_item, function(one_of_recipe_item) {
+                                        if (itemIOwn.id == one_of_recipe_item.id && itemIOwn.amount >= one_of_recipe_item.amount) {
+                                            valid_items_count++;
+                                            return true;
+                                        }
+
                                         return false;
-                                    } else {
-                                        return true;
-                                    }
-                                } else {
+                                    }, this);
+                                } else { // If the item in the recipe items list is present, its is required
                                     if (itemIOwn.id == recipe_item.id && itemIOwn.amount >= recipe_item.amount) {
+                                        valid_items_count++;
                                         return true;
-                                    } else {
-                                        return false;
                                     }
+
+                                    return false;
                                 }
                             }, this);
-
-                            if (_.isUndefined(res_recipe_items)) {
-                                return false;
-                            } else {
-                                return true;
-                            }
                         }, this);
 
-                        if (!_.isUndefined(item_i_can_craft)) {
+                        // If all items I own are valid components to craft this item
+                        if (valid_items_count == item.craft.recipe_items.length) {
                             item_ids_i_can_craft.push(item_id);
                         }
                     }

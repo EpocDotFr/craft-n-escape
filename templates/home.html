@@ -40,9 +40,9 @@
                             <button type="submit" title="Add"><i class="fa fa-plus"></i></button>
                         </form>
 
-                        <p class="mbs" v-show="whatCanICraft.itemsIOwn.length > 0"><a href="#" title="Remove all" @click.prevent="whatCanICraft.itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
+                        <p class="mbs" v-show="!_.isEmpty(whatCanICraft.itemsIOwn)"><a href="#" title="Remove all" @click.prevent="whatCanICraft.itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
 
-                        <p>
+                        <p v-show="!_.isEmpty(whatCanICraft.itemsIOwn)">
                             <span class="recipe-item pas mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
                                 <itemname :item="items[itemIOwn.id]" :itemid="itemIOwn.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
