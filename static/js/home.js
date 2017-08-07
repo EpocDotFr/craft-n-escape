@@ -85,8 +85,16 @@ var app = new Vue({
             _.each(this.items, function(item, item_id) {
                 if (('craft' in item)) {
                     _.each(item.craft.recipe_items, function(recipe_item) {
-                        if (!(recipe_item.id in component_items)) {
-                            component_items[recipe_item.id] = this.items[recipe_item.id];
+                        if (_.isArray(recipe_item)) {
+                            _.each(recipe_item, function(one_of_recipe_item) {
+                                if (!(one_of_recipe_item.id in component_items)) {
+                                    component_items[one_of_recipe_item.id] = this.items[one_of_recipe_item.id];
+                                }
+                            }, this);
+                        } else {
+                            if (!(recipe_item.id in component_items)) {
+                                component_items[recipe_item.id] = this.items[recipe_item.id];
+                            }
                         }
                     }, this);
                 }
