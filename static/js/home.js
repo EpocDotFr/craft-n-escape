@@ -25,8 +25,7 @@ Vue.component('itemsiownfilter', {
         filteredItems: function() {
             var filtered_items = {};
 
-            for (var item_id in this.items) {
-                var item = this.items[item_id];
+            _.each(this.items, function(item, item_id) {
                 var match = true;
 
                 if (this.query) {
@@ -36,7 +35,7 @@ Vue.component('itemsiownfilter', {
                 if (match) {
                     filtered_items[item_id] = item;
                 }
-            }
+            }, this);
 
             return filtered_items;
         }
@@ -83,21 +82,15 @@ var app = new Vue({
         componentItems: function() {
             var component_items = {};
 
-            for (var item_id in this.items) {
-                var item = this.items[item_id];
-
-                for (var recipe_id in this.recipes) {
-                    var recipe = this.recipes[recipe_id];
-
-                    for (var j = 0; j < recipe.items.length; j++) {
-                        var recipe_item = recipe.items[j];
-
-                        if (item_id == recipe_item.id) {
-                            component_items[item_id] = item;
+            _.each(this.items, function(item, item_id) {
+                if (('craft' in item)) {
+                    _.each(item.craft.recipe_items, function(recipe_item) {
+                        if (!(recipe_item.id in component_items)) {
+                            component_items[recipe_item.id] = this.items[recipe_item.id];
                         }
-                    }
+                    }, this);
                 }
-            }
+            }, this);
 
             return component_items;
         },
@@ -146,8 +139,7 @@ var app = new Vue({
 
             var filtered_items = {};
 
-            for (var item_id in this.items) {
-                var item = this.items[item_id];
+            _.each(this.items, function(item, item_id) {
                 var name = is_buyable = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = can_i_craft = true;
 
                 if (('name' in item) && this.filters.name) {
@@ -207,7 +199,7 @@ var app = new Vue({
                 if (name && is_buyable && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && can_i_craft) {
                     filtered_items[item_id] = item;
                 }
-            }
+            }, this);
 
             return filtered_items;
         }
@@ -215,18 +207,11 @@ var app = new Vue({
     methods: {
         addItemIOwn: function() {
             // If the item to add is already present in the items I own list, just increment its amount
-            var already_present = false;
+            var already_present = _.findIndex(this.whatCanICraft.itemsIOwn, function(itemIOwn) {
+                return itemIOwn.id == this.whatCanICraft.addItem.id;
+            }, this);
 
-            for (var i = 0; i < this.whatCanICraft.itemsIOwn.length; i++) {
-                var itemIOwn = this.whatCanICraft.itemsIOwn[i];
-
-                if (itemIOwn.id == this.whatCanICraft.addItem.id) {
-                    already_present = i;
-                    break;
-                }
-            }
-
-            if (already_present === false) {
+            if (already_present == -1) {
                 this.whatCanICraft.itemsIOwn.push({
                     id: this.whatCanICraft.addItem.id,
                     amount: this.whatCanICraft.addItem.amount
