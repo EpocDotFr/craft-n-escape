@@ -85,17 +85,9 @@ var app = new Vue({
 
             _.each(this.items, function(item, item_id) {
                 if (('craft' in item)) {
-                    _.each(item.craft.recipe_items, function(recipe_item) {
-                        if (_.isArray(recipe_item)) {
-                            _.each(recipe_item, function(one_of_recipe_item) {
-                                if (!(one_of_recipe_item.id in component_items)) {
-                                    component_items[one_of_recipe_item.id] = this.items[one_of_recipe_item.id];
-                                }
-                            }, this);
-                        } else {
-                            if (!(recipe_item.id in component_items)) {
-                                component_items[recipe_item.id] = this.items[recipe_item.id];
-                            }
+                    _.each(_.flatten(item.craft.recipe_items), function(recipe_item) { // We don't care making the difference between a recipe item and a One of group
+                        if (!(recipe_item.id in component_items)) {
+                            component_items[recipe_item.id] = this.items[recipe_item.id];
                         }
                     }, this);
                 }
@@ -103,49 +95,39 @@ var app = new Vue({
 
             return component_items;
         },
-        filteredItems: function () {
+        itemIdsICanCraft: function() {
+            var item_ids_i_can_craft = [];
+
             if (!_.isEmpty(this.whatCanICraft.itemsIOwn)) {
-                var what_can_i_craft = [];
-                var items_i_own_ids = _.map(this.whatCanICraft.itemsIOwn, function(item_i_own) {
-                    return item_i_own.id;
-                }, this);
+                _.each(this.items, function(item, item_id) {
+                    if (('craft' in item)) {
+                        // Check if I own all the items at least one time each, and at least one of the One of groups
+                        if (!(item_id in item_ids_i_can_craft)) {
+                            var item_i_can_craft = _.find(this.whatCanICraft.itemsIOwn, function(itemIOwn) {
+                                return _.find(item.craft.recipe_items, function(recipe_item) {
+                                    if (_.isArray(recipe_item)) {
+                                        // TODO Handle One of groups
+                                    } else {
+                                        if (itemIOwn.id == recipe_item.id && itemIOwn.amount < recipe_item.amount) {
+                                            return false;
+                                        } else {
+                                            return true;
+                                        }
+                                    }
+                                }, this);
+                            }, this);
 
-                for (var recipe_id in this.recipes) {
-                    var recipe = this.recipes[recipe_id];
-                    var recipe_items_ids = _.map(recipe.items, function(recipe_item) {
-                        return recipe_item.id;
-                    }, this);
-
-                    // Items I own aren't all present in the item recipe
-                    if (items_i_own_ids.sort().toString() != recipe_items_ids.sort().toString()) {
-                        continue;
-                    }
-
-                    var add_to_what_can_i_craft = true;
-
-                    for (var i = 0; i < this.whatCanICraft.itemsIOwn.length; i++) {
-                        var itemIOwn = this.whatCanICraft.itemsIOwn[i];
-
-                        for (var k = 0; k < recipe.items.length; k++) {
-                            var recipe_item = recipe.items[k];
-
-                            if (itemIOwn.id == recipe_item.id && itemIOwn.amount < recipe_item.amount) {
-                                add_to_what_can_i_craft = false;
-                                break;
+                            if (item_i_can_craft) {
+                                item_ids_i_can_craft.push(item_id);
                             }
                         }
-
-                        if (!add_to_what_can_i_craft) {
-                            break;
-                        }
                     }
-
-                    if (add_to_what_can_i_craft && !(recipe_id in what_can_i_craft)) {
-                        what_can_i_craft.push(recipe_id);
-                    }
-                }
+                }, this);
             }
 
+            return item_ids_i_can_craft;
+        },
+        filteredItems: function () {
             var filtered_items = {};
 
             _.each(this.items, function(item, item_id) {
@@ -204,7 +186,7 @@ var app = new Vue({
                 }
 
                 if (!_.isEmpty(this.whatCanICraft.itemsIOwn)) {
-                    can_i_craft = what_can_i_craft.indexOf(item_id) !== -1;
+                    can_i_craft = (item_id in this.itemIdsICanCraft);
                 } else if (this.filters.is_craftable) {
                     is_craftable = ('craft' in item);
                 }
