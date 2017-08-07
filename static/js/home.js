@@ -104,17 +104,17 @@ var app = new Vue({
             return component_items;
         },
         filteredItems: function () {
-            if (this.whatCanICraft.itemsIOwn.length > 0) {
+            if (!_.isEmpty(this.whatCanICraft.itemsIOwn)) {
                 var what_can_i_craft = [];
-                var items_i_own_ids = this.whatCanICraft.itemsIOwn.map(function(item_i_own) {
+                var items_i_own_ids = _.map(this.whatCanICraft.itemsIOwn, function(item_i_own) {
                     return item_i_own.id;
-                });
+                }, this);
 
                 for (var recipe_id in this.recipes) {
                     var recipe = this.recipes[recipe_id];
-                    var recipe_items_ids = recipe.items.map(function(recipe_item) {
+                    var recipe_items_ids = _.map(recipe.items, function(recipe_item) {
                         return recipe_item.id;
-                    });
+                    }, this);
 
                     // Items I own aren't all present in the item recipe
                     if (items_i_own_ids.sort().toString() != recipe_items_ids.sort().toString()) {
@@ -203,7 +203,7 @@ var app = new Vue({
                     is_outfit = ('outfit' in item);
                 }
 
-                if (this.whatCanICraft.itemsIOwn.length > 0) {
+                if (!_.isEmpty(this.whatCanICraft.itemsIOwn)) {
                     can_i_craft = what_can_i_craft.indexOf(item_id) !== -1;
                 } else if (this.filters.is_craftable) {
                     is_craftable = ('craft' in item);
