@@ -121,7 +121,7 @@ def ReleaseKey(hexKeyCode):
 
 
 class ItemsImagesExtractor:
-    current_weapon_addr = 0x03E110DC
+    current_weapon_addr = 0x03E0BF7C
     weapon_slot_top = 370
     weapon_slot_left = 484
     weapon_slot_width = 106
@@ -178,7 +178,10 @@ class ItemsImagesExtractor:
     def _set_current_weapon(self, item_id):
         buf = ctypes.create_unicode_buffer(item_id)
 
-        ctypes.windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, buf, ctypes.sizeof(buf) - 1)
+        try:
+            ctypes.windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, buf, ctypes.sizeof(buf) - 1)
+        except:
+            pass
 
         sleep(0.2)
 
