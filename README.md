@@ -90,13 +90,12 @@ window opened. The game's window must be visible at all times, and must not be m
 This project is mainly powered by [Flask](http://flask.pocoo.org/) (Python) for the backend and
 [Vue.js](http://vuejs.org/) 2 for the frontend.
 
-Data is stored in [JSON](https://en.wikipedia.org/wiki/JSON) files:
+Data is stored in [JSON](https://en.wikipedia.org/wiki/JSON) files. Why? And why not an [SQLite](https://en.wikipedia.org/wiki/SQLite)
+database or some kind of embedded relational database? Because JSON files are easy to read using every programming languages,
+even Javascript on the client-side.
 
   - `storage/data/items.json` is built by the `flask itemsdata` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
-  - `storage/data/recipes.json` contains all crafting recipes of the items contained in the file above.
-
-A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists crafting
-recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items ID).
+  - `storage/data/recipes.json` contains all crafting recipes of the items contained in the file above. A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists crafting recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items IDs).
 
 Items images are extracted using, huh, a brutal solution. Basically, the `flask itemsimages` command edit the game's
 process memory for each existing items by assigning them in your weapon slot. A screenshot of the current weapon is then
