@@ -121,7 +121,7 @@ def ReleaseKey(hexKeyCode):
 
 
 class ItemsImagesExtractor:
-    current_weapon_addr = 0x03E0BF7C
+    current_weapon_addr = 0x03BD10DC
     weapon_slot_top = 370
     weapon_slot_left = 484
     weapon_slot_width = 106
@@ -176,12 +176,12 @@ class ItemsImagesExtractor:
             raise Exception('Unable open the game\'s process')
 
     def _set_current_weapon(self, item_id):
-        buf = ctypes.create_unicode_buffer(item_id)
+        buf = ctypes.create_string_buffer(item_id.encode('ascii'))
 
         try:
-            ctypes.windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, buf, ctypes.sizeof(buf) - 1)
+            ctypes.windll.kernel32.WriteProcessMemory(self.game_process, self.current_weapon_addr, buf, ctypes.sizeof(buf))
         except:
-            pass
+            pass # YOLO
 
         sleep(0.2)
 
