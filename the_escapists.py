@@ -121,7 +121,7 @@ def ReleaseKey(hexKeyCode):
 
 
 class ItemsImagesExtractor:
-    current_weapon_addr = 0x03BD10DC
+    current_weapon_addr = 0x03C110DC
     weapon_slot_top = 370
     weapon_slot_left = 484
     weapon_slot_width = 106
@@ -205,10 +205,13 @@ class ItemsImagesExtractor:
             # Take screenshot of the weapon slot
             weapon_slot = scsh.grab(self.weapon_slot_pos)
 
-            weapon_slot_img = Image.frombytes('RGBA', weapon_slot.size, bytes(weapon_slot.raw), 'raw', 'RGBA')
+            weapon_slot_img = Image.frombytes('RGB', weapon_slot.size, weapon_slot.rgb)
 
-            pixdata = weapon_slot_img.load()
-            width, height = weapon_slot_img.size
+            weapon_slot_img_with_alpha = Image.new('RGBA', weapon_slot.size)
+            weapon_slot_img_with_alpha.paste(weapon_slot_img)
+
+            pixdata = weapon_slot_img_with_alpha.load()
+            width, height = weapon_slot_img_with_alpha.size
 
             # Make the grey background transparent
             for y in range(height):
@@ -217,7 +220,7 @@ class ItemsImagesExtractor:
                         pixdata[x, y] = self.item_background_color_replace
 
             # Save the image with the item ID as its name
-            weapon_slot_img.save(os.path.join(self.output_dir, item_id + '.png'))
+            weapon_slot_img_with_alpha.save(os.path.join(self.output_dir, item_id + '.png'))
 
             # Hide the player's profile by sending key 7 (required in order to be taken into account by the game)
             self._toggle_profile()
