@@ -52,6 +52,7 @@ var app = new Vue({
         escapistsWikiSearch: 'http://' + ESCAPISTS_WIKI_DOMAIN + '/Special:Search/',
         filters: {
             name: '',
+            is_map_specific: false,
             is_buyable: false,
             can_heal: false,
             can_hurt: false,
@@ -148,10 +149,14 @@ var app = new Vue({
             var filtered_items = {};
 
             _.each(this.items, function(item, item_id) {
-                var name = is_buyable = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = can_i_craft = true;
+                var name = is_map_specific = is_buyable = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = can_i_craft = true;
 
                 if (('name' in item) && this.filters.name) {
                     name = item.name.toLowerCase().indexOf(this.filters.name.toLowerCase()) !== -1;
+                }
+
+                if (this.filters.is_map_specific) {
+                    is_map_specific = ('found' in item);
                 }
 
                 if (this.filters.is_buyable) {
@@ -204,7 +209,7 @@ var app = new Vue({
                     is_craftable = ('craft' in item);
                 }
 
-                if (name && is_buyable && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && can_i_craft) {
+                if (name && is_map_specific && is_buyable && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && can_i_craft) {
                     filtered_items[item_id] = item;
                 }
             }, this);
@@ -233,6 +238,7 @@ var app = new Vue({
         },
         clearAllFilters: function() {
             this.filters.name = '';
+            this.filters.is_map_specific = false;
             this.filters.is_buyable = false;
             this.filters.can_heal = false;
             this.filters.can_hurt = false;
