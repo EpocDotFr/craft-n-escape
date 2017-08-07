@@ -11,10 +11,10 @@ _Because everyone loves it when a plan comes together_
     - Can be filtered by item name
     - Crafting recipes
     - Links to [The Escapists wiki](http://theescapists.gamepedia.com/)
-    - (WIP) Items image
+    - Items image
   - Given a list of items you own, you can get the list of items you can craft
   - (Internal) Crafting recipes editor (used to convert The Escapists crafting recipes format to the Craft N' Escape one)
-  - (WIP) (Internal) Items images extractor
+  - (Internal) Items images extractor
 
 ## Prerequisites
 
