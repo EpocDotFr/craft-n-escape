@@ -34,20 +34,16 @@
 
                         <p class="mbs"><strong>Add an item you own:</strong></p>
 
-                        <form v-on:submit.prevent="addItemIOwn()">
-                            <itemsiownfilter :add_item.sync="whatCanICraft.addItem" :items="componentItems"></itemsiownfilter>
-                            <input type="number" min="1" value="1" required v-model.number="whatCanICraft.addItem.amount" class="w100p">
-                            <button type="submit" title="Add"><i class="fa fa-plus"></i></button>
-                        </form>
+                        <itemiownform :items_i_own.sync="itemsIOwn" :items="componentItems"></itemiownform>
 
-                        <p class="mbs" v-show="!_.isEmpty(whatCanICraft.itemsIOwn)"><a href="#" title="Remove all" @click.prevent="whatCanICraft.itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
+                        <p class="mbs" v-show="!_.isEmpty(itemsIOwn)"><a href="#" title="Remove all" @click.prevent="itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
 
-                        <p v-show="!_.isEmpty(whatCanICraft.itemsIOwn)">
-                            <span class="recipe-item pas mrs" v-for="itemIOwn in whatCanICraft.itemsIOwn">
+                        <p v-show="!_.isEmpty(itemsIOwn)">
+                            <span class="recipe-item pas mrs" v-for="itemIOwn in itemsIOwn">
                                 <itemname :item="items[itemIOwn.id]" :itemid="itemIOwn.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
                                 <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
-                                <a href="#" title="Remove" @click.prevent="whatCanICraft.itemsIOwn.splice(whatCanICraft.itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
+                                <a href="#" title="Remove" @click.prevent="itemsIOwn.splice(itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
                             </span>
                         </p>
                     </fieldset>
@@ -154,15 +150,20 @@
         </span>
     </template>
 
-    <template id="itemsiownfilter">
-        <span>
+    <template id="itemiownform">
+        <form v-on:submit.prevent="addItemIOwn()">
             <a href="#" title="Clear filter" @click.prevent="query = ''"><i class="fa fa-eraser"></i></a>
+
             <input type="text" class="w200p" placeholder="Filter by item name" v-model="query">
-            <select name="id" required v-model="add_item.id" class="w300p">
+
+            <select name="id" required v-model="addItem.id" class="w300p">
                 <option value="">Select an item</option>
                 <option v-for="(item, item_id) in filteredItems" :value="item_id">${ item.name }</option>
             </select>
-        </span>
+
+            <input type="number" min="1" value="1" required v-model.number="addItem.amount" class="w100p">
+            <button type="submit" title="Add"><i class="fa fa-plus"></i></button>
+        </form>
     </template>
 
     <script src="https://unpkg.com/vue@2.4.1/dist/vue{% if not config['DEBUG'] %}.min{% endif %}.js"></script>

@@ -12,13 +12,17 @@ Vue.component('itemname', {
     props: ['item', 'itemid', 'escapistswikisearch']
 });
 
-Vue.component('itemsiownfilter', {
+Vue.component('itemiownform', {
     delimiters: vue_delimiters,
-    template: '#itemsiownfilter',
-    props: ['items', 'add_item'],
+    template: '#itemiownform',
+    props: ['items', 'items_i_own'],
     data: function() {
         return {
-            query: ''
+            query: '',
+            addItem: {
+                id: '',
+                amount: 1,
+            }
         };
     },
     computed: {
@@ -38,6 +42,27 @@ Vue.component('itemsiownfilter', {
             }, this);
 
             return filtered_items;
+        }
+    },
+    methods: {
+        addItemIOwn: function() {
+            // If the item to add is already present in the items I own list, just increment its amount
+            var already_present = _.findIndex(this.items_i_own, function(itemIOwn) {
+                return itemIOwn.id == this.addItem.id;
+            }, this);
+
+            if (already_present == -1) {
+                this.items_i_own.push({
+                    id: this.addItem.id,
+                    amount: this.addItem.amount
+                });
+            } else {
+                this.items_i_own[already_present].amount += this.addItem.amount;
+            }
+
+            this.query = '';
+            this.addItem.id = '';
+            this.addItem.amount = 1;
         }
     }
 });
@@ -65,13 +90,7 @@ var app = new Vue({
             is_outfit: false,
             is_craftable: false
         },
-        whatCanICraft: {
-            addItem: {
-                id: '',
-                amount: 1,
-            },
-            itemsIOwn: []
-        }
+        itemsIOwn: []
     },
     mounted: function() {
         this.$nextTick(function () {
@@ -97,7 +116,7 @@ var app = new Vue({
         itemIdsICanCraft: function() {
             var item_ids_i_can_craft = [];
 
-            if (!_.isEmpty(this.whatCanICraft.itemsIOwn)) {
+            if (!_.isEmpty(this.itemsIOwn)) {
                 _.each(this.items, function(item, item_id) { // For each available items
                     // First make sure this item:
                     //   - Has a crafting recipe
@@ -106,7 +125,7 @@ var app = new Vue({
                         var valid_items_count = 0;
 
                         // Check if I own all the items at least one time each, and at least one of the One of groups
-                        _.find(this.whatCanICraft.itemsIOwn, function(itemIOwn) {
+                        _.find(this.itemsIOwn, function(itemIOwn) {
                             _.find(item.craft.recipe_items, function(recipe_item) {
                                 if (_.isArray(recipe_item)) { // One of those recipe items are required, so break when we found one
                                     _.find(recipe_item, function(one_of_recipe_item) {
@@ -196,7 +215,7 @@ var app = new Vue({
                     is_outfit = ('outfit' in item);
                 }
 
-                if (!_.isEmpty(this.whatCanICraft.itemsIOwn)) {
+                if (!_.isEmpty(this.itemsIOwn)) {
                     can_i_craft = this.itemIdsICanCraft.indexOf(item_id) !== -1;
                 } else if (this.filters.is_craftable) {
                     is_craftable = ('craft' in item);
@@ -211,24 +230,6 @@ var app = new Vue({
         }
     },
     methods: {
-        addItemIOwn: function() {
-            // If the item to add is already present in the items I own list, just increment its amount
-            var already_present = _.findIndex(this.whatCanICraft.itemsIOwn, function(itemIOwn) {
-                return itemIOwn.id == this.whatCanICraft.addItem.id;
-            }, this);
-
-            if (already_present == -1) {
-                this.whatCanICraft.itemsIOwn.push({
-                    id: this.whatCanICraft.addItem.id,
-                    amount: this.whatCanICraft.addItem.amount
-                });
-            } else {
-                this.whatCanICraft.itemsIOwn[already_present].amount += this.whatCanICraft.addItem.amount;
-            }
-
-            this.whatCanICraft.addItem.id = '';
-            this.whatCanICraft.addItem.amount = 1;
-        },
         clearAllFilters: function() {
             this.filters.name = '';
             this.filters.is_map_specific = false;
