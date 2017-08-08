@@ -90,7 +90,17 @@ var app = new Vue({
             is_outfit: false,
             is_craftable: false
         },
-        itemsIOwn: []
+        itemsIOwn: [],
+        maps: {
+            'irongate': 'HMP-Irongate',
+            'perks': 'Center Perks',
+            'jungle': 'Jungle Compound',
+            'stalagflucht': 'Stalag Flucht',
+            'sanpancho': 'San Pancho',
+            'escapeteam': 'Escape Team',
+            'DTAF': 'Duct Tapes Are Forever',
+            'SS': 'Santa\'s Sweatshop'
+        }
     },
     mounted: function() {
         this.$nextTick(function () {
@@ -245,36 +255,6 @@ var app = new Vue({
             this.filters.can_disrupt_cameras = false;
             this.filters.is_outfit = false;
             this.filters.is_craftable = false;
-        },
-        getFound: function(found) {
-            switch (found) {
-                case 'irongate':
-                    return 'HMP-Irongate';
-                break;
-                case 'perks':
-                    return 'Center Perks';
-                break;
-                case 'jungle':
-                    return 'Jungle Compound';
-                break;
-                case 'stalagflucht':
-                    return 'Stalag Flucht';
-                break;
-                case 'sanpancho':
-                    return 'San Pancho';
-                break;
-                case 'escapeteam':
-                    return 'Escape Team';
-                break;
-                case 'DTAF':
-                    return 'Duct Tapes Are Forever';
-                break;
-                case 'SS':
-                    return 'Santa\'s Sweatshop';
-                break;
-                default:
-                    return null;
-            }
         }
     }
 });

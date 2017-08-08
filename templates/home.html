@@ -122,7 +122,7 @@
                             <td>${ item.chipping }</td>
                             <td>${ item.unscrewing }</td>
                             <td>${ item.cutting }</td>
-                            <td><template v-if="item.found"><a :href="escapistsWikiSearch + getFound(item.found)">${ getFound(item.found) }</a></template></td>
+                            <td><template v-if="item.found"><a :href="escapistsWikiSearch + maps[item.found]">${ maps[item.found] }</a></template></td>
                             <td><template v-if="item.fat">-${ item.fat }</template></td>
                             <td><template v-if="item.camdis">${ item.camdis / 1000 }</template></td>
                             <!--<td><i class="fa fa-check" v-if="item.carry"></i></td>-->
