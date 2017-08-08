@@ -9,10 +9,19 @@
                     <fieldset class="man ptn">
                         <legend><i class="fa fa-filter"></i> Filters <a href="#" title="Clear all filters" @click.prevent="clearAllFilters()"><i class="fa fa-eraser"></i></a></legend>
 
-                        <div><label>Item name <input type="text" v-model="filters.name"></label> <a href="#" title="Clear this filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a></div>
-
-                        <div class="grid-3 has-gutter">
-                            <div><label><input type="checkbox" v-model="filters.is_map_specific"> <i class="fa fa-star fa-fw"></i> Is map-specific</label></div>
+                        <div class="grid-3 has-gutter mts">
+                            <div>
+                                <label>Name <input type="text" v-model="filters.name"></label>
+                                <a href="#" title="Clear this filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a>
+                            </div>
+                            <div>
+                                Map
+                                <select v-model="filters.found_in_map">
+                                    <option value="">Any</option>
+                                    <option v-for="(map_name, map_id) in maps" :value="map_id">${ map_name }</option>
+                                </select>
+                                <a href="#" title="Clear this filter" @click.prevent="filters.found_in_map = ''"><i class="fa fa-eraser"></i></a>
+                            </div>
                             <div><label><input type="checkbox" v-model="filters.is_buyable"> <i class="fa fa-dollar fa-fw"></i> Can be bought</label></div>
                             <div><label><input type="checkbox" v-model="filters.can_heal"> <i class="fa fa-medkit fa-fw"></i> Can heal you</label></div>
                             <div><label><input type="checkbox" v-model="filters.can_hurt"> <i class="fa fa-bomb fa-fw"></i> Can hurt people</label></div>
@@ -156,7 +165,7 @@
 
             <input type="text" class="w200p" placeholder="Filter by item name" v-model="query">
 
-            <select name="id" required v-model="addItem.id" class="w300p">
+            <select required v-model="addItem.id" class="w300p">
                 <option value="">Select an item</option>
                 <option v-for="(item, item_id) in filteredItems" :value="item_id">${ item.name }</option>
             </select>
