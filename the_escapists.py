@@ -11,6 +11,10 @@ import os
 
 class ItemsDataParser:
     """
+    Parse a items_*.dat file from The Escapists game.
+
+    Available items attributes:
+
     ['name', 'illegal', 'gift', 'decay', 'info', 'desk', 'npc_carry', 'fat',
     'outfit', 'buy', 'craft', 'digging', 'chipping', 'hp', 'camdis', 'weapon',
     'unscrewing', 'cutting', 'found', 'carry']
@@ -20,6 +24,7 @@ class ItemsDataParser:
         self.data_dir = os.path.join(self.game_dir, 'Data')
 
     def parse(self, lang='eng'):
+        """Actually run the parsing process."""
         items_file = os.path.join(self.data_dir, 'items_' + lang + '.dat')
 
         if not os.path.isfile(items_file):
@@ -45,6 +50,7 @@ class ItemsDataParser:
         return items
 
     def _get_item_attribute_value(self, name, value):
+        """Get the proper value of an item attribute."""
         if name in ['gift', 'decay', 'desk', 'fat', 'outfit', 'buy', 'digging', 'chipping', 'hp', 'camdis', 'weapon', 'unscrewing', 'cutting']:
             value = int(value)
         elif name in ['illegal', 'npc_carry', 'carry']:
@@ -55,6 +61,7 @@ class ItemsDataParser:
         return value
 
     def _parse_craft_attribute_value(self, value):
+        """Get the item's craft attribute."""
         craft = {}
 
         intelligence, recipe = value.split('_', maxsplit=1)
@@ -121,6 +128,7 @@ def ReleaseKey(hexKeyCode):
 
 
 class ItemsImagesExtractor:
+    """Extract items image from The Escapists game."""
     current_weapon_addr = 0x03C110DC
     weapon_slot_top = 370
     weapon_slot_left = 484
@@ -143,7 +151,7 @@ class ItemsImagesExtractor:
         self._set_process()
 
     def _set_window(self):
-        """Set the game's window."""
+        """Retrieve the game's window handle."""
         self.game_window = ctypes.windll.user32.FindWindowW(None, 'The Escapists')
 
         if not self.game_window:
@@ -164,6 +172,7 @@ class ItemsImagesExtractor:
         }
 
     def _set_process(self):
+        """Retrieve the game's process handle."""
         game_window_proc_id = DWORD()
         ctypes.windll.user32.GetWindowThreadProcessId(self.game_window, ctypes.byref(game_window_proc_id))
 
@@ -176,6 +185,7 @@ class ItemsImagesExtractor:
             raise Exception('Unable open the game\'s process')
 
     def _set_current_weapon(self, item_id):
+        """The the current weapon in the player's inventory."""
         buf = ctypes.create_string_buffer(item_id.encode('ascii'))
 
         try:
@@ -186,12 +196,14 @@ class ItemsImagesExtractor:
         sleep(0.2)
 
     def _toggle_profile(self):
+        """Toggle the display of the profile window in-game."""
         PressKey(0x08)
         sleep(0.2)
         ReleaseKey(0x08)
         sleep(0.2)
 
     def extract(self):
+        """Actually run the extract process."""
         scsh = mss()
 
         # For each available items
