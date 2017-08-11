@@ -22,6 +22,9 @@
                                 </select>
                                 <a href="#" title="Clear this filter" @click.prevent="filters.found_in_map = ''"><i class="fa fa-eraser"></i></a>
                             </div>
+                        </div>
+
+                        <div class="grid-3 has-gutter mts">
                             <div><label><input type="checkbox" v-model="filters.is_buyable"> <i class="fa fa-dollar fa-fw"></i> Can be bought</label></div>
                             <div><label><input type="checkbox" v-model="filters.can_heal"> <i class="fa fa-medkit fa-fw"></i> Can heal you</label></div>
                             <div><label><input type="checkbox" v-model="filters.can_hurt"> <i class="fa fa-bomb fa-fw"></i> Can hurt people</label></div>
