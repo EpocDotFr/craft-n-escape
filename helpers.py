@@ -22,7 +22,7 @@ def load_json(file):
     with open(file, 'r') as f:
         data = f.read()
 
-    return json.loads(data, object_pairs_hook=OrderedDict) if data else data # FIXME object_pairs_hook doesn't seem to work
+    return json.loads(data) if data else data
 
 
 def save_json(file, data):
