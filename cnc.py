@@ -1,6 +1,5 @@
 from flask import Flask, render_template, make_response, request, abort, flash
 from werkzeug.exceptions import HTTPException
-from collections import OrderedDict
 from urllib.parse import urlparse
 from flask_cache import Cache
 from glob import glob
@@ -162,12 +161,15 @@ def itemsdata(gamedir):
     parser = ItemsDataParser(gamedir)
     items = parser.parse()
 
-    # Sort items by their name
-    items = OrderedDict(sorted(items.items(), key=lambda x: x[1]['name']))
-
     app.logger.info('Saving {}'.format(app.config['ITEMS_FILE']))
 
     save_json(app.config['ITEMS_FILE'], items)
+
+    # Initialize the recipes file as it doesn't exists
+    if not os.path.isfile(app.config['RECIPES_FILE']):
+        app.logger.info('Saving {}'.format(app.config['RECIPES_FILE']))
+
+        save_json(app.config['RECIPES_FILE'], {})
 
     app.logger.info('Done')
 
