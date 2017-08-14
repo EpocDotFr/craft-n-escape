@@ -88,7 +88,8 @@ var app = new Vue({
             is_in_desks: false,
             can_disrupt_cameras: false,
             is_outfit: false,
-            is_craftable: false
+            is_craftable: false,
+            is_illegal: false
         },
         itemsIOwn: [],
         maps: {
@@ -171,7 +172,7 @@ var app = new Vue({
             var filtered_items = {};
 
             _.each(this.items, function(item, item_id) {
-                var name = found_in_map = is_buyable = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = can_i_craft = true;
+                var name = found_in_map = is_buyable = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = is_illegal = can_i_craft = true;
 
                 if (('name' in item) && this.filters.name) {
                     name = item.name.toLowerCase().indexOf(this.filters.name.toLowerCase()) !== -1;
@@ -225,13 +226,17 @@ var app = new Vue({
                     is_outfit = ('outfit' in item);
                 }
 
+                if (this.filters.is_illegal) {
+                    is_illegal = ('illegal' in item);
+                }
+
                 if (!_.isEmpty(this.itemsIOwn)) {
                     can_i_craft = this.itemIdsICanCraft.indexOf(item_id) !== -1;
                 } else if (this.filters.is_craftable) {
                     is_craftable = ('craft' in item);
                 }
 
-                if (name && found_in_map && is_buyable && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && can_i_craft) {
+                if (name && found_in_map && is_buyable && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && is_illegal && can_i_craft) {
                     filtered_items[item_id] = item;
                 }
             }, this);
@@ -255,6 +260,7 @@ var app = new Vue({
             this.filters.can_disrupt_cameras = false;
             this.filters.is_outfit = false;
             this.filters.is_craftable = false;
+            this.filters.is_illegal = false;
         }
     }
 });
