@@ -186,11 +186,9 @@ def itemsimages():
 
     items = load_json(app.config['ITEMS_FILE'])
 
-    item_ids = [item_id for item_id, item in items.items()]
-
     app.logger.info('Extracting')
 
-    extractor = ItemsImagesExtractor(item_ids=item_ids, output_dir=app.config['ITEMS_IMAGES_DIR'])
+    extractor = ItemsImagesExtractor(item_ids=items.keys(), output_dir=app.config['ITEMS_IMAGES_DIR'])
     extractor.extract()
 
     app.logger.info('Done')

@@ -129,7 +129,7 @@ def ReleaseKey(hexKeyCode):
 
 class ItemsImagesExtractor:
     """Extract items image from The Escapists game."""
-    current_weapon_addr = 0x03C110DC
+    current_weapon_addr = 0x03C110DC # FIXME This has to be changed every time the game is started or a map is reloaded
     weapon_slot_top = 370
     weapon_slot_left = 484
     weapon_slot_width = 106

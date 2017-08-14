@@ -66,24 +66,23 @@ You'll probably have to hack with this application to make it work with one of t
 
 ### Extracting items data
 
-A Flask command (`flask itemsdata`) can be used to regenerate the items listing file, i.e when the game has been
-updated.
+The Flask command `flask itemsdata` is used to regenerate the items listing file, i.e when the game has been updated.
+
+**This command only works on Windows**, and requires the game to be installed.
 
   1. `set FLASK_APP=cnc.py`
   2. `flask itemsdata --gamedir="{path to the game root directory}"`
 
-**This command only works on Windows**, and requires the game to be installed.
-
 ### Extracting items images
 
-A Flask command (`flask itemsimages`) can be used to extract items images from the game itself.
+The Flask command `flask itemsimages` is used to extract items images from the game itself.
+
+**This command only works on Windows**, and requires the game to be already running in any map without any internal game
+window opened. The game's window must be visible at all times, and must not be moved or resized.
 
   1. `pip install -r requirements-dev.txt`
   2. `set FLASK_APP=cnc.py`
   3. `flask itemsimages`
-
-**This command only works on Windows**, and requires the game to be already running in any map without any internal game
-window opened. The game's window must be visible at all times, and must not be moved or resized.
 
 ## How it works
 
@@ -92,7 +91,8 @@ This project is mainly powered by [Flask](http://flask.pocoo.org/) (Python) for 
 
 Data is stored in [JSON](https://en.wikipedia.org/wiki/JSON) files. Why? And why not an [SQLite](https://en.wikipedia.org/wiki/SQLite)
 database or some kind of embedded relational database? Because JSON files are easy to read using every programming languages,
-even Javascript on the client-side.
+even Javascript on the client-side. In addition I didn't want to mess with the SQLite => JSON processing, so instead
+we directly use JSON as the data storage format.
 
   - `storage/data/items.json` is built by the `flask itemsdata` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
   - `storage/data/recipes.json` contains all crafting recipes of the items contained in the file above. A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists crafting recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items IDs).
