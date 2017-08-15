@@ -92,6 +92,7 @@ var app = new Vue({
             is_illegal: false
         },
         itemsIOwn: [],
+        allow_partial_match: false,
         maps: {
             'irongate': 'HMP-Irongate',
             'perks': 'Center Perks',
@@ -158,9 +159,16 @@ var app = new Vue({
                             }, this);
                         }, this);
 
-                        // If all items I own are valid components to craft this item
-                        if (valid_items_count == item.craft.recipe_items.length) {
-                            item_ids_i_can_craft.push(item_id);
+                        if (this.allow_partial_match) { // If partial crafting recipe match is allowed
+                            // If at least one of the items I own is a valid component to craft this item: add this item to the items I can craft
+                            if (valid_items_count > 0) {
+                                item_ids_i_can_craft.push(item_id);
+                            }
+                        } else { // If partial crafting recipe match isn't allowed
+                            // If all items I own are valid components to craft this item: add this item to the items I can craft
+                            if (valid_items_count == item.craft.recipe_items.length) {
+                                item_ids_i_can_craft.push(item_id);
+                            }
                         }
                     }
                 }, this);
