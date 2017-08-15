@@ -94,14 +94,14 @@ var app = new Vue({
         itemsIOwn: [],
         allow_partial_match: false,
         maps: {
-            'irongate': 'HMP-Irongate',
             'perks': 'Center Perks',
-            'jungle': 'Jungle Compound',
-            'stalagflucht': 'Stalag Flucht',
-            'sanpancho': 'San Pancho',
-            'escapeteam': 'Escape Team',
             'DTAF': 'Duct Tapes Are Forever',
-            'SS': 'Santa\'s Sweatshop'
+            'escapeteam': 'Escape Team',
+            'irongate': 'HMP-Irongate',
+            'jungle': 'Jungle Compound',
+            'SS': 'Santa\'s Sweatshop',
+            'sanpancho': 'San Pancho',
+            'stalagflucht': 'Stalag Flucht'
         }
     },
     mounted: function() {
