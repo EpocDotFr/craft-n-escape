@@ -45,7 +45,7 @@ var app = new Vue({
         currentRecipe: current_recipe
     },
     mounted: function() {
-        this.$nextTick(function () {
+        this.$nextTick(function() {
             this.loading = false;
         });
     },

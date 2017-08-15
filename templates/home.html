@@ -90,8 +90,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, item_id) in filteredItems" class="item">
-                            <td>${ item_id }</td>
+                        <tr v-for="item in filteredItems" class="item">
+                            <td>${ item.id }</td>
                             <td class="summary-cell">
                                 <i class="fa fa-star" v-if="item.found" title="Map-specific"></i>
                                 <i class="fa fa-dollar" v-if="item.buy" title="Can be bought"></i>
@@ -109,7 +109,7 @@
                                 <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
                             </td>
                             <td class="name-cell">
-                                <itemname :item="item" :itemid="item_id" :escapistswikisearch="escapistsWikiSearch"></itemname>
+                                <itemname :item="item" :itemid="item.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
                             </td>
                             <td><template v-if="item.buy">$${ item.buy }</template></td>
                             <td><template v-if="item.gift">+${ item.gift }</template></td>

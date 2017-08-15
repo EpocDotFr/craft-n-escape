@@ -105,7 +105,7 @@ var app = new Vue({
         }
     },
     mounted: function() {
-        this.$nextTick(function () {
+        this.$nextTick(function() {
             this.loading = false;
         });
     },
@@ -176,8 +176,8 @@ var app = new Vue({
 
             return item_ids_i_can_craft;
         },
-        filteredItems: function () {
-            var filtered_items = {};
+        filteredItems: function() {
+            var filtered_items = [];
 
             _.each(this.items, function(item, item_id) {
                 var name = found_in_map = is_buyable = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = is_illegal = can_i_craft = true;
@@ -245,11 +245,15 @@ var app = new Vue({
                 }
 
                 if (name && found_in_map && is_buyable && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && is_illegal && can_i_craft) {
-                    filtered_items[item_id] = item;
+                    item.id = item_id; // The item ID is the this.items key but does not exist in the item object itself. So add it manually
+
+                    filtered_items.push(item);
                 }
             }, this);
 
-            return filtered_items;
+            return filtered_items.sort(function(first_item, second_item) {
+                return first_item.name.localeCompare(second_item.name);
+            });
         }
     },
     methods: {
