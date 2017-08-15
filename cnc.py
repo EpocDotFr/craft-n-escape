@@ -79,8 +79,10 @@ def recipes_editor():
 
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
+    images = get_images()
 
     items = get_items_with_recipe(items) # Only get items with a crafting recipe
+    items = merge_images_in_items(items, images)
 
     # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
     # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
@@ -96,6 +98,9 @@ def recipes_editor_item(item_id):
 
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
+    images = get_images()
+
+    items = merge_images_in_items(items, images)
 
     # Highlight items with crafting recipe but not in the Craft N' Escape recipes file
     # Also highlight items with no up-to-date crafting recipe in comparison of the game's one
