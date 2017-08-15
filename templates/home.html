@@ -173,7 +173,7 @@
 
             <select required v-model="addItem.id" class="w300p">
                 <option value="">Select an item</option>
-                <option v-for="(item, item_id) in filteredItems" :value="item_id">${ item.name }</option>
+                <option v-for="item in filteredItems" :value="item.id">${ item.name }</option>
             </select>
 
             <input type="number" min="1" value="1" required v-model.number="addItem.amount" class="w100p">
