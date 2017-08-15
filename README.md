@@ -8,7 +8,7 @@ _Because everyone loves it when a plan comes together_
 
   - Web-based
   - List of all available items with all their attributes (attack power, illegal, price, etc)
-    - Can be filtered in may ways (is craftable, is buyable, etc)
+    - Can be filtered in many ways (is craftable, is buyable, etc)
     - Crafting recipes
     - Links to [The Escapists wiki](http://theescapists.gamepedia.com/)
     - Items image
