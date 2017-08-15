@@ -68,7 +68,7 @@
             <input type="text" class="w200p" placeholder="Filter by item ID or name" v-model="query">
             <select required v-model.number="recipe_item.id" class="w300p">
                 <option value="">Select an item</option>
-                <option v-for="(item, item_id) in filteredItems" :value="item_id">#${ item_id } ${ item.name }</option>
+                <option v-for="item in filteredItems" :value="item.id">#${ item.id } ${ item.name }</option>
             </select>
         </span>
     </template>

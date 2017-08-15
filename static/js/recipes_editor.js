@@ -11,7 +11,7 @@ Vue.component('itemsfilter', {
     },
     computed: {
         filteredItems: function() {
-            var filtered_items = {};
+            var filtered_items = [];
 
             _.each(this.items, function(item, item_id) {
                 var match = true;
@@ -21,11 +21,15 @@ Vue.component('itemsfilter', {
                 }
 
                 if (match) {
-                    filtered_items[item_id] = item;
+                    item.id = item_id; // The item ID is the this.items key but does not exist in the item object itself. So add it manually
+
+                    filtered_items.push(item);
                 }
             }, this);
 
-            return filtered_items;
+            return filtered_items.sort(function(first_item, second_item) {
+                return first_item.name.localeCompare(second_item.name);
+            });
         }
     }
 });
