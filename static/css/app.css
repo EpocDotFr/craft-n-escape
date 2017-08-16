@@ -204,6 +204,7 @@ table th {
 table th {
     background-color: #0e3163;
     vertical-align: middle;
+    border-color: #34457e;
 }
 
 table tr:nth-child(even) td {
