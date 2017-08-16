@@ -120,7 +120,7 @@ header > * {
     display: table-cell;
 }
 
-header .va-middle {
+header .vertical-middle {
     vertical-align: middle;
 }
 
@@ -131,6 +131,12 @@ header h1 {
 header a,
 header a:hover {
     text-decoration: none;
+}
+
+header .game-version-selector img.inactive {
+    filter: gray;
+    -webkit-filter: grayscale(1);
+    filter: grayscale(1);
 }
 
 /************************************************************************

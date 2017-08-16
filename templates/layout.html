@@ -18,7 +18,7 @@
 </head>
 <body class="man pls prs pbs">
     <header class="mbs pas center w700p">
-        <div class="va-middle txtcenter">
+        <div class="vertical-middle txtleft">
             <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"></a>
         </div>
         <div>
@@ -30,9 +30,9 @@
             </div>
         </div>
         {% if is_local() %}
-            <div class="va-middle txtcenter">
-                <img src="http://via.placeholder.com/140x55">
-                <img src="http://via.placeholder.com/140x55">
+            <div class="vertical-middle txtright game-version-selector">
+                <a href="#"><img src="http://via.placeholder.com/140x60"></a>
+                <a href="#"><img src="http://via.placeholder.com/140x60" class="inactive"></a>
             </div>
         {% endif %}
     </header>
