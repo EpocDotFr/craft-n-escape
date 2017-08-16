@@ -106,37 +106,33 @@ fieldset {
 /************************************************************************
  * Header */
 
-header {
+header,
+header .content {
+   display: table;
+}
+
+header .content {
     border-left: 0.1rem solid #34457e;
     border-right: 0.1rem solid #34457e;
     border-bottom: 0.1rem solid #34457e;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     background-color: #0e3163;
-    display: table;
 }
 
-header > * {
+header > *,
+header .content > * {
     display: table-cell;
-}
-
-header .vertical-middle {
     vertical-align: middle;
 }
 
-header h1 {
+header .content h1 {
     font-family: monospace, monospace;
 }
 
-header a,
-header a:hover {
+header .content a,
+header .content a:hover {
     text-decoration: none;
-}
-
-header .game-version-selector img.inactive {
-    filter: gray;
-    -webkit-filter: grayscale(1);
-    filter: grayscale(1);
 }
 
 /************************************************************************

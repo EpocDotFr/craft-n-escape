@@ -17,22 +17,36 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 </head>
 <body class="man pls prs pbs">
-    <header class="mbs pas center w700p">
-        <div class="vertical-middle txtleft">
-            <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"></a>
-        </div>
+    <header class="mbs center">
         <div>
-            <div class="txtcenter">
-                <h1 class="man"><a href="{{ url_for('home') }}">Craft N' Escape</a></h1>
-            </div>
-            <div class="txtcenter small">
-                <em>Because everyone loves it when a plan comes together</em>
+            <div class="content pas">
+                <div class="txtleft prs">
+                    <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/the_escapists_icon.png') }}"></a>
+                </div>
+                <div>
+                    <div class="txtcenter">
+                        <h1 class="man"><a href="{{ url_for('home') }}">Craft N' Escape</a></h1>
+                    </div>
+                    <div class="txtcenter small">
+                        <em>Because everyone loves it when a plan comes together</em>
+                    </div>
+                </div>
             </div>
         </div>
         {% if is_local() %}
-            <div class="vertical-middle txtright game-version-selector">
-                <a href="{{ url_for('home') }}"><img src="http://via.placeholder.com/140x60.png?text=The+Escapists" {% if game_version != 1 %}class="inactive" title="Click to use The Escapists"{% endif %}></a>
-                <a href="{{ url_for('home', game_version=2) }}"><img src="http://via.placeholder.com/140x60.png?text=The+Escapists+2" {% if game_version != 2 %}class="inactive" title="Click to use The Escapists 2"{% endif %}></a>
+            <div class="pls txtcenter">
+                {% if game_version == 1 %}
+                    {% set game_selector_link = url_for('home', game_version=2) %}
+                    {% set game_logo = 'the_escapists_logo.png' %}
+                    {% set game_switch_name = 'The Escapists 2' %}
+                {% elif game_version == 2 %}
+                    {% set game_selector_link = url_for('home') %}
+                    {% set game_logo = 'the_escapists_2_logo.png' %}
+                    {% set game_switch_name = 'The Escapists' %}
+                {% endif %}
+
+                <div><img src="{{ url_for('static', filename='images/' + game_logo) }}"></div>
+                <div class="small"><a href="{{ game_selector_link }}">Switch to {{ game_switch_name }}</a></div>
             </div>
         {% endif %}
     </header>
