@@ -61,7 +61,8 @@ for handler in app.logger.handlers:
 
 
 @app.route('/')
-def home():
+@app.route('/<int:game_version>')
+def home(game_version=1):
     items = load_json(app.config['ITEMS_FILE'])
     recipes = load_json(app.config['RECIPES_FILE'])
     images = get_images()
@@ -69,7 +70,7 @@ def home():
     items = merge_recipe_items_in_items(items, recipes)
     items = merge_images_in_items(items, images)
 
-    return render_template('home.html', items=items)
+    return render_template('home.html', items=items, game_version=game_version)
 
 
 @app.route('/recipes-editor')

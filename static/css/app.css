@@ -120,7 +120,7 @@ header > * {
     display: table-cell;
 }
 
-header .logo {
+header .va-middle {
     vertical-align: middle;
 }
 

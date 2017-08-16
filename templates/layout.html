@@ -17,8 +17,8 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 </head>
 <body class="man pls prs pbs">
-    <header class="mbs pas center w400p">
-        <div class="logo txtcenter">
+    <header class="mbs pas center w700p">
+        <div class="va-middle txtcenter">
             <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/logo.png') }}"></a>
         </div>
         <div>
@@ -29,6 +29,12 @@
                 <em>Because everyone loves it when a plan comes together</em>
             </div>
         </div>
+        {% if is_local() %}
+            <div class="va-middle txtcenter">
+                <img src="http://via.placeholder.com/140x55">
+                <img src="http://via.placeholder.com/140x55">
+            </div>
+        {% endif %}
     </header>
 
     {% if is_local() %}
