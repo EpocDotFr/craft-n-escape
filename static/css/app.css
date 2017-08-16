@@ -66,7 +66,7 @@ a:focus {
  * Forms */
 
 fieldset {
-    border: 0.1rem solid #303030;
+    border: 0.1rem solid #484848;
     border-radius: 0.5rem;
 }
 
@@ -107,9 +107,9 @@ fieldset {
  * Header */
 
 header {
-    border-left: 0.1rem solid #303030;
-    border-right: 0.1rem solid #303030;
-    border-bottom: 0.1rem solid #303030;
+    border-left: 0.1rem solid #34457e;
+    border-right: 0.1rem solid #34457e;
+    border-bottom: 0.1rem solid #34457e;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     background-color: #0e3163;
@@ -167,8 +167,8 @@ button:focus, .btn:focus {
 input,
 select,
 textarea {
-    background-color: #181818;
-    border: 0.1rem solid #303030;
+    background-color: #292929;
+    border: 0.1rem solid #484848;
     border-radius: 0.5rem;
     color: #FFF;
 }
