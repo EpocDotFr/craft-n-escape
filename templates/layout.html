@@ -31,8 +31,8 @@
         </div>
         {% if is_local() %}
             <div class="vertical-middle txtright game-version-selector">
-                <a href="#"><img src="http://via.placeholder.com/140x60"></a>
-                <a href="#"><img src="http://via.placeholder.com/140x60" class="inactive"></a>
+                <a href="{{ url_for('home') }}"><img src="http://via.placeholder.com/140x60.png?text=The+Escapists" {% if game_version != 1 %}class="inactive" title="Click to use The Escapists"{% endif %}></a>
+                <a href="{{ url_for('home', game_version=2) }}"><img src="http://via.placeholder.com/140x60.png?text=The+Escapists+2" {% if game_version != 2 %}class="inactive" title="Click to use The Escapists 2"{% endif %}></a>
             </div>
         {% endif %}
     </header>
