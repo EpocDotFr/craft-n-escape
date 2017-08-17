@@ -107,3 +107,8 @@ For more information, I suggest you do dive into the code starting with the `cnc
 
   - Logo, items image, The Escapists © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
   - This project isn't supported nor endorsed by Mouldy Toof Studios / Team17 Digital
+
+## End words
+
+If you have questions or problems, you can either submit an issue [here on GitHub](https://github.com/EpocDotFr/craft-n-escape/issues)
+or in [this Reddit thread](https://www.reddit.com/r/theescapists/comments/6s8ip5/craft_n_escape_all_items_and_crafting_recipes_on/).

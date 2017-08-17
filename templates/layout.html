@@ -1,3 +1,19 @@
+{% if game_version == 1 %}
+    {% set home_link = url_for('home') %}
+    {% set game_name = 'The Escapists' %}
+    {% set home_switch_link = url_for('home', game_version=2) %}
+    {% set game_logo = 'the_escapists_logo.png' %}
+    {% set game_switch_name = 'The Escapists 2' %}
+{% elif game_version == 2 %}
+    {% set home_link = url_for('home', game_version=2) %}
+    {% set game_name = 'The Escapists 2' %}
+    {% set home_switch_link = url_for('home') %}
+    {% set game_logo = 'the_escapists_2_logo.png' %}
+    {% set game_switch_name = 'The Escapists' %}
+{% else %}
+    {% set home_link = url_for('home') %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,9 +21,12 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Items and crafting recipes for The Escapists, on one filterable page. Because everyone loves it when a plan comes together">
 
-    <title>{% block meta_title %}{% endblock %}{% if self.meta_title() | trim %} • {% endif %}Craft N' Escape</title>
+    {% if game_name %}
+        <meta name="description" content="Items and crafting recipes for {{ game_name }}, on one filterable page. Because everyone loves it when a plan comes together">
+    {% endif %}
+
+    <title>{% block meta_title %}{% endblock %}{% if self.meta_title() | trim %} • {% endif %}Craft N' Escape{% if game_name %} - {{ game_name }}{% endif %}</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.rawgit.com/alsacreations/KNACSS/6.1.2/css/knacss.css">
@@ -21,11 +40,11 @@
         <div>
             <div class="content pas">
                 <div class="txtleft prs">
-                    <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename='images/the_escapists_icon.png') }}"></a>
+                    <a href="{{ home_link }}"><img src="{{ url_for('static', filename='images/the_escapists_icon.png') }}"></a>
                 </div>
                 <div>
                     <div class="txtcenter">
-                        <h1 class="man"><a href="{{ url_for('home') }}">Craft N' Escape</a></h1>
+                        <h1 class="man"><a href="{{ home_link }}">Craft N' Escape</a></h1>
                     </div>
                     <div class="txtcenter small">
                         <em>Because everyone loves it when a plan comes together</em>
@@ -33,20 +52,10 @@
                 </div>
             </div>
         </div>
-        {% if is_local() %}
+        {% if game_version and is_local() %}
             <div class="pls txtcenter">
-                {% if game_version == 1 %}
-                    {% set game_selector_link = url_for('home', game_version=2) %}
-                    {% set game_logo = 'the_escapists_logo.png' %}
-                    {% set game_switch_name = 'The Escapists 2' %}
-                {% elif game_version == 2 %}
-                    {% set game_selector_link = url_for('home') %}
-                    {% set game_logo = 'the_escapists_2_logo.png' %}
-                    {% set game_switch_name = 'The Escapists' %}
-                {% endif %}
-
                 <div><img src="{{ url_for('static', filename='images/' + game_logo) }}"></div>
-                <div class="small"><a href="{{ game_selector_link }}">Switch to {{ game_switch_name }}</a></div>
+                <div class="small"><a href="{{ home_switch_link }}">Switch to {{ game_switch_name }}</a></div>
             </div>
         {% endif %}
     </header>
