@@ -149,14 +149,14 @@ def recipes_editor_item(item_id):
 
 @app.cli.command()
 @click.option('--gamedir', '-g', help='Game root directory')
-def itemsdata(gamedir):
-    """Extract data from items_eng.dat"""
+def te1_extract_items_data(gamedir):
+    """Extract items data from The Escapists 1"""
     from the_escapists import ItemsDataParser
 
     context = click.get_current_context()
 
     if not gamedir:
-        click.echo(itemsdata.get_help(context))
+        click.echo(the_escapists.get_help(context))
         context.exit()
 
     if not click.confirm('This will overwrite the {} file. Are you sure?'.format(app.config['ITEMS_FILE'])):
@@ -181,23 +181,43 @@ def itemsdata(gamedir):
 
 
 @app.cli.command()
-def itemsimages():
-    """Extract items images"""
+def te1_extract_items_image():
+    """Extract items image from The Escapists 1"""
     from the_escapists import ItemsImagesExtractor
 
     app.logger.info('Extracting started')
-    app.logger.info('Do not touch anything until it is finished')
+    app.logger.info('Do not do anything else until it is finished (you will be noticed)')
 
     app.logger.info('Loading items')
 
     items = load_json(app.config['ITEMS_FILE'])
 
-    app.logger.info('Extracting')
+    app.logger.info('Extracting images')
 
     extractor = ItemsImagesExtractor(item_ids=items.keys(), output_dir=app.config['ITEMS_IMAGES_DIR'])
     extractor.extract()
 
     app.logger.info('Done')
+
+
+@app.cli.command()
+@click.option('--locfile', '-l', help='The items name localization file')
+def te2_extract_items_data(locfile):
+    """Extract items name from The Escapists 2"""
+    from the_escapists_2 import parse_items_localization
+
+    context = click.get_current_context()
+
+    if not locfile:
+        click.echo(te2_extract_items_data.get_help(context))
+        context.exit()
+
+    app.logger.info('Extracting started')
+
+    print(parse_items_localization(locfile))
+
+    app.logger.info('Done')
+
 
 # -----------------------------------------------------------
 # HTTP errors handler

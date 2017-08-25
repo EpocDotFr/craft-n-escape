@@ -1,15 +1,15 @@
 import os
 
 
-def parse_items_localization(file, lang='en'):
+def parse_items_localization(file, lang='eng'):
     locales = {
-        'en': 1,
-        'de': 2,
-        'fr': 3,
-        'es': 4,
-        'ru': 5,
-        'it': 6,
-        'zh': 7
+        'eng': 1,
+        'ger': 2,
+        'fre': 3,
+        'spa': 4,
+        'rus': 5,
+        'ita': 6,
+        'chi': 7
     }
 
     if lang not in locales:
@@ -18,7 +18,7 @@ def parse_items_localization(file, lang='en'):
     if not os.path.isfile(file):
         raise FileNotFoundError(file + ' does not exists')
 
-    with open(file, 'r') as f:
+    with open(file, 'r', encoding='utf-8') as f:
         file_content = f.read().strip()
 
     localization = {}
