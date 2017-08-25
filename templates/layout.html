@@ -1,19 +1,20 @@
 {% if game_version == 1 %}
     {% set home_link = url_for('home') %}
     {% set game_name = 'The Escapists' %}
-    {% set home_switch_link = url_for('home', game_version=2) %}
     {% set game_logo = 'the_escapists_logo.png' %}
+
+    {% set home_switch_link = url_for('home', game_version=2) %}
     {% set game_switch_name = 'The Escapists 2' %}
 {% elif game_version == 2 %}
     {% set home_link = url_for('home', game_version=2) %}
     {% set game_name = 'The Escapists 2' %}
-    {% set home_switch_link = url_for('home') %}
     {% set game_logo = 'the_escapists_2_logo.png' %}
+
+    {% set home_switch_link = url_for('home') %}
     {% set game_switch_name = 'The Escapists' %}
 {% else %}
     {% set home_link = url_for('home') %}
 {% endif %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
