@@ -106,7 +106,7 @@ For more information, I suggest you do dive into the code starting with the `cnc
 
 ## Credits
 
-  - Logo, items image, The Escapists © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
+  - Logos, items image, The Escapists, The Escapists © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
   - This project isn't supported nor endorsed by Mouldy Toof Studios / Team17 Digital
 
 ## End words

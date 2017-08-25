@@ -39,6 +39,8 @@ def parse_items_localization(file, lang='eng'):
         if not text_id.startswith('Text.Item'):
             continue
 
+        text_id = text_id.replace('Text.Item.', '', 1)
+
         localization[text_id] = cols[locales[lang]]
 
     return localization

@@ -203,7 +203,7 @@ def te1_extract_items_image():
 @app.cli.command()
 @click.option('--locfile', '-l', help='The items name localization file')
 def te2_extract_items_data(locfile):
-    """Extract items name from The Escapists 2"""
+    """Extract items data from The Escapists 2"""
     from the_escapists_2 import parse_items_localization
 
     context = click.get_current_context()
