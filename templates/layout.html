@@ -55,8 +55,9 @@
         </div>
         {% if game_version and is_local() %}
             <div class="pls txtcenter">
+                <div class="smaller">You are using:</div>
                 <div><img src="{{ url_for('static', filename='images/' + game_logo) }}"></div>
-                <div class="small"><a href="{{ home_switch_link }}">Switch to {{ game_switch_name }}</a></div>
+                <div class="smaller"><a href="{{ home_switch_link }}">Click to switch to {{ game_switch_name }}</a></div>
             </div>
         {% endif %}
     </header>
