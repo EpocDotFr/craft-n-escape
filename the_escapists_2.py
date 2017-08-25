@@ -1,8 +1,10 @@
+from collections import OrderedDict
+import unitypack
 import os
 
 
-def parse_items_localization(file, lang='eng'):
-    locales = {
+class ItemsDataExtractor:
+    available_locales = {
         'eng': 1,
         'ger': 2,
         'fre': 3,
@@ -12,35 +14,55 @@ def parse_items_localization(file, lang='eng'):
         'chi': 7
     }
 
-    if lang not in locales:
-        raise ValueError(lang + ' is not supported')
+    def __init__(self, game_dir):
+        self.game_dir = game_dir
+        self.data_dir = os.path.join(self.game_dir, 'TheEscapists2_Data')
 
-    if not os.path.isfile(file):
-        raise FileNotFoundError(file + ' does not exists')
+    def extract(self, lang='eng'):
+        """Actually run the extraction process."""
 
-    with open(file, 'r', encoding='utf-8') as f:
-        file_content = f.read().strip()
+        resources_file = os.path.join(self.data_dir, 'resources.assets')
 
-    localization = {}
+        if not os.path.isfile(resources_file):
+            raise FileNotFoundError(resources_file + ' does not exists')
 
-    for line in file_content.splitlines()[1:]:
-        line = line.strip()
+        items = OrderedDict()
 
-        if not line: # Empty line
-            continue
+        with open(resources_file, 'rb') as f:
+            assets = unitypack.Asset.from_file(f)
 
-        cols = [c.strip() for c in line.split('\t')]
+            # self._parse_localization(stream, lang=lang)
 
-        if len(cols) <= 1:
-            continue
+        return items
 
-        text_id = cols[0]
+    def _parse_localization(self, stream, lang='eng'):
+        if lang not in self.available_locales:
+            raise ValueError(lang + ' is not supported')
 
-        if not text_id.startswith('Text.Item'):
-            continue
+        # with open(stream, 'r', encoding='utf-8') as f:
+        #     file_content = f.read().strip()
+        file_content = stream.read().strip()
 
-        text_id = text_id.replace('Text.Item.', '', 1)
+        localization = {}
 
-        localization[text_id] = cols[locales[lang]]
+        for line in file_content.splitlines()[1:]:
+            line = line.strip()
 
-    return localization
+            if not line: # Empty line
+                continue
+
+            cols = [c.strip() for c in line.split('\t')]
+
+            if len(cols) <= 1:
+                continue
+
+            text_id = cols[0]
+
+            if not text_id.startswith('Text.Item'):
+                continue
+
+            text_id = text_id.replace('Text.Item.', '', 1)
+
+            localization[text_id] = cols[self.available_locales[lang]]
+
+        return localization

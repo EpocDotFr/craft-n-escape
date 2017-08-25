@@ -12,7 +12,7 @@ import os
 
 
 # -----------------------------------------------------------
-# Local helpers
+# Helpers
 
 
 def is_local():
@@ -162,7 +162,7 @@ def te1_extract_items_data(gamedir):
     if not click.confirm('This will overwrite the {} file. Are you sure?'.format(app.config['ITEMS_FILE'])):
         context.exit()
 
-    app.logger.info('Extracting started')
+    app.logger.info('Parsing started')
 
     parser = ItemsDataParser(gamedir)
     items = parser.parse()
@@ -201,20 +201,23 @@ def te1_extract_items_image():
 
 
 @app.cli.command()
-@click.option('--locfile', '-l', help='The items name localization file')
-def te2_extract_items_data(locfile):
+@click.option('--gamedir', '-g', help='Game root directory')
+def te2_extract_items_data(gamedir):
     """Extract items data from The Escapists 2"""
-    from the_escapists_2 import parse_items_localization
+    from the_escapists_2 import ItemsDataExtractor
 
     context = click.get_current_context()
 
-    if not locfile:
+    if not gamedir:
         click.echo(te2_extract_items_data.get_help(context))
         context.exit()
 
     app.logger.info('Extracting started')
 
-    print(parse_items_localization(locfile))
+    extractor = ItemsDataExtractor(gamedir)
+    items = extractor.extract()
+
+    print(items) # TODO
 
     app.logger.info('Done')
 
@@ -243,7 +246,7 @@ def http_error_handler(error, without_code=False):
 
 
 # -----------------------------------------------------------
-# Local helpers
+# Helpers
 
 
 @cache.cached(timeout=60 * 60 * 6)
