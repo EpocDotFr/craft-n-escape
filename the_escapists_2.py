@@ -1,5 +1,6 @@
 from collections import OrderedDict
-import unitypack
+from unitypack.asset import Asset
+from PIL import ImageOps
 import os
 
 
@@ -29,23 +30,42 @@ class ItemsDataExtractor:
         items = OrderedDict()
 
         with open(resources_file, 'rb') as f:
-            assets = unitypack.Asset.from_file(f)
+            asset = Asset.from_file(f)
 
-            # self._parse_localization(stream, lang=lang)
+            # Loop through each objects in the resources file to find the items
+            # localization file. If found, parse and load it.
+            for id, obj in asset.objects.items():
+                d = obj.read()
+
+                if d.name == 'LocalizationItems':
+                    self._parse_localization(d.script, lang=lang)
+
+                    break
+
+            if not hasattr(self, 'localization'):
+                raise Exception('Items localization was not loaded, aborting')
+
+            # Loop through each objects in the resources file to find the items
+            # image file. If found, extract it.
+            # for id, obj in asset.objects.items():
+            #     d = obj.read()
+
+            #     if not d.name.startswith('ITM_') and obj.type != 'Texture2D':
+            #         continue
+
+            #     image = ImageOps.flip(d.image)
+            #     image.save(d.name + '.png')
 
         return items
 
-    def _parse_localization(self, stream, lang='eng'):
+    def _parse_localization(self, content, lang='eng'):
+        """Parse the items localization file."""
         if lang not in self.available_locales:
             raise ValueError(lang + ' is not supported')
 
-        # with open(stream, 'r', encoding='utf-8') as f:
-        #     file_content = f.read().strip()
-        file_content = stream.read().strip()
+        self.localization = {}
 
-        localization = {}
-
-        for line in file_content.splitlines()[1:]:
+        for line in content.splitlines()[1:]:
             line = line.strip()
 
             if not line: # Empty line
@@ -63,6 +83,4 @@ class ItemsDataExtractor:
 
             text_id = text_id.replace('Text.Item.', '', 1)
 
-            localization[text_id] = cols[self.available_locales[lang]]
-
-        return localization
+            self.localization[text_id] = cols[self.available_locales[lang]]
