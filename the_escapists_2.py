@@ -42,9 +42,6 @@ class ItemsDataExtractor:
 
                     break
 
-            if not hasattr(self, 'localization'):
-                raise Exception('Items localization was not loaded, aborting')
-
             # Loop through each objects in the resources file to find the items
             # image file. If found, extract it.
             # for id, obj in asset.objects.items():
@@ -65,7 +62,7 @@ class ItemsDataExtractor:
 
         self.localization = {}
 
-        for line in content.splitlines()[1:]:
+        for line in content.strip().splitlines()[1:]:
             line = line.strip()
 
             if not line: # Empty line
@@ -80,7 +77,5 @@ class ItemsDataExtractor:
 
             if not text_id.startswith('Text.Item'):
                 continue
-
-            text_id = text_id.replace('Text.Item.', '', 1)
 
             self.localization[text_id] = cols[self.available_locales[lang]]
