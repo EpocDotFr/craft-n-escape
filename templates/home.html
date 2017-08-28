@@ -161,7 +161,7 @@
 
     <template id="itemname">
         <span class="item-name">
-            <img :src="'images/items/' + itemid + item._img_ext" v-if="item._img_ext"> <a :href="escapistswikisearch + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
+            <img :src="'images/items/{{ game_version }}/' + itemid + item._img_ext" v-if="item._img_ext"> <a :href="escapistswikisearch + item.name" :title="item.info" :class="[item.illegal ? 'txtred' : '']">${ item.name }</a>
         </span>
     </template>
 

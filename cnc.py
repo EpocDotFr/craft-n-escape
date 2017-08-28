@@ -33,9 +33,9 @@ app.config.from_pyfile('config.py')
 
 app.config['CACHE_TYPE'] = 'filesystem'
 app.config['CACHE_DIR'] = 'storage/cache'
-app.config['ITEMS_IMAGES_DIR'] = 'static/images/items'
-app.config['ITEMS_FILE'] = 'storage/data/items.json'
-app.config['RECIPES_FILE'] = 'storage/data/recipes.json'
+app.config['ITEMS_IMAGES_DIR'] = 'static/images/items/{game_version}'
+app.config['ITEMS_FILE'] = 'storage/data/{game_version}/items.json'
+app.config['RECIPES_FILE'] = 'storage/data/{game_version}/recipes.json'
 app.config['ESCAPISTS_WIKI_DOMAIN'] = 'theescapists.gamepedia.com'
 
 app.jinja_env.globals.update(is_local=is_local)
@@ -63,9 +63,9 @@ for handler in app.logger.handlers:
 @app.route('/')
 @app.route('/<int:game_version>')
 def home(game_version=1):
-    items = load_json(app.config['ITEMS_FILE'])
-    recipes = load_json(app.config['RECIPES_FILE'])
-    images = get_images()
+    items = load_json(app.config['ITEMS_FILE'].format(game_version=game_version))
+    recipes = load_json(app.config['RECIPES_FILE'].format(game_version=game_version))
+    images = get_images(game_version=game_version)
 
     items = merge_recipe_items_in_items(items, recipes)
     items = merge_images_in_items(items, images)
@@ -78,9 +78,11 @@ def recipes_editor():
     if not is_local(): # Can only edit crafting recipes locally
         abort(404)
 
-    items = load_json(app.config['ITEMS_FILE'])
-    recipes = load_json(app.config['RECIPES_FILE'])
-    images = get_images()
+    game_version = 1 # TODO
+
+    items = load_json(app.config['ITEMS_FILE'].format(game_version=game_version))
+    recipes = load_json(app.config['RECIPES_FILE'].format(game_version=game_version))
+    images = get_images(game_version=game_version)
 
     items = get_items_with_recipe(items) # Only get items with a crafting recipe
     items = merge_images_in_items(items, images)
@@ -97,9 +99,11 @@ def recipes_editor_item(item_id):
     if not is_local(): # Can only edit crafting recipes locally
         abort(404)
 
-    items = load_json(app.config['ITEMS_FILE'])
-    recipes = load_json(app.config['RECIPES_FILE'])
-    images = get_images()
+    game_version = 1 # TODO
+
+    items = load_json(app.config['ITEMS_FILE'].format(game_version=game_version))
+    recipes = load_json(app.config['RECIPES_FILE'].format(game_version=game_version))
+    images = get_images(game_version=game_version)
 
     items = merge_images_in_items(items, images)
 
@@ -121,7 +125,7 @@ def recipes_editor_item(item_id):
             recipes[item_id]['_recipe_hash'] = recipe_hash
             recipes[item_id]['items'] = recipe_items
 
-            save_json(app.config['RECIPES_FILE'], recipes)
+            save_json(app.config['RECIPES_FILE'].format(game_version=game_version), recipes)
 
             flash('Recipe saved successfully.', 'success')
         except Exception as e:
@@ -159,7 +163,9 @@ def te1_extract_items_data(gamedir):
         click.echo(the_escapists.get_help(context))
         context.exit()
 
-    if not click.confirm('This will overwrite the {} file. Are you sure?'.format(app.config['ITEMS_FILE'])):
+    items_file = app.config['ITEMS_FILE'].format(game_version=1)
+
+    if not click.confirm('This will overwrite the {} file. Are you sure?'.format(items_file)):
         context.exit()
 
     app.logger.info('Parsing started')
@@ -167,15 +173,9 @@ def te1_extract_items_data(gamedir):
     parser = ItemsDataParser(gamedir)
     items = parser.parse()
 
-    app.logger.info('Saving {}'.format(app.config['ITEMS_FILE']))
+    app.logger.info('Saving {}'.format(items_file))
 
-    save_json(app.config['ITEMS_FILE'], items)
-
-    # Initialize the recipes file as it doesn't exists
-    if not os.path.isfile(app.config['RECIPES_FILE']):
-        app.logger.info('Saving {}'.format(app.config['RECIPES_FILE']))
-
-        save_json(app.config['RECIPES_FILE'], {})
+    save_json(items_file, items)
 
     app.logger.info('Done')
 
@@ -190,11 +190,11 @@ def te1_extract_items_image():
 
     app.logger.info('Loading items')
 
-    items = load_json(app.config['ITEMS_FILE'])
+    items = load_json(app.config['ITEMS_FILE'].format(game_version=1))
 
     app.logger.info('Extracting images')
 
-    extractor = ItemsImagesExtractor(item_ids=items.keys(), output_dir=app.config['ITEMS_IMAGES_DIR'])
+    extractor = ItemsImagesExtractor(item_ids=items.keys(), output_dir=app.config['ITEMS_IMAGES_DIR'].format(game_version=1))
     extractor.extract()
 
     app.logger.info('Done')
@@ -250,10 +250,10 @@ def http_error_handler(error, without_code=False):
 
 
 @cache.cached(timeout=60 * 60 * 6)
-def get_images():
+def get_images(game_version=1):
     items_images = {}
 
-    detected_images = glob(os.path.join(app.config['ITEMS_IMAGES_DIR'], '*.*'))
+    detected_images = glob(os.path.join(app.config['ITEMS_IMAGES_DIR'].format(game_version=game_version), '*.*'))
 
     for detected_image in detected_images:
         detected_image = os.path.splitext(os.path.basename(detected_image))

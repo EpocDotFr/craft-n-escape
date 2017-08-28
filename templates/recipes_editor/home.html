@@ -15,7 +15,7 @@
                 <div>
                     <a href="{{ url_for('recipes_editor_item', item_id=item_id) }}" title="Edit this item crafting recipe"><i class="fa fa-pencil"></i></a>
                     #{{ item_id }}
-                    {% if item._img_ext %}<img src="{{ url_for('static', filename='images/items/' + item_id + item._img_ext) }}" style="max-width: 24px">{% endif %}
+                    {% if item._img_ext %}<img src="{{ url_for('static', filename='images/items/1/' + item_id + item._img_ext) }}" style="max-width: 24px">{% endif %}
                     <a href="http://theescapists.gamepedia.com/Special:Search/{{ item.name }}" title="{{ item.info }}" class="{{ 'txtred' if item.recipe_do_not_exists else '' }}{{ 'txtblue' if item.recipe_out_of_date else '' }}">{{ item.name }}</a>
                 </div>
             {% endfor %}

@@ -43,7 +43,7 @@ class ItemsDataExtractor:
                     break
 
             # Loop through each objects in the resources file to find the items
-            # image file. If found, extract it.
+            # image file. If found, extract them.
             # for id, obj in asset.objects.items():
             #     d = obj.read()
 
