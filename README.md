@@ -100,7 +100,7 @@ we directly use JSON as the data storage format.
 
 Items images are extracted using, huh, a brutal solution. Basically, the `flask te1_extract_items_image` command edit the game's
 process memory for each existing items by assigning them in your weapon slot. A screenshot of the current weapon is then
-taken, the background is converted to a transparent one and the final image saved at `static/images/items/{item ID}.png`.
+taken, the background is converted to a transparent one and the final image saved at `static/images/items/1/{item ID}.png`.
 
 For more information, I suggest you do dive into the code starting with the `cnc.py` file.
 
