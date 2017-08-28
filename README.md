@@ -95,8 +95,8 @@ database or some kind of embedded relational database? Because JSON files are ea
 even Javascript on the client-side. In addition I didn't want to mess with the SQLite => JSON processing, so instead
 we directly use JSON as the data storage format.
 
-  - `storage/data/items.json` is built by the `flask te1_extract_items_data` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
-  - `storage/data/recipes.json` contains all crafting recipes of the items contained in the file above. A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists crafting recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items IDs).
+  - `storage/data/1/items.json` is built by the `flask te1_extract_items_data` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
+  - `storage/data/1/recipes.json` contains all crafting recipes of the items contained in the file above. A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists crafting recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items IDs).
 
 Items images are extracted using, huh, a brutal solution. Basically, the `flask te1_extract_items_image` command edit the game's
 process memory for each existing items by assigning them in your weapon slot. A screenshot of the current weapon is then
