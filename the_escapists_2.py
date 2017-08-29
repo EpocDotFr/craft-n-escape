@@ -35,6 +35,9 @@ class ItemsDataExtractor:
             # Loop through each objects in the resources file to find the items
             # localization file. If found, parse and load it.
             for id, obj in asset.objects.items():
+                if obj.type != 'TextAsset': # We only want text objects
+                    continue
+
                 d = obj.read()
 
                 if d.name == 'LocalizationItems':
@@ -43,15 +46,22 @@ class ItemsDataExtractor:
                     break
 
             # Loop through each objects in the resources file to find the items
-            # image file. If found, extract them.
-            # for id, obj in asset.objects.items():
-            #     d = obj.read()
+            # data config files. If found, parse them.
+            for id, obj in asset.objects.items():
+                if obj.type_id > 0: # Ignore known object types
+                    continue
 
-            #     if not d.name.startswith('ITM_') and obj.type != 'Texture2D':
-            #         continue
+                d = obj.read()
 
-            #     image = ImageOps.flip(d.image)
-            #     image.save(d.name + '.png')
+                if isinstance(d, dict) and 'm_Name' in d and d['m_Name'].endswith('_ItemData'):
+                    print(d) # TODO
+                    break
+
+                # if not d.name.startswith('ITM_') and obj.type != 'Texture2D':
+                #     continue
+
+                # image = ImageOps.flip(d.image)
+                # image.save(d.name + '.png')
 
         return items
 

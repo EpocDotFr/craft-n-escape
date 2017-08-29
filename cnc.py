@@ -212,12 +212,19 @@ def te2_extract_items_data(gamedir):
         click.echo(te2_extract_items_data.get_help(context))
         context.exit()
 
+    items_file = app.config['ITEMS_FILE'].format(game_version=2)
+
+    if not click.confirm('This will overwrite the {} file. Are you sure?'.format(items_file)):
+        context.exit()
+
     app.logger.info('Extracting started')
 
     extractor = ItemsDataExtractor(gamedir)
     items = extractor.extract()
 
-    print(items) # TODO
+    app.logger.info('Saving {}'.format(items_file))
+
+    save_json(items_file, items)
 
     app.logger.info('Done')
 
