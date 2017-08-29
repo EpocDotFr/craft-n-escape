@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="mts mbn">
+                <table class="items mts mbn">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -115,7 +115,7 @@
                             <td><template v-if="item.gift">+${ item.gift }</template></td>
                             <td>${ item.decay }</td>
                             <td><template v-if="item.craft">${ item.craft.intelligence }</template></td>
-                            <td>
+                            <td class="pbn">
                                 <template v-if="item.craft">
                                     <template v-for="(recipe_item, index) in item.craft.recipe_items">
                                         <recipeitem :escapistswikisearch="escapistsWikiSearch" :items="items" :recipe_item="recipe_item" :key="index" v-if="!_.isArray(recipe_item)"></recipeitem>

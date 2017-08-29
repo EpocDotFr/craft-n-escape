@@ -66,6 +66,10 @@ a:focus {
     display: inline-block;
 }
 
+.items .recipe-item {
+    margin-bottom: 0.4em;
+}
+
 /************************************************************************
  * Forms */
 
