@@ -128,7 +128,9 @@ class ItemsDataExtractor:
         gift_inmate = buf.read_int()
         gift_guard = buf.read_int()
 
-        item['gift'] = [gift_inmate, gift_guard]
+        if gift_inmate != 0 or gift_guard != 0:
+            item['gift'] = [gift_inmate, gift_guard]
+
         item['illegal'] = buf.read_boolean()
 
         self._pad_bytes(buf)
