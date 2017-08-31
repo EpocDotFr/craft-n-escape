@@ -76,8 +76,8 @@ class ItemsDataExtractor:
         items = OrderedDict()
 
         for file in glob(os.path.join(self.items_data_dir, '*.dat')):
-            with open(file, 'rb') as file:
-                item_id, item = self._parse_item_data_file(BinaryReader(file))
+            with open(file, 'rb') as buf:
+                item_id, item = self._parse_item_data_file(BinaryReader(buf))
 
                 if not item['name']:
                     continue
@@ -142,13 +142,15 @@ class ItemsDataExtractor:
         func_data_count = buf.read_int() # ItemFunctionalities count
 
         if func_data_count > 0:
-            pass # TODO
+            for i in range(func_data_count):
+                buf.read_int()
+                print(buf.read_float())
 
-        print(buf.read_boolean()) # IsWorkingCopySoClearFunctionalitiesData
+        buf.read_boolean() # IsWorkingCopySoClearFunctionalitiesData
         buf.read(3)
 
-        print(buf.read_int()) # ItemHeldType ?
-        print(buf.read_int()) # ItemUseType ?
+        buf.read_int() # ItemHeldType ?
+        buf.read_int() # ItemUseType ?
 
         return item_id, item
 
