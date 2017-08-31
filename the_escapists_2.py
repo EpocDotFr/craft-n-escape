@@ -79,6 +79,9 @@ class ItemsDataExtractor:
             with open(file, 'rb') as file:
                 item_id, item = self._parse_item_data_file(BinaryReader(file))
 
+                if not item['name']:
+                    continue
+
                 items[item_id] = item
 
         return items

@@ -72,7 +72,7 @@
                             <th>Summary</th>
                             <th>Name</th>
                             <th>Base price</th>
-                            <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> increase<br><small>when given</small></th>
+                            <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> {{ 'increase' if game_version == 1 else 'change' }}<br><small>when given{{ '' if game_version == 1 else ' to inmate, guard' }}</small></th>
                             <th>Decay<br><small>decrease % per use</small></th>
                             <th>Required <a href="http://theescapists.gamepedia.com/Intellect">INT</a><br><small>for crafting</small></th>
                             <th>Crafting recipe</th>
@@ -112,7 +112,15 @@
                                 <itemname :item="item" :itemid="item.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
                             </td>
                             <td><template v-if="item.buy">$${ item.buy }</template></td>
-                            <td><template v-if="item.gift">+${ item.gift }</template></td>
+                            <td>
+                                <template v-if="item.gift">
+                                {% if game_version == 1 %}
+                                    +${ item.gift }
+                                {% else %}
+                                    ${ (item.gift[0] > 0 ? '+' : '') + item.gift[0] }, ${ (item.gift[1] > 0 ? '+' : '') + item.gift[1] }
+                                {% endif %}
+                                </template>
+                            </td>
                             <td>${ item.decay }</td>
                             <td><template v-if="item.craft">${ item.craft.intelligence }</template></td>
                             <td class="pbn">
