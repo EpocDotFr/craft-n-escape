@@ -114,36 +114,41 @@ class ItemsDataExtractor:
         buf.read_string(buf.read_int()) # Unity object name
         self._pad_bytes(buf)
 
-        item_id = buf.read_int()
-
-        locale_id = buf.read_string(buf.read_int())
+        item_id = buf.read_int() # ItemDataID
+        locale_id = buf.read_string(buf.read_int()) # ItemLocalizationTag
 
         item['name'] = self._get_localization(locale_id)
         self._pad_bytes(buf)
 
-        buf.read_int() # Health
+        buf.read_int() # ItemHealth
 
-        item['buy'] = buf.read_int()
+        buy = buf.read_int() # ItemValue
 
-        gift_inmate = buf.read_int()
-        gift_guard = buf.read_int()
+        if buy > 0:
+            item['buy'] = buy
+
+        gift_inmate = buf.read_int() # GiftOpinionValues.Inmate
+        gift_guard = buf.read_int() # GiftOpinionValues.Guard
 
         if gift_inmate != 0 or gift_guard != 0:
             item['gift'] = [gift_inmate, gift_guard]
 
-        item['illegal'] = buf.read_boolean()
+        item['illegal'] = buf.read_boolean() # bIsContraband
+        buf.read(3)
 
-        self._pad_bytes(buf)
+        buf.read_boolean() # CanBeEquiped
+        buf.read(3)
 
-        buf.read_boolean() # Can be equiped?
+        func_data_count = buf.read_int() # ItemFunctionalities count
 
-        self._pad_bytes(buf)
+        if func_data_count > 0:
+            pass # TODO
 
-        buf.read_boolean()
+        print(buf.read_boolean()) # IsWorkingCopySoClearFunctionalitiesData
+        buf.read(3)
 
-        self._pad_bytes(buf)
-
-        buf.read_int()
+        print(buf.read_int()) # ItemHeldType ?
+        print(buf.read_int()) # ItemUseType ?
 
         return item_id, item
 
