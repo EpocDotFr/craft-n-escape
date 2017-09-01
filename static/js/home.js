@@ -82,6 +82,7 @@ var app = new Vue({
             name: '',
             found_in_map: '',
             is_buyable: false,
+            can_be_given: false,
             can_heal: false,
             can_hurt: false,
             can_dig: false,
@@ -184,7 +185,7 @@ var app = new Vue({
             var filtered_items = [];
 
             _.each(this.items, function(item, item_id) {
-                var name = found_in_map = is_buyable = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = is_illegal = can_i_craft = true;
+                var name = found_in_map = is_buyable = can_be_given = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = is_illegal = can_i_craft = true;
 
                 if (('name' in item) && this.filters.name) {
                     name = item.name.toLowerCase().indexOf(this.filters.name.toLowerCase()) !== -1;
@@ -196,6 +197,10 @@ var app = new Vue({
 
                 if (this.filters.is_buyable) {
                     is_buyable = ('buy' in item);
+                }
+
+                if (this.filters.can_be_given) {
+                    can_be_given = ('gift' in item);
                 }
 
                 if (this.filters.can_heal) {
@@ -248,7 +253,7 @@ var app = new Vue({
                     is_craftable = ('craft' in item);
                 }
 
-                if (name && found_in_map && is_buyable && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && is_illegal && can_i_craft) {
+                if (name && found_in_map && is_buyable && can_be_given && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && is_illegal && can_i_craft) {
                     item.id = item_id; // The item ID is the this.items key but does not exist in the item object itself. So add it manually
 
                     filtered_items.push(item);
@@ -265,6 +270,7 @@ var app = new Vue({
             this.filters.name = '';
             this.filters.found_in_map = '';
             this.filters.is_buyable = false;
+            this.filters.can_be_given = false;
             this.filters.can_heal = false;
             this.filters.can_hurt = false;
             this.filters.can_dig = false;
