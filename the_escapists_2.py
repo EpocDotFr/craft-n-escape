@@ -133,18 +133,15 @@ class ItemsDataExtractor:
         if gift_inmate != 0 or gift_guard != 0:
             item['gift'] = [gift_inmate, gift_guard]
 
-        item['illegal'] = buf.read_boolean() # bIsContraband
+        is_illegal = buf.read_boolean() # bIsContraband
+
+        if is_illegal:
+            item['illegal'] = True
+
         buf.read(3)
 
         buf.read_boolean() # CanBeEquiped
         buf.read(3)
-
-        func_data_count = buf.read_int() # ItemFunctionalities count
-
-        if func_data_count > 0:
-            for i in range(func_data_count):
-                buf.read_int()
-                print(buf.read_float())
 
         buf.read_boolean() # IsWorkingCopySoClearFunctionalitiesData
         buf.read(3)
