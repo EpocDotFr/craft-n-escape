@@ -27,17 +27,21 @@
                         <div class="grid-3 has-gutter mts">
                             <div><label><input type="checkbox" v-model="filters.is_buyable"> <i class="fa fa-dollar fa-fw"></i> Can be bought</label></div>
                             <div><label><input type="checkbox" v-model="filters.gift"> <i class="fa fa-gift fa-fw"></i> Can be given</label></div>
-                            <div><label><input type="checkbox" v-model="filters.can_heal"> <i class="fa fa-medkit fa-fw"></i> Can heal you</label></div>
-                            <div><label><input type="checkbox" v-model="filters.can_hurt"> <i class="fa fa-bomb fa-fw"></i> Can hurt people</label></div>
-                            <div><label><input type="checkbox" v-model="filters.can_dig"> <i class="fa fa-spoon fa-fw"></i> Can dig tunnels</label></div>
-                            <div><label><input type="checkbox" v-model="filters.can_chop"> <i class="fa fa-crop fa-fw"></i> Can chop things</label></div>
-                            <div><label><input type="checkbox" v-model="filters.can_unscrew"> <i class="fa fa-wrench fa-fw"></i> Can unscrew things</label></div>
-                            <div><label><input type="checkbox" v-model="filters.can_cut"> <i class="fa fa-scissors fa-fw"></i> Can cut things</label></div>
-                            <div><label><input type="checkbox" v-model="filters.is_carried"> <i class="fa fa-android fa-fw"></i> Can be carried by NPCs</label></div>
-                            <div><label><input type="checkbox" v-model="filters.is_in_desks"> <i class="fa fa-desktop fa-fw"></i> Can be found in desks</label></div>
-                            <div><label><input type="checkbox" v-model="filters.can_disrupt_cameras"> <i class="fa fa-video-camera fa-fw"></i> Can disrupt cameras</label></div>
-                            <div><label><input type="checkbox" v-model="filters.is_outfit"> <i class="fa fa-male fa-fw"></i> Outfits (provides defense)</label></div>
-                            <div><label><input type="checkbox" v-model="filters.is_craftable"> <i class="fa fa-gavel fa-fw"></i> Can be crafted</label></div>
+
+                            {% if game_version == 1 %}
+                                <div><label><input type="checkbox" v-model="filters.can_heal"> <i class="fa fa-medkit fa-fw"></i> Can heal you</label></div>
+                                <div><label><input type="checkbox" v-model="filters.can_hurt"> <i class="fa fa-bomb fa-fw"></i> Can hurt people</label></div>
+                                <div><label><input type="checkbox" v-model="filters.can_dig"> <i class="fa fa-spoon fa-fw"></i> Can dig tunnels</label></div>
+                                <div><label><input type="checkbox" v-model="filters.can_chop"> <i class="fa fa-crop fa-fw"></i> Can chop things</label></div>
+                                <div><label><input type="checkbox" v-model="filters.can_unscrew"> <i class="fa fa-wrench fa-fw"></i> Can unscrew things</label></div>
+                                <div><label><input type="checkbox" v-model="filters.can_cut"> <i class="fa fa-scissors fa-fw"></i> Can cut things</label></div>
+                                <div><label><input type="checkbox" v-model="filters.is_carried"> <i class="fa fa-android fa-fw"></i> Can be carried by NPCs</label></div>
+                                <div><label><input type="checkbox" v-model="filters.is_in_desks"> <i class="fa fa-desktop fa-fw"></i> Can be found in desks</label></div>
+                                <div><label><input type="checkbox" v-model="filters.can_disrupt_cameras"> <i class="fa fa-video-camera fa-fw"></i> Can disrupt cameras</label></div>
+                                <div><label><input type="checkbox" v-model="filters.is_outfit"> <i class="fa fa-male fa-fw"></i> Outfits (provides defense)</label></div>
+                                <div><label><input type="checkbox" v-model="filters.is_craftable"> <i class="fa fa-gavel fa-fw"></i> Can be crafted</label></div>
+                            {% endif %}
+
                             <div><label><input type="checkbox" v-model="filters.is_illegal"> <i class="fa fa-exclamation-circle fa-fw"></i> Is illegal (<span class="txtred">red items</span>)</label></div>
                         </div>
                     </fieldset>
@@ -46,22 +50,26 @@
                     <fieldset class="man ptn">
                         <legend><i class="fa fa-gavel"></i> What can I craft?</legend>
 
-                        <p><label><input type="checkbox" v-model="allow_partial_match"> Allow partial crafting recipe match</label></p>
+                        {% if game_version == 1 %}
+                            <p><label><input type="checkbox" v-model="allow_partial_match"> Allow partial crafting recipe match</label></p>
 
-                        <p class="mbs"><strong>Add an item you own:</strong></p>
+                            <p class="mbs"><strong>Add an item you own:</strong></p>
 
-                        <itemiownform :items_i_own.sync="itemsIOwn" :items="componentItems"></itemiownform>
+                            <itemiownform :items_i_own.sync="itemsIOwn" :items="componentItems"></itemiownform>
 
-                        <p class="mbs" v-show="!_.isEmpty(itemsIOwn)"><a href="#" title="Remove all" @click.prevent="itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
+                            <p class="mbs" v-show="!_.isEmpty(itemsIOwn)"><a href="#" title="Remove all" @click.prevent="itemsIOwn = []"><i class="fa fa-eraser"></i></a> <strong>Items you own:</strong></p>
 
-                        <p v-show="!_.isEmpty(itemsIOwn)">
-                            <span class="pill recipe-item pas mrs" v-for="itemIOwn in itemsIOwn">
-                                <itemname :item="items[itemIOwn.id]" :itemid="itemIOwn.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
+                            <p v-show="!_.isEmpty(itemsIOwn)">
+                                <span class="pill recipe-item pas mrs" v-for="itemIOwn in itemsIOwn">
+                                    <itemname :item="items[itemIOwn.id]" :itemid="itemIOwn.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
 
-                                <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
-                                <a href="#" title="Remove" @click.prevent="itemsIOwn.splice(itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
-                            </span>
-                        </p>
+                                    <template v-if="itemIOwn.amount > 1">x ${ itemIOwn.amount }</template>
+                                    <a href="#" title="Remove" @click.prevent="itemsIOwn.splice(itemsIOwn.indexOf(itemIOwn), 1)"><i class="fa fa-remove"></i></a>
+                                </span>
+                            </p>
+                        {% else %}
+                            <p>This feature is not yet available for The Escapists 2.</p>
+                        {% endif %}
                     </fieldset>
                 </div>
             </div>
@@ -74,41 +82,46 @@
                             <th>Name</th>
                             <th>{{ 'Base price' if game_version == 1 else 'Value' }}</th>
                             <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> {{ 'increase' if game_version == 1 else 'change' }}<br><small>when given{{ '' if game_version == 1 else ' to inmate, guard' }}</small></th>
-                            <th>Decay<br><small>decrease % per use</small></th>
-                            <th>Required <a href="http://theescapists.gamepedia.com/Intellect">INT</a><br><small>for crafting</small></th>
-                            <th>Crafting recipe</th>
-                            <th>Defense power</th>
-                            <th>Healing power</th>
-                            <th>Attack power</th>
-                            <th>Digging power</th>
-                            <th>Chipping power</th>
-                            <th>Unscrewing power</th>
-                            <th>Cutting power</th>
-                            <th>Only found in</th>
-                            <th><a href="http://theescapists.gamepedia.com/Fatigue">Fatigue</a> decrease<br><small>when eat</small></th>
-                            <th>Camera disruption<br><small>in seconds</small></th>
-                            <!--<th>carry</th>-->
+
+                            {% if game_version == 1 %}
+                                <th>Decay<br><small>decrease % per use</small></th>
+                                <th>Required <a href="http://theescapists.gamepedia.com/Intellect">INT</a><br><small>for crafting</small></th>
+                                <th>Crafting recipe</th>
+                                <th>Defense power</th>
+                                <th>Healing power</th>
+                                <th>Attack power</th>
+                                <th>Digging power</th>
+                                <th>Chipping power</th>
+                                <th>Unscrewing power</th>
+                                <th>Cutting power</th>
+                                <th>Only found in</th>
+                                <th><a href="http://theescapists.gamepedia.com/Fatigue">Fatigue</a> decrease<br><small>when eat</small></th>
+                                <th>Camera disruption<br><small>in seconds</small></th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in filteredItems" class="item">
                             <td>${ item.id }</td>
                             <td class="summary-cell">
-                                <i class="fa fa-star" v-if="item.found" title="Map-specific"></i>
                                 <i class="fa fa-dollar" v-if="item.buy" title="Can be bought"></i>
                                 <i class="fa fa-gift" v-if="item.gift" title="Can be given"></i>
-                                <i class="fa fa-medkit" v-if="item.hp" title="Can heal you"></i>
-                                <i class="fa fa-bomb" v-if="item.weapon" title="Can hurt people"></i>
-                                <i class="fa fa-spoon" v-if="item.digging" title="Can dig tunnels"></i>
-                                <i class="fa fa-crop" v-if="item.chipping" title="Can chop things"></i>
-                                <i class="fa fa-wrench" v-if="item.unscrewing" title="Can unscrew things"></i>
-                                <i class="fa fa-scissors" v-if="item.cutting" title="Can cut things"></i>
-                                <i class="fa fa-android" v-if="item.npc_carry" title="Can be carried by NPCs"></i>
-                                <i class="fa fa-desktop" v-if="item.desk" title="Can be found in desks"></i>
-                                <i class="fa fa-video-camera" v-if="item.camdis" title="Can disrupt cameras"></i>
-                                <i class="fa fa-male" v-if="item.outfit" title="Outfit (provides defense)"></i>
-                                <i class="fa fa-chain-broken" v-if="item.decay" title="Can broke"></i>
-                                <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
+
+                                {% if game_version == 1 %}
+                                    <i class="fa fa-star" v-if="item.found" title="Map-specific"></i>
+                                    <i class="fa fa-medkit" v-if="item.hp" title="Can heal you"></i>
+                                    <i class="fa fa-bomb" v-if="item.weapon" title="Can hurt people"></i>
+                                    <i class="fa fa-spoon" v-if="item.digging" title="Can dig tunnels"></i>
+                                    <i class="fa fa-crop" v-if="item.chipping" title="Can chop things"></i>
+                                    <i class="fa fa-wrench" v-if="item.unscrewing" title="Can unscrew things"></i>
+                                    <i class="fa fa-scissors" v-if="item.cutting" title="Can cut things"></i>
+                                    <i class="fa fa-android" v-if="item.npc_carry" title="Can be carried by NPCs"></i>
+                                    <i class="fa fa-desktop" v-if="item.desk" title="Can be found in desks"></i>
+                                    <i class="fa fa-video-camera" v-if="item.camdis" title="Can disrupt cameras"></i>
+                                    <i class="fa fa-male" v-if="item.outfit" title="Outfit (provides defense)"></i>
+                                    <i class="fa fa-chain-broken" v-if="item.decay" title="Can broke"></i>
+                                    <i class="fa fa-gavel" v-if="item.craft" title="Can be crafted"></i>
+                                {% endif %}
                             </td>
                             <td class="name-cell">
                                 <itemname :item="item" :itemid="item.id" :escapistswikisearch="escapistsWikiSearch"></itemname>
@@ -124,34 +137,36 @@
                                 {% endif %}
                                 </template>
                             </td>
-                            <td>${ item.decay }</td>
-                            <td><template v-if="item.craft">${ item.craft.intelligence }</template></td>
-                            <td class="pbn">
-                                <template v-if="item.craft">
-                                    <template v-for="(recipe_item, index) in item.craft.recipe_items">
-                                        <recipeitem :escapistswikisearch="escapistsWikiSearch" :items="items" :recipe_item="recipe_item" :key="index" v-if="!_.isArray(recipe_item)"></recipeitem>
-                                        <template v-if="_.isArray(recipe_item)">
-                                            <template v-for="(one_of_recipe_item, one_of_index) in recipe_item">
-                                                <recipeitem :escapistswikisearch="escapistsWikiSearch" :items="items" :recipe_item="one_of_recipe_item" :key="one_of_index"></recipeitem>
-                                                <template v-if="one_of_index < (recipe_item.length - 1)"> or </template>
-                                            </template>
-                                        </template>
 
-                                        <template v-if="index < (item.craft.recipe_items.length - 1)"> + </template>
+                            {% if game_version == 1 %}
+                                <td>${ item.decay }</td>
+                                <td><template v-if="item.craft">${ item.craft.intelligence }</template></td>
+                                <td class="pbn">
+                                    <template v-if="item.craft">
+                                        <template v-for="(recipe_item, index) in item.craft.recipe_items">
+                                            <recipeitem :escapistswikisearch="escapistsWikiSearch" :items="items" :recipe_item="recipe_item" :key="index" v-if="!_.isArray(recipe_item)"></recipeitem>
+                                            <template v-if="_.isArray(recipe_item)">
+                                                <template v-for="(one_of_recipe_item, one_of_index) in recipe_item">
+                                                    <recipeitem :escapistswikisearch="escapistsWikiSearch" :items="items" :recipe_item="one_of_recipe_item" :key="one_of_index"></recipeitem>
+                                                    <template v-if="one_of_index < (recipe_item.length - 1)"> or </template>
+                                                </template>
+                                            </template>
+
+                                            <template v-if="index < (item.craft.recipe_items.length - 1)"> + </template>
+                                        </template>
                                     </template>
-                                </template>
-                            </td>
-                            <td>${ item.outfit }</td>
-                            <td><template v-if="item.hp">+${ item.hp }</template></td>
-                            <td>${ item.weapon }</td>
-                            <td>${ item.digging }</td>
-                            <td>${ item.chipping }</td>
-                            <td>${ item.unscrewing }</td>
-                            <td>${ item.cutting }</td>
-                            <td><template v-if="item.found"><a :href="escapistsWikiSearch + maps[item.found]">${ maps[item.found] }</a></template></td>
-                            <td><template v-if="item.fat">-${ item.fat }</template></td>
-                            <td><template v-if="item.camdis">${ item.camdis / 1000 }</template></td>
-                            <!--<td><i class="fa fa-check" v-if="item.carry"></i></td>-->
+                                </td>
+                                <td>${ item.outfit }</td>
+                                <td><template v-if="item.hp">+${ item.hp }</template></td>
+                                <td>${ item.weapon }</td>
+                                <td>${ item.digging }</td>
+                                <td>${ item.chipping }</td>
+                                <td>${ item.unscrewing }</td>
+                                <td>${ item.cutting }</td>
+                                <td><template v-if="item.found"><a :href="escapistsWikiSearch + maps[item.found]">${ maps[item.found] }</a></template></td>
+                                <td><template v-if="item.fat">-${ item.fat }</template></td>
+                                <td><template v-if="item.camdis">${ item.camdis / 1000 }</template></td>
+                            {% endif %}
                         </tr>
                         <tr v-show="_.isEmpty(filteredItems)">
                             <td colspan="18" class="txtcenter"><div class="alert info pas">Nothing to display.</div></td>
