@@ -26,6 +26,7 @@
 
                         <div class="grid-3 has-gutter mts">
                             <div><label><input type="checkbox" v-model="filters.is_buyable"> <i class="fa fa-dollar fa-fw"></i> Can be bought</label></div>
+                            <div><label><input type="checkbox" v-model="filters.gift"> <i class="fa fa-gift fa-fw"></i> Can be given</label></div>
                             <div><label><input type="checkbox" v-model="filters.can_heal"> <i class="fa fa-medkit fa-fw"></i> Can heal you</label></div>
                             <div><label><input type="checkbox" v-model="filters.can_hurt"> <i class="fa fa-bomb fa-fw"></i> Can hurt people</label></div>
                             <div><label><input type="checkbox" v-model="filters.can_dig"> <i class="fa fa-spoon fa-fw"></i> Can dig tunnels</label></div>
@@ -95,6 +96,7 @@
                             <td class="summary-cell">
                                 <i class="fa fa-star" v-if="item.found" title="Map-specific"></i>
                                 <i class="fa fa-dollar" v-if="item.buy" title="Can be bought"></i>
+                                <i class="fa fa-gift" v-if="item.gift" title="Can be given"></i>
                                 <i class="fa fa-medkit" v-if="item.hp" title="Can heal you"></i>
                                 <i class="fa fa-bomb" v-if="item.weapon" title="Can hurt people"></i>
                                 <i class="fa fa-spoon" v-if="item.digging" title="Can dig tunnels"></i>
