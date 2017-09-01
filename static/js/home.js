@@ -77,6 +77,7 @@ var app = new Vue({
     data: {
         loading: true,
         items: items,
+        game_version: game_version,
         escapistsWikiSearch: 'http://' + ESCAPISTS_WIKI_DOMAIN + '/Special:Search/',
         filters: {
             name: '',
@@ -99,14 +100,29 @@ var app = new Vue({
         itemsIOwn: [],
         allow_partial_match: false,
         maps: {
-            'perks': 'Center Perks',
-            'DTAF': 'Duct Tapes Are Forever',
-            'escapeteam': 'Escape Team',
-            'irongate': 'HMP-Irongate',
-            'jungle': 'Jungle Compound',
-            'SS': 'Santa\'s Sweatshop',
-            'sanpancho': 'San Pancho',
-            'stalagflucht': 'Stalag Flucht'
+            1: {
+                'perks': 'Center Perks',
+                'DTAF': 'Duct Tapes Are Forever',
+                'escapeteam': 'Escape Team',
+                'irongate': 'HMP-Irongate',
+                'jungle': 'Jungle Compound',
+                'SS': 'Santa\'s Sweatshop',
+                'sanpancho': 'San Pancho',
+                'stalagflucht': 'Stalag Flucht'
+            },
+            2: {
+                1: 'Center Perks 2.0',
+                2: 'Rattlesnake Springs',
+                4: 'K.A.P.O.W Camp',
+                8: 'U.S.S. Anomaly',
+                16: 'Fort Tundra',
+                32: 'H.M.P Offshore',
+                64: 'Cougar Creek Railroad',
+                128: 'H.M.S. Orca',
+                256: 'Air Force Con',
+                512: 'Area 17',
+                1024: 'The Glorious Regime'
+            }
         }
     },
     mounted: function() {

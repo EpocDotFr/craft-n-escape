@@ -14,14 +14,17 @@
                                 <label>Name <input type="text" v-model="filters.name"></label>
                                 <a href="#" title="Clear this filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a>
                             </div>
-                            <div>
-                                Map
-                                <select v-model="filters.found_in_map">
-                                    <option value="">Any</option>
-                                    <option v-for="(map_name, map_id) in maps" :value="map_id">${ map_name }</option>
-                                </select>
-                                <a href="#" title="Clear this filter" @click.prevent="filters.found_in_map = ''"><i class="fa fa-eraser"></i></a>
-                            </div>
+
+                            {% if game_version == 1 %}
+                                <div>
+                                    Map
+                                    <select v-model="filters.found_in_map">
+                                        <option value="">Any</option>
+                                        <option v-for="(map_name, map_id) in maps[game_version]" :value="map_id">${ map_name }</option>
+                                    </select>
+                                    <a href="#" title="Clear this filter" @click.prevent="filters.found_in_map = ''"><i class="fa fa-eraser"></i></a>
+                                </div>
+                             {% endif %}
                         </div>
 
                         <div class="grid-3 has-gutter mts">
@@ -80,7 +83,7 @@
                             <th>ID</th>
                             <th>Summary</th>
                             <th>Name</th>
-                            <th>{{ 'Base price' if game_version == 1 else 'Value' }}</th>
+                            <th>Base price</th>
                             <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> {{ 'increase' if game_version == 1 else 'change' }}<br><small>when given{{ '' if game_version == 1 else ' to inmate, guard' }}</small></th>
 
                             {% if game_version == 1 %}
@@ -128,13 +131,12 @@
                             </td>
                             <td><template v-if="item.buy">$${ item.buy }</template></td>
                             <td>
-                                <template v-if="item.gift">
-                                {% if game_version == 1 %}
+                                <template v-if="item.gift && game_version == 1">
                                     +${ item.gift }
-                                {% else %}
+                                </template>
+                                <template v-if="item.gift && game_version == 2">
                                     <span class="pill pas">${ (item.gift[0] > 0 ? '+' : '') + item.gift[0] }</span>
                                     <span class="pill pas">${ (item.gift[1] > 0 ? '+' : '') + item.gift[1] }</span>
-                                {% endif %}
                                 </template>
                             </td>
 
@@ -163,7 +165,7 @@
                                 <td>${ item.chipping }</td>
                                 <td>${ item.unscrewing }</td>
                                 <td>${ item.cutting }</td>
-                                <td><template v-if="item.found"><a :href="escapistsWikiSearch + maps[item.found]">${ maps[item.found] }</a></template></td>
+                                <td><template v-if="item.found"><a :href="escapistsWikiSearch + maps[game_version][item.found]">${ maps[game_version][item.found] }</a></template></td>
                                 <td><template v-if="item.fat">-${ item.fat }</template></td>
                                 <td><template v-if="item.camdis">${ item.camdis / 1000 }</template></td>
                             {% endif %}
@@ -213,6 +215,7 @@
         Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
 
         items = {{ items|tojson }};
+        game_version = {{ game_version }};
 
         ESCAPISTS_WIKI_DOMAIN = '{{ config['ESCAPISTS_WIKI_DOMAIN'] }}';
     </script>
