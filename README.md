@@ -1,27 +1,29 @@
 # Craft N' Escape
 
-Items and crafting recipes for [The Escapists](http://escapistgame.com/), on one filterable page. Available at [craft-n-escape.epoc.fr](https://craft-n-escape.epoc.fr/).
+Items and crafting recipes for The Escapists [1](https://www.team17.com/games/escapists/) & [2](https://www.team17.com/games/the-escapists-2/),
+on one filterable page. Available at [craft-n-escape.epoc.fr](https://craft-n-escape.epoc.fr/).
 
 _Because everyone loves it when a plan comes together_
 
 ## Features
 
+**Note:** Only The Escapists 1 is supported at this moment. The Escapists 2 support will hopefully come soon.
+
   - Web-based
   - List of all available items with all their attributes
-    - Can be filtered in many ways (is craftable, is buyable, is illegal, etc)
+    - Can be filtered in many ways (is craftable, is illegal, etc)
     - Crafting recipes
     - Links to [The Escapists wiki](http://theescapists.gamepedia.com/)
     - Items image
   - Given a list of items you own, you can get the list of items you can craft
-  - (Internal) Crafting recipes editor (used to convert The Escapists crafting recipes format to the Craft N' Escape one)
+  - (Internal) Crafting recipes editor (used to convert The Escapists 1 crafting recipes format to the Craft N' Escape one)
   - (Internal) Items images extractor
-  - Only The Escapists is supported. The Escapists 2 support is - hopefuly - ongoing
 
 ## Prerequisites
 
   - Should work on any Python 3.x version. Feel free to test with another Python version and give me feedback
-  - A [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/)-capable web server (optional, but recommended)
-  - (Optional) The Escapists game, if you need to extract the items data or images
+  - (Optional, but recommended) A [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/)-capable web server
+  - (Optional) The Escapists 1 and/or 2, if you need to extract the items data or images
 
 ## Installation
 
@@ -67,14 +69,23 @@ You'll probably have to hack with this application to make it work with one of t
 
 ### Extracting items data
 
-The Flask command `flask te1_extract_items_data` is used to regenerate the items listing file, i.e when the game has been updated.
+#### The Escapists 1
+
+The Flask command `flask te1_extract_items_data` is used to regenerate the items listing file, i.e when the game has been
+updated.
 
 **This command only works on Windows**, and requires the game to be installed.
 
   1. `set FLASK_APP=cnc.py`
   2. `flask te1_extract_items_data --gamedir="{path to the game root directory}"`
 
+#### The Escapists 2
+
+> TODO
+
 ### Extracting items images
+
+#### The Escapists 1
 
 The Flask command `flask te1_extract_items_image` is used to extract items images from the game itself.
 
@@ -84,6 +95,10 @@ window opened. The game's window must be visible at all times, and must not be m
   1. `pip install -r requirements-dev.txt`
   2. `set FLASK_APP=cnc.py`
   3. `flask te1_extract_items_image`
+
+#### The Escapists 2
+
+> TODO
 
 ## How it works
 
@@ -95,18 +110,24 @@ database or some kind of embedded relational database? Because JSON files are ea
 even Javascript on the client-side. In addition I didn't want to mess with the SQLite => JSON processing, so instead
 we directly use JSON as the data storage format.
 
+#### The Escapists 1
+
   - `storage/data/1/items.json` is built by the `flask te1_extract_items_data` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
-  - `storage/data/1/recipes.json` contains all crafting recipes of the items contained in the file above. A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists crafting recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items IDs).
+  - `storage/data/1/recipes.json` contains all crafting recipes of the items contained in the file above. A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists 1 crafting recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items IDs).
 
 Items images are extracted using, huh, a brutal solution. Basically, the `flask te1_extract_items_image` command edit the game's
 process memory for each existing items by assigning them in your weapon slot. A screenshot of the current weapon is then
 taken, the background is converted to a transparent one and the final image saved at `static/images/items/1/{item ID}.png`.
 
+#### The Escapists 2
+
+> TODO
+
 For more information, I suggest you do dive into the code starting with the `cnc.py` file.
 
 ## Credits
 
-  - Logos, items image, The Escapists, The Escapists © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
+  - Logos, items image, The Escapists, The Escapists 2 © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
   - This project isn't supported nor endorsed by Mouldy Toof Studios / Team17 Digital
 
 ## End words
