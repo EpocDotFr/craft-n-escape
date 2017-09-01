@@ -26,6 +26,14 @@ h2 {
     border-bottom: 0.1rem solid #484848;
 }
 
+.pill {
+    border-radius: 0.8rem;
+    border: 0.1rem solid #00454b;
+    background-color: #002b2f;
+    display: inline-block;
+    white-space: nowrap;
+}
+
 /************************************************************************
  * Links */
 
@@ -56,14 +64,6 @@ a:focus {
 
 .item .fa {
     cursor: help;
-}
-
-.recipe-item {
-    border-radius: 0.5rem;
-    border: 0.1rem solid #00454b;
-    background-color: #002b2f;
-    white-space: nowrap;
-    display: inline-block;
 }
 
 .items .recipe-item {
