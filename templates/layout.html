@@ -2,6 +2,7 @@
     {% set home_link = url_for('home') %}
     {% set game_name = 'The Escapists' %}
     {% set game_logo = 'the_escapists_logo.png' %}
+    {% set game_icon = 'the_escapists_icon.png' %}
 
     {% set home_switch_link = url_for('home', game_version=2) %}
     {% set game_switch_name = 'The Escapists 2' %}
@@ -9,11 +10,13 @@
     {% set home_link = url_for('home', game_version=2) %}
     {% set game_name = 'The Escapists 2' %}
     {% set game_logo = 'the_escapists_2_logo.png' %}
+    {% set game_icon = 'the_escapists_2_icon.png' %}
 
     {% set home_switch_link = url_for('home') %}
     {% set game_switch_name = 'The Escapists' %}
 {% else %}
     {% set home_link = url_for('home') %}
+    {% set game_icon = 'the_escapists_icon.png' %}
 {% endif %}
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +44,7 @@
         <div>
             <div class="content pas">
                 <div class="txtleft prs">
-                    <a href="{{ home_link }}"><img src="{{ url_for('static', filename='images/the_escapists_icon.png') }}"></a>
+                    <a href="{{ home_link }}"><img src="{{ url_for('static', filename='images/' + game_icon) }}"></a>
                 </div>
                 <div>
                     <div class="txtcenter">
