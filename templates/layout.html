@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        {% if game_version and is_local() %}
+        {% if game_version %}
             <div class="pls txtcenter">
                 <div class="smaller">You are using:</div>
                 <div><img src="{{ url_for('static', filename='images/' + game_logo) }}"></div>
