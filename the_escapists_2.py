@@ -86,18 +86,12 @@ class ItemsDataExtractor:
 
         return items
 
-    def _pad_bytes(self, buf):
-        c = b''
+    def _pad(self, buf, text):
+        length = len(text)
 
-        while True:
-            pos = buf.tell()
-
-            c = buf.read(1)
-
-            if c != b"\0":
-                buf.seek(pos)
-
-                break
+        while length % 4 != 0:
+            buf.read(1)
+            length += 1
 
     def _parse_item_data_file(self, buf):
         """Parse a raw item data file coming form the game resources.assets file."""
@@ -111,14 +105,14 @@ class ItemsDataExtractor:
         buf.read_int()
         buf.read_int()
 
-        buf.read_string(buf.read_int()) # Unity object name
-        self._pad_bytes(buf)
+        unity_object_name = buf.read_string(buf.read_int()) # Unity object name
+        self._pad(buf, unity_object_name)
 
         item_id = buf.read_int() # ItemDataID
         locale_id = buf.read_string(buf.read_int()) # ItemLocalizationTag
+        self._pad(buf, locale_id)
 
         item['name'] = self._get_localization(locale_id)
-        self._pad_bytes(buf)
 
         buf.read_int() # ItemHealth
 
