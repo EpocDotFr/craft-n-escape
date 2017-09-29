@@ -257,7 +257,7 @@ def http_error_handler(error, without_code=False):
 # Helpers
 
 
-@cache.cached(timeout=60 * 60 * 6)
+@cache.cached(timeout=60 * 60 * 6, key_prefix='te1_items_images')
 def get_images(game_version=1):
     items_images = {}
 
