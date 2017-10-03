@@ -232,7 +232,7 @@ class ItemsImagesExtractor:
                         pixdata[x, y] = self.item_background_color_replace
 
             # Save the image with the item ID as its name
-            weapon_slot_img_with_alpha.save(os.path.join(self.output_dir, item_id + '.png'))
+            weapon_slot_img_with_alpha.save(os.path.join(self.output_dir, item_id + '.png'), optimize=True)
 
             # Hide the player's profile by sending key 7 (required in order to be taken into account by the game)
             self._toggle_profile()
