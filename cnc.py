@@ -1,7 +1,7 @@
 from flask import Flask, render_template, make_response, request, abort, flash
 from werkzeug.exceptions import HTTPException
 from urllib.parse import urlparse
-from flask_cache import Cache
+from flask_caching import Cache
 from glob import glob
 from helpers import *
 import logging
