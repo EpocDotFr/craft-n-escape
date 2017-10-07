@@ -260,6 +260,9 @@ def http_error_handler(error, without_code=False):
 
 @cache.cached(timeout=60 * 60 * 6, key_prefix='te1_items_images')
 def get_images(game_version=1):
+    if game_version == 2:
+        return {}
+
     items_images = {}
 
     detected_images = glob(os.path.join(app.config['ITEMS_IMAGES_DIR'].format(game_version=game_version), '*.*'))
