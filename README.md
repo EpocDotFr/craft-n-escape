@@ -7,7 +7,7 @@ _Because everyone loves it when a plan comes together_
 
 ## Features
 
-**Note:** Only The Escapists 1 is supported at this moment. The Escapists 2 support will hopefully come soon.
+**Note:** Only The Escapists 1 is fully supported at this moment. The Escapists 2 support is ongoing.
 
   - List of all available items with all their attributes
     - Can be filtered in many ways (is craftable, is illegal, etc)
