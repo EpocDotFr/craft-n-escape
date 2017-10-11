@@ -9,7 +9,6 @@ _Because everyone loves it when a plan comes together_
 
 **Note:** Only The Escapists 1 is supported at this moment. The Escapists 2 support will hopefully come soon.
 
-  - Web-based
   - List of all available items with all their attributes
     - Can be filtered in many ways (is craftable, is illegal, etc)
     - Crafting recipes
