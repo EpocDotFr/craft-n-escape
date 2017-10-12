@@ -218,3 +218,13 @@ table tr:nth-child(even) td {
 table tbody > tr:hover td {
     background-color: #03282c;
 }
+
+/************************************************************************
+ * Footer */
+
+footer a,
+footer a:visited,
+footer a:hover,
+footer a:focus {
+    color: inherit;
+}
