@@ -75,7 +75,7 @@ updated.
 
 **This command only works on Windows**, and requires the game to be installed.
 
-  1. `set FLASK_APP=cnc.py`
+  1. `set FLASK_APP=cne.py`
   2. `flask te1_extract_items_data --gamedir="{path to the game root directory}"`
 
 #### The Escapists 2
@@ -92,7 +92,7 @@ The Flask command `flask te1_extract_items_image` is used to extract items image
 window opened. The game's window must be visible at all times, and must not be moved or resized.
 
   1. `pip install -r requirements-dev.txt`
-  2. `set FLASK_APP=cnc.py`
+  2. `set FLASK_APP=cne.py`
   3. `flask te1_extract_items_image`
 
 #### The Escapists 2
@@ -122,7 +122,7 @@ taken, the background is converted to a transparent one and the final image save
 
 > TODO
 
-For more information, I suggest you do dive into the code starting with the `cnc.py` file.
+For more information, I suggest you do dive into the code starting with the `cne.py` file.
 
 ## Credits
 

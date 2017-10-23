@@ -1,1 +1,1 @@
-from cnc import app
+from cne import app
