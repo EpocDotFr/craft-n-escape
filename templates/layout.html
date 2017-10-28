@@ -71,6 +71,14 @@
         </div>
     {% endif %}
 
+    {% if request.args['from'] %}
+        <div class="alert info pas mbs" id="redirect-notice">
+            <a href="#" class="fr" onclick="document.getElementById('redirect-notice').parentNode.removeChild(document.getElementById('redirect-notice')); return false;"><i class="fa fa-times"></i></a>
+
+            <strong>Heads-up!</strong> You were redirected here automatically from the old address (craft-n-escape.epoc.fr). Please remember to update your bookmarks - if you use any - to use the new address (craft-n-escape.com) as the old one will no longer work soon.
+        </div>
+    {% endif %}
+
     {% with flash_messages = get_flashed_messages(with_categories=true) %}
       {% if flash_messages %}
         <div class="pas center w1140p">
