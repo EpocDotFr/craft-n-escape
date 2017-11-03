@@ -126,13 +126,12 @@ For more information, I suggest you do dive into the code starting with the `cne
 
 ## Credits
 
-  - Logos, items image, The Escapists, The Escapists 2 © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
-  - This project isn't supported nor endorsed by Mouldy Toof Studios / Team17 Digital
+  - All The Escapists / The Escapists 2 assets © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
+  - This project is not affiliated with Mouldy Toof Studios / Team17 Digital
 
 ## End words
 
 If you have questions or problems, you can either:
 
   - Submit an issue [here on GitHub](https://github.com/EpocDotFr/craft-n-escape/issues)
-  - Post a comment in [this Reddit thread](https://www.reddit.com/r/theescapists/comments/6s8ip5/craft_n_escape_all_items_and_crafting_recipes_on/)
   - Post a message in [this Steam topic](https://steamcommunity.com/app/298630/discussions/0/1471968797464250630/)

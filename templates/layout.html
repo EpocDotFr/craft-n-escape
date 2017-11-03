@@ -72,7 +72,7 @@
     {% endif %}
 
     {% if request.args['from'] %}
-        <div class="alert info pas mbs" id="redirect-notice">
+        <div class="w1140p center alert info pas mbs" id="redirect-notice">
             <a href="#" class="fr" onclick="document.getElementById('redirect-notice').parentNode.removeChild(document.getElementById('redirect-notice')); return false;"><i class="fa fa-times"></i></a>
 
             <strong>Heads-up!</strong> You were redirected here automatically from the old address (craft-n-escape.epoc.fr). Please remember to update your bookmarks - if you use any - to use the new address (craft-n-escape.com) as the old one will no longer work soon.
@@ -91,11 +91,16 @@
 
     {% block content %} {% endblock %}
 
-    <footer class="txtmuted txtcenter small pts">
-        © 2017 <a href="https://epoc.fr"><img src="{{ url_for('static', filename='images/me.png') }}"></a> <a href="https://epoc.fr">Maxime "Epoc" G.</a><br>
-        Logos, items image, The Escapists, The Escapists 2 © 2015 - 2017 Mouldy Toof Studios / Team17 Digital<br>
-        This website isn't supported nor endorsed by Mouldy Toof Studios / Team17 Digital<br>
-        <a href="https://theescapists.gamepedia.com/The_Escapists_Wiki">The Escapists Wiki</a> • <a href="https://www.reddit.com/r/theescapists/">The Escapists on Reddit</a> • Steam: <a href="http://steamcommunity.com/app/298630">The Escapists 1</a> • <a href="http://steamcommunity.com/app/641990">The Escapists 2</a>
+    <footer class="w1140p center small grid txtmuted pts">
+        <div>
+            © 2017 <a href="https://epoc.fr"><img src="{{ url_for('static', filename='images/me.png') }}"></a> <a href="https://epoc.fr">Maxime "Epoc" G.</a><br>
+            This site is not affiliated with Mouldy Toof Studios / Team17 Digital.<br>
+            All The Escapists / The Escapists 2 assets © 2015 - 2017 Osumia Games.
+        </div>
+        <div class="txtright">
+            <a href="https://theescapists.gamepedia.com/The_Escapists_Wiki">The Escapists Wiki</a> • <a href="https://www.reddit.com/r/theescapists/">The Escapists on Reddit</a> • Steam: <a href="http://steamcommunity.com/app/298630">The Escapists 1</a> • <a href="http://steamcommunity.com/app/641990">The Escapists 2</a><br><br>
+            Any feedback? Post a message <a href="https://steamcommunity.com/app/298630/discussions/0/1471968797464250630/">in the RWR Steam discussions</a>.
+        </div>
     </footer>
 
     {% if config['GAUGES_SITE_ID'] %}
