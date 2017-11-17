@@ -29,7 +29,7 @@
 
                         <div class="grid-3 has-gutter mts">
                             <div><label><input type="checkbox" v-model="filters.is_buyable"> <i class="fa fa-dollar fa-fw"></i> Can be bought</label></div>
-                            <div><label><input type="checkbox" v-model="filters.can_be_given"> <i class="fa fa-gift fa-fw"></i> Can be given</label></div>
+                            <div><label><input type="checkbox" v-model="filters.can_be_offered"> <i class="fa fa-gift fa-fw"></i> Can be offered</label></div>
 
                             {% if game_version == 1 %}
                                 <div><label><input type="checkbox" v-model="filters.can_heal"> <i class="fa fa-medkit fa-fw"></i> Can heal you</label></div>
@@ -84,7 +84,7 @@
                             <th>Summary</th>
                             <th>Name</th>
                             <th>Base price</th>
-                            <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> {{ 'increase' if game_version == 1 else 'change' }}<br><small>when given{{ '' if game_version == 1 else ' to inmate, guard' }}</small></th>
+                            <th><a href="http://theescapists.gamepedia.com/Stats#OPN_.28Opinion.29">OPN</a> {{ 'increase' if game_version == 1 else 'change' }}<br><small>when offered{{ '' if game_version == 1 else ' to inmate, guard' }}</small></th>
 
                             {% if game_version == 1 %}
                                 <th>Decay<br><small>decrease % per use</small></th>
@@ -108,7 +108,7 @@
                             <td>${ item.id }</td>
                             <td class="summary-cell">
                                 <i class="fa fa-dollar" v-if="item.buy" title="Can be bought"></i>
-                                <i class="fa fa-gift" v-if="item.gift" title="Can be given"></i>
+                                <i class="fa fa-gift" v-if="item.gift" title="Can be offered"></i>
 
                                 {% if game_version == 1 %}
                                     <i class="fa fa-star" v-if="item.found" title="Map-specific"></i>
