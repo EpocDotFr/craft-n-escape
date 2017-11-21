@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response, request
+from flask import Flask, render_template, make_response, request, abort, g
 from logging.handlers import RotatingFileHandler
 from werkzeug.exceptions import HTTPException
 from flask_caching import Cache
@@ -67,6 +67,19 @@ def http_error_handler(error, without_code=False):
 
 # -----------------------------------------------------------
 # Hooks
+
+
+@app.before_request
+def define_globals():
+    g.UNDER_MAINTENANCE = False
+
+
+@app.before_request
+def check_under_maintenance():
+    if request.endpoint != 'static' and os.path.exists('maintenance'):
+        g.UNDER_MAINTENANCE = True
+
+        abort(503)
 
 
 @app.url_defaults
