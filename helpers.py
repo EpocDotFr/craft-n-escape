@@ -1,9 +1,15 @@
 from collections import OrderedDict
+from urllib.parse import urlparse
+from cne import app, cache
+from flask import request
+from glob import glob
 import json
 import os
 
 
 __all__ = [
+    'is_local',
+    'get_images',
     'load_json',
     'save_json',
     'get_items_with_recipe',
@@ -11,6 +17,29 @@ __all__ = [
     'merge_recipe_items_in_items',
     'merge_images_in_items'
 ]
+
+
+def is_local():
+    url = urlparse(request.url_root)
+
+    if url.hostname != 'localhost':
+        return False
+
+    return True
+
+
+@cache.cached(timeout=60 * 60 * 6, key_prefix='te1_items_images')
+def get_images(game_version=1):
+    items_images = {}
+
+    detected_images = glob(os.path.join(app.config['ITEMS_IMAGES_DIR'].format(game_version=game_version), '*.*'))
+
+    for detected_image in detected_images:
+        detected_image = os.path.splitext(os.path.basename(detected_image))
+
+        items_images[detected_image[0]] = detected_image[1]
+
+    return items_images
 
 
 def load_json(file):
