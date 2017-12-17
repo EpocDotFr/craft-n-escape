@@ -125,7 +125,7 @@ For more information, I suggest you do dive into the code starting with the `cne
 
 ## Credits
 
-  - All The Escapists / The Escapists 2 assets © 2015 - 2017 Mouldy Toof Studios / Team17 Digital
+  - All The Escapists / The Escapists 2 assets © 2015 - 2018 Mouldy Toof Studios / Team17 Digital
   - This project is not affiliated with Mouldy Toof Studios / Team17 Digital
 
 ## End words
