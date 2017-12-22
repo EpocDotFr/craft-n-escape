@@ -43,20 +43,16 @@ def get_images(game_version=1):
 
 
 def load_json(file):
-    data = None
-
     if not os.path.isfile(file):
         raise FileNotFoundError('The {} file does not exists'.format(file))
 
-    with open(file, 'r') as f:
-        data = f.read()
-
-    return json.loads(data, object_pairs_hook=OrderedDict) if data else data
+    with open(file, 'r', encoding='utf-8') as f:
+        return json.load(f, object_pairs_hook=OrderedDict)
 
 
 def save_json(file, data):
-    with open(file, 'w') as f:
-        f.write(json.dumps(data))
+    with open(file, 'w', encoding='utf-8') as f:
+        json.dump(data, f)
 
     return data
 
