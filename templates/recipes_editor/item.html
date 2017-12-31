@@ -73,7 +73,7 @@
         </span>
     </template>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.4/vue{{ '.min' if not config['DEBUG'] else '' }}.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.4/vue{{ '.min' if not config['DEBUG'] }}.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script>
         Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
