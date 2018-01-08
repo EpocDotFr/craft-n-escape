@@ -7,12 +7,12 @@ import click
 @click.option('--gamedir', '-g', help='Game root directory')
 def te1_extract_items_data(gamedir):
     """Extract items data from The Escapists 1"""
-    from the_escapists import ItemsDataParser
+    from the_escapists.one import ItemsDataParser
 
     context = click.get_current_context()
 
     if not gamedir:
-        click.echo(the_escapists.get_help(context))
+        click.echo(te1_extract_items_data.get_help(context))
         context.exit()
 
     items_file = app.config['ITEMS_FILE'].format(game_version=1)
@@ -35,7 +35,7 @@ def te1_extract_items_data(gamedir):
 @app.cli.command()
 def te1_extract_items_image():
     """Extract items image from The Escapists 1"""
-    from the_escapists import ItemsImagesExtractor
+    from the_escapists.one import ItemsImagesExtractor
 
     click.echo('Extracting started')
     click.echo('Do not do anything else until it is finished (you will be noticed)')
@@ -57,7 +57,7 @@ def te1_extract_items_image():
 @click.option('--datadir', '-d', help='Items data files location')
 def te2_extract_items_data(gamedir, datadir):
     """Extract items data from The Escapists 2"""
-    from the_escapists_2 import ItemsDataExtractor
+    from the_escapists.two import ItemsDataExtractor
 
     context = click.get_current_context()
 
