@@ -1,1 +1,3 @@
 User-agent: *
+Allow: /
+Sitemap: https://craft-n-escape.com/sitemap.xml
