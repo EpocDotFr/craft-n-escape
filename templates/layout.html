@@ -41,7 +41,7 @@
 
     <meta name="google-site-verification" content="5SnehkHAbGot_8LRmf-bSQMV__hduhMrTPLgTEXBCGQ" />
 </head>
-<body class="man pls prs pbs">
+<body class="man pls prs pbs" itemscope itemtype="http://schema.org/WebSite">
     <header class="mbs center">
         <div>
             <div class="content pas">
@@ -85,7 +85,10 @@
 
     {% block content %} {% endblock %}
 
-    <footer class="w1140p center small grid txtmuted pts">
+    <footer class="w1140p center small grid txtmuted pts" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="Craft N' Escape">
+        <meta itemprop="url" content="https://craft-n-escape.com/">
+
         <div>
             © 2017 - 2018 <a href="https://epoc.fr"><img src="{{ url_for('static', filename='images/me.png') }}"></a> <a href="https://epoc.fr">Maxime "Epoc" G.</a><br>
             This site is not affiliated with Mouldy Toof Studios / Team17 Digital.<br>
