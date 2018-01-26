@@ -1,4 +1,4 @@
-from flask import request, g, make_response, render_template, abort
+from flask import g, make_response, render_template, abort
 from werkzeug.exceptions import HTTPException
 from cne import app
 import os
@@ -15,29 +15,6 @@ def check_under_maintenance():
         g.UNDER_MAINTENANCE = True
 
         abort(503)
-
-
-@app.url_defaults
-def hashed_static_file(endpoint, values):
-    """Add a cache-buster value in the URL of each static assets."""
-    if endpoint == 'static':
-        filename = values.get('filename')
-
-        if filename:
-            blueprint = request.blueprint
-
-            if '.' in endpoint:
-                blueprint = endpoint.rsplit('.', 1)[0]
-
-            static_folder = app.static_folder
-
-            if blueprint and app.blueprints[blueprint].static_folder:
-                static_folder = app.blueprints[blueprint].static_folder
-
-            fp = os.path.join(static_folder, filename)
-
-            if os.path.exists(fp):
-                values[int(os.stat(fp).st_mtime)] = ''
 
 
 @app.errorhandler(401)

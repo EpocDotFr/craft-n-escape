@@ -1,4 +1,5 @@
 from logging.handlers import RotatingFileHandler
+from flask_assets import Environment, Bundle
 from flask_caching import Cache
 from flask import Flask
 import logging
@@ -20,6 +21,13 @@ app.config['RECIPES_FILE'] = 'storage/data/{game_version}/recipes.json'
 app.config['ESCAPISTS_WIKI_DOMAIN'] = 'theescapists.gamepedia.com'
 
 cache = Cache(app)
+assets = Environment(app)
+
+assets.cache = 'storage/webassets-cache/'
+
+assets.register('js_home', Bundle('js/common.js', 'js/home.js', filters='jsmin', output='js/home.min.js'))
+assets.register('js_recipes_editor', Bundle('js/common.js', 'js/recipes_editor.js', filters='jsmin', output='js/recipes_editor.min.js'))
+assets.register('css_app', Bundle('css/app.css', filters='cssutils', output='css/app.min.css'))
 
 handler = RotatingFileHandler('storage/logs/errors.log', maxBytes=10000000, backupCount=2)
 handler.setLevel(logging.WARNING)

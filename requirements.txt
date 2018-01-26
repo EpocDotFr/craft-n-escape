@@ -1,2 +1,5 @@
 flask
 Flask-Caching
+Flask-Assets
+jsmin
+cssutils

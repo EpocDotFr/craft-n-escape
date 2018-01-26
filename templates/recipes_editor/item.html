@@ -77,10 +77,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script>
         Vue.config.silent = {{ 'false' if config['DEBUG'] else 'true' }};
-        Vue.config.productionTip = false;
 
         items = {{ items|tojson }};
         current_recipe = {{ current_recipe|tojson }};
     </script>
-    <script src="{{ url_for('static', filename='js/recipes_editor.js') }}"></script>
+    {% assets 'js_recipes_editor' %}<script src="{{ ASSET_URL }}"></script>{% endassets %}
 {% endblock %}
