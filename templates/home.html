@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 
+{% block meta_title %}{{ game_name }}{% endblock %}
+
 {% block content %}
     <div id="app">
         <div v-show="loading" class="txtcenter bigger"><i class="fa fa-cog fa-spin"></i> Loading...</div>
