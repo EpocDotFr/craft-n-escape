@@ -35,6 +35,9 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 
+    <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('static', filename='opensearch_te1.xml') }}" title="Item search: The Escapists 1">
+    <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('static', filename='opensearch_te2.xml') }}" title="Item search: The Escapists 2">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.rawgit.com/alsacreations/KNACSS/6.1.2/css/knacss.css">
     {% assets 'css_app' %}<link rel="stylesheet" href="{{ ASSET_URL }}">{% endassets %}
@@ -91,7 +94,7 @@
         <meta itemprop="logo" content="{{ url_for('static', filename='images/the_escapists_icon.png', _external=True) }}">
 
         <div>
-            © 2017 - 2018 <a href="https://epoc.fr"><img src="{{ url_for('static', filename='images/me.png') }}"></a> <a href="https://epoc.fr">Maxime "Epoc" G.</a><br>
+            © 2017 - 2018 <a href="https://epoc.fr"><img src="{{ url_for('static', filename='images/epoc.png') }}"></a> <a href="https://epoc.fr">Maxime "Epoc" G.</a><br>
             This site is not affiliated with Mouldy Toof Studios / Team17 Digital.<br>
             All The Escapists / The Escapists 2 assets © 2015 - 2018 Osumia Games.
         </div>

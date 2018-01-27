@@ -78,7 +78,7 @@ var app = new Vue({
         game_version: game_version,
         escapistsWikiSearch: 'http://' + ESCAPISTS_WIKI_DOMAIN + '/Special:Search/',
         filters: {
-            name: '',
+            name: item_name_search,
             found_in_map: '',
             is_buyable: false,
             can_be_offered: false,

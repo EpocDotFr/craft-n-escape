@@ -9,9 +9,11 @@
                     <fieldset class="man ptn">
                         <legend><i class="fa fa-filter"></i> Filters <a href="#" title="Clear all filters" @click.prevent="clearAllFilters()"><i class="fa fa-eraser"></i></a></legend>
 
-                        <div class="grid-3 has-gutter mts">
+                        <div class="grid-3 has-gutter mts" itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction">
+                            <meta itemprop="target" content="{{ home_link }}?item_name={item_name}"/>
+
                             <div>
-                                <label>Name <input type="text" v-model="filters.name"></label>
+                                <label>Name <input type="text" v-model="filters.name" name="item_name" itemprop="query-input"></label>
                                 <a href="#" title="Clear this filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a>
                             </div>
 
@@ -218,6 +220,8 @@
         game_version = {{ game_version }};
 
         ESCAPISTS_WIKI_DOMAIN = '{{ config['ESCAPISTS_WIKI_DOMAIN'] }}';
+
+        item_name_search = '{{ request.args.get('item_name', '') }}';
     </script>
     {% assets 'js_home' %}<script src="{{ ASSET_URL }}"></script>{% endassets %}
 {% endblock %}
