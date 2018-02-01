@@ -27,7 +27,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {% if game_name %}
-        <meta name="description" content="Items and crafting recipes for {{ game_name }}, on one filterable page. Because everyone loves it when a plan comes together">
+        <meta name="description" content="Items and crafting recipes for {{ game_name }}, on one filterable page. Because everyone loves it when a plan comes together.">
     {% endif %}
 
     <title>{% block meta_title %}{% endblock %}{% if self.meta_title() | trim %} • {% endif %}Craft N' Escape</title>
@@ -35,7 +35,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Craft N' Escape">
     <meta property="og:title" content="{{ self.meta_title() }}">
-    <meta property="og:description" content="Items and crafting recipes for {{ game_name }}, on one filterable page. Because everyone loves it when a plan comes together">
+    <meta property="og:description" content="Items and crafting recipes for {{ game_name }}, on one filterable page. Because everyone loves it when a plan comes together.">
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
