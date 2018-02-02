@@ -118,12 +118,11 @@ fieldset {
 /************************************************************************
  * Header */
 
-header,
-header .content {
+header {
    display: table;
 }
 
-header .content {
+header {
     border-left: 0.1rem solid #34457e;
     border-right: 0.1rem solid #34457e;
     border-bottom: 0.1rem solid #34457e;
@@ -133,17 +132,21 @@ header .content {
 }
 
 header > *,
-header .content > * {
+header .left > * {
     display: table-cell;
     vertical-align: middle;
 }
 
-header .content h1 {
+header .left {
+    border-right: .1rem solid #34457e;
+}
+
+header .left h1 {
     font-family: monospace, monospace;
 }
 
-header .content a,
-header .content a:hover {
+header .left a,
+header .left a:hover {
     text-decoration: none;
 }
 
