@@ -125,7 +125,7 @@ For more information, I suggest you do dive into the code starting with the `cne
 
 ## Credits
 
-  - Icon by [Matthew McClintock](https://www.iconfinder.com/icons/34703/beos_customize_wrench_icon) (Design Science License)
+  - Logo by [Matthew McClintock](https://www.iconfinder.com/icons/34703/beos_customize_wrench_icon) (Design Science License)
   - All The Escapists / The Escapists 2 assets © 2015 - 2018 Mouldy Toof Studios / Team17 Digital
   - This project is not affiliated with Mouldy Toof Studios / Team17 Digital
 
