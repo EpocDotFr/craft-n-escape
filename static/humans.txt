@@ -1,5 +1,7 @@
 
-   Craft N' Escape was created and is maintained by
+               Craft N' Escape
+
+        was created and is maintained by
 
                      `-::---...```
                    `.+sssssssyyyysssso.
@@ -27,13 +29,17 @@
                        `-oooo/:.`
                          `.`
 
-                 Maxime "Epoc". G.
+               Maxime "Epoc". G.
 
-                  https://epoc.fr
-                    (in french)
+                https://epoc.fr
 
-  This website and some of its data is open-source:
-     https://github.com/EpocDotFr/craft-n-escape
+        Found a problem? Got a suggestion?
+ This website and some of its data is open-source:
+   https://github.com/EpocDotFr/craft-n-escape
 
-          Found an problem? Any suggestion?
- Feel free to open an issue or create a pull request.
+Feel free to open an issue or create a pull request.
+
+        More credits can be found here:
+https://github.com/EpocDotFr/craft-n-escape#credits
+
+Steam Discussions topic: https://steamcommunity.com/app/298630/discussions/0/1471968797464250630/
