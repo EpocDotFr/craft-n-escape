@@ -12,11 +12,11 @@
                         <legend><i class="fa fa-filter"></i> Filters <a href="#" title="Clear all filters" @click.prevent="clearAllFilters()"><i class="fa fa-eraser"></i></a></legend>
 
                         <div class="grid-3 has-gutter mts" itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction">
-                            <meta itemprop="target" content="{{ home_link }}?item_name={item_name}"/>
+                            <meta itemprop="target" content="{{ home_link }}?name_or_id={name_or_id}"/>
 
                             <div>
-                                <label>Name <input type="text" v-model="filters.name" name="item_name" itemprop="query-input"></label>
-                                <a href="#" title="Clear this filter" @click.prevent="filters.name = ''"><i class="fa fa-eraser"></i></a>
+                                <label>Name or ID <input type="text" v-model="filters.name_or_id" name="name_or_id" itemprop="query-input"></label>
+                                <a href="#" title="Clear this filter" @click.prevent="filters.name_or_id = ''"><i class="fa fa-eraser"></i></a>
                             </div>
 
                             {% if game_version == 1 %}

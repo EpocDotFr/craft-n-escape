@@ -78,7 +78,7 @@ var app = new Vue({
         game_version: game_version,
         escapistsWikiSearch: 'http://' + ESCAPISTS_WIKI_DOMAIN + '/Special:Search/',
         filters: {
-            name: item_name_search,
+            name_or_id: item_name_search,
             found_in_map: '',
             is_buyable: false,
             can_be_offered: false,
@@ -199,10 +199,10 @@ var app = new Vue({
             var filtered_items = [];
 
             _.each(this.items, function(item, item_id) {
-                var name = found_in_map = is_buyable = can_be_offered = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = is_illegal = can_i_craft = true;
+                var name_or_id = found_in_map = is_buyable = can_be_offered = can_heal = can_hurt = can_dig = can_chop = can_unscrew = can_cut = is_carried = is_in_desks = can_disrupt_cameras = is_outfit = is_craftable = is_illegal = can_i_craft = true;
 
-                if (('name' in item) && this.filters.name) {
-                    name = item.name.toLowerCase().indexOf(this.filters.name.toLowerCase()) !== -1;
+                if (this.filters.name_or_id) {
+                    name_or_id = item_id == this.filters.name_or_id || (('name' in item) ? item.name.toLowerCase().indexOf(this.filters.name_or_id.toLowerCase()) !== -1 : false);
                 }
 
                 if (this.filters.found_in_map) {
@@ -267,7 +267,7 @@ var app = new Vue({
                     is_craftable = ('craft' in item);
                 }
 
-                if (name && found_in_map && is_buyable && can_be_offered && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && is_illegal && can_i_craft) {
+                if (name_or_id && found_in_map && is_buyable && can_be_offered && can_heal && can_hurt && can_dig && can_chop && can_unscrew && can_cut && is_carried && is_in_desks && can_disrupt_cameras && is_outfit && is_craftable && is_illegal && can_i_craft) {
                     item.id = item_id; // The item ID is the this.items key but does not exist in the item object itself. So add it manually
 
                     filtered_items.push(item);
@@ -281,7 +281,7 @@ var app = new Vue({
     },
     methods: {
         clearAllFilters: function() {
-            this.filters.name = '';
+            this.filters.name_or_id = '';
             this.filters.found_in_map = '';
             this.filters.is_buyable = false;
             this.filters.can_be_offered = false;
