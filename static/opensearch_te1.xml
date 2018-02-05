@@ -3,6 +3,6 @@
 	<Description>Craft N' Escape The Escapists 1 item search</Description>
 	<InputEncoding>UTF-8</InputEncoding>
 	<Image width="16" height="16" type="image/x-icon">https://craft-n-escape.com/favicon.ico</Image>
-	<Url type="text/html" method="get" template="https://craft-n-escape.com/?name_or_id={searchTerms}"/>
+	<Url type="text/html" method="get" template="https://craft-n-escape.com/?item_name_or_id={searchTerms}"/>
 	<moz:SearchForm>https://craft-n-escape.com/</moz:SearchForm>
 </OpenSearchDescription>
