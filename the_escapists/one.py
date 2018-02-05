@@ -1,10 +1,11 @@
-from collections import OrderedDict
-from configparser import ConfigParser
-from mss.windows import MSS as mss
 from ctypes.wintypes import RECT, DWORD
+from configparser import ConfigParser
+from collections import OrderedDict
+from mss.windows import MSS as mss
+from slugify import slugify
 from hashlib import md5
-from PIL import Image
 from time import sleep
+from PIL import Image
 import ctypes
 import os
 
@@ -40,12 +41,14 @@ class ItemsDataParser:
         items_parser.read_string(items_file_content)
 
         for item_id in items_parser.sections():
-            items[item_id] = {}
+            items[item_id] = OrderedDict()
 
             for name, value in items_parser.items(item_id):
                 value = self._get_item_attribute_value(name, value)
 
                 items[item_id][name] = value
+
+            items[item_id]['name_slug'] = slugify(items[item_id]['name'])
 
         return items
 
@@ -62,7 +65,7 @@ class ItemsDataParser:
 
     def _parse_craft_attribute_value(self, value):
         """Get the item's craft attribute."""
-        craft = {}
+        craft = OrderedDict()
 
         intelligence, recipe = value.split('_', maxsplit=1)
 

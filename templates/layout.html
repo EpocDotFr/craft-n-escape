@@ -1,4 +1,4 @@
-{% if game_version == 1 %}
+{% if not game_version or game_version == 1 %}
     {% set home_link = url_for('home') %}
     {% set game_name = 'The Escapists' %}
     {% set game_logo = 'the_escapists_logo.png' %}
@@ -6,7 +6,6 @@
 
     {% set home_switch_link = url_for('home', game_version=2) %}
     {% set game_switch_name = 'The Escapists 2' %}
-    {% set canonical_url = url_for('home', _external=True) %}
 {% elif game_version == 2 %}
     {% set home_link = url_for('home', game_version=2) %}
     {% set game_name = 'The Escapists 2' %}
@@ -15,11 +14,6 @@
 
     {% set home_switch_link = url_for('home') %}
     {% set game_switch_name = 'The Escapists' %}
-    {% set canonical_url = url_for('home', game_version=2, _external=True) %}
-{% else %}
-    {% set home_link = url_for('home') %}
-    {% set game_icon = 'the_escapists_icon.png' %}
-    {% set canonical_url = url_for('home', _external=True) %}
 {% endif %}
 <!DOCTYPE html>
 <html lang="en">
@@ -29,16 +23,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {% if game_name %}
-        <meta name="description" content="Items and crafting recipes for {{ game_name }}, on one filterable page. Because everyone loves it when a plan comes together.">
-    {% endif %}
+    <meta name="description" content="{% block meta_description %}Items and crafting recipes for {{ game_name }}, on one filterable page. Because everyone loves it when a plan comes together.{% endblock %}">
 
     <title>{% block meta_title %}{% endblock %}{% if self.meta_title() | trim %} • {% endif %}Craft N' Escape</title>
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Craft N' Escape">
     <meta property="og:title" content="{{ self.meta_title() }}">
-    <meta property="og:description" content="Items and crafting recipes for {{ game_name }}, on one filterable page. Because everyone loves it when a plan comes together.">
+    <meta property="og:description" content="{{ self.meta_description() }}">
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />

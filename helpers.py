@@ -1,7 +1,7 @@
 from collections import OrderedDict
+from flask import request, url_for
 from urllib.parse import urlparse
 from cne import app, cache
-from flask import request
 from glob import glob
 import json
 import os
@@ -15,7 +15,9 @@ __all__ = [
     'get_items_with_recipe',
     'get_items_for_recipes_editor',
     'merge_recipe_items_in_items',
-    'merge_images_in_items'
+    'merge_images_in_items',
+    'get_item_by_id',
+    'set_items_permalink'
 ]
 
 
@@ -98,5 +100,24 @@ def merge_images_in_items(items, images):
     for item_id, item in items.items():
         if item_id in images:
             item['_img_ext'] = images[item_id]
+
+    return items
+
+
+def get_item_by_id(items, id):
+    id = str(id)
+
+    for item_id, item in items.items():
+        if id == item_id:
+            item['id'] = item_id
+
+            return item
+
+    return None
+
+
+def set_items_permalink(items, game_version):
+    for item_id, item in items.items():
+        item['permalink'] = url_for('home', game_version=None if game_version == 1 else game_version, item_id=item_id, item_slug=item['name_slug'])
 
     return items
