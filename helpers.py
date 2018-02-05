@@ -105,8 +105,12 @@ def merge_images_in_items(items, images):
 
 
 def get_item_by_id(items, id):
+    id = str(id)
+
     for item_id, item in items.items():
         if id == item_id:
+            item['id'] = item_id
+
             return item
 
     return None

@@ -1,10 +1,16 @@
 {% extends 'layout.html' %}
 
-{% block meta_title %}{{ game_name }} items{% endblock %}
+{% block meta_title %}{{ game_name }} items{{ ' › ' + permalink_item.name if permalink_item }}{% endblock %}
 
-{% block meta_description %}{% endblock %}
+{% block meta_description -%}
+    {% if permalink_item -%}
+        Details and crafting recipes for the {{ permalink_item.name.lower() }} item in {{ game_name }}.
+    {%- else -%}
+        {{ super() }}
+    {%- endif %}
+{%- endblock %}
 
-{% set canonical_url = url_for('home', game_version=None if game_version == 1 else game_version, item_id=permalink_item.item_id if permalink_item else None, item_slug=permalink_item.name_slug if permalink_item else None, _external=True) %}
+{% set canonical_url = url_for('home', game_version=None if game_version == 1 else game_version, item_id=permalink_item.id if permalink_item else None, item_slug=permalink_item.name_slug if permalink_item else None, _external=True) %}
 
 {% block content %}
     <div id="app">
@@ -231,7 +237,7 @@
 
         ESCAPISTS_WIKI_DOMAIN = '{{ config['ESCAPISTS_WIKI_DOMAIN'] }}';
 
-        item_name_or_id = '{{ permalink_item.item_id if permalink_item else request.args.get('item_name_or_id', '') }}';
+        item_name_or_id = '{{ permalink_item.id if permalink_item else request.args.get('item_name_or_id', '') }}';
     </script>
     {% assets 'js_home' %}<script src="{{ ASSET_URL }}"></script>{% endassets %}
 {% endblock %}

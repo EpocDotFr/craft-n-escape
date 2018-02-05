@@ -1,4 +1,4 @@
-{% if game_version == 1 or not game_version %}
+{% if not game_version or game_version == 1 %}
     {% set home_link = url_for('home') %}
     {% set game_name = 'The Escapists' %}
     {% set game_logo = 'the_escapists_logo.png' %}
