@@ -2,3 +2,4 @@ Pillow
 mss
 unitypack
 Pillow
+python-slugify

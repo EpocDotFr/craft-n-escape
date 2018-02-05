@@ -2,6 +2,10 @@
 
 {% block meta_title %}{{ game_name }} items{% endblock %}
 
+{% block meta_description %}{% endblock %}
+
+{% set canonical_url = url_for('home', game_version=None if game_version == 1 else game_version, item_id=permalink_item.item_id if permalink_item else None, item_slug=permalink_item.name_slug if permalink_item else None, _external=True) %}
+
 {% block content %}
     <div id="app">
         <div v-show="loading" class="txtcenter bigger"><i class="fa fa-cog fa-spin"></i> Loading...</div>
@@ -105,6 +109,8 @@
                                 <th><a href="http://theescapists.gamepedia.com/Fatigue">Fatigue</a> decrease<br><small>when eat</small></th>
                                 <th>Camera disruption<br><small>in seconds</small></th>
                             {% endif %}
+
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,6 +179,8 @@
                                 <td><template v-if="item.fat">-${ item.fat }</template></td>
                                 <td><template v-if="item.camdis">${ item.camdis / 1000 }</template></td>
                             {% endif %}
+
+                            <td><a :href="item.permalink" :title="'Permalink to the ' + item.name +' item'"><i class="fa fa-link"></i></a></td>
                         </tr>
                         <tr v-show="_.isEmpty(filteredItems)">
                             <td colspan="18" class="txtcenter"><div class="alert info pas">Nothing to display.</div></td>
@@ -223,7 +231,7 @@
 
         ESCAPISTS_WIKI_DOMAIN = '{{ config['ESCAPISTS_WIKI_DOMAIN'] }}';
 
-        item_name_or_id = '{{ request.args.get('item_name_or_id', '') }}';
+        item_name_or_id = '{{ permalink_item.item_id if permalink_item else request.args.get('item_name_or_id', '') }}';
     </script>
     {% assets 'js_home' %}<script src="{{ ASSET_URL }}"></script>{% endassets %}
 {% endblock %}

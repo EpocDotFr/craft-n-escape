@@ -4,18 +4,28 @@ from cne import app
 
 
 @app.route('/')
+@app.route('/<int:item_id>-<item_slug>')
 @app.route('/<int:game_version>')
-def home(game_version=1):
+@app.route('/<int:game_version>/<int:item_id>-<item_slug>')
+def home(game_version=1, item_id=None, item_slug=None):
     items = load_json(app.config['ITEMS_FILE'].format(game_version=game_version))
     recipes = load_json(app.config['RECIPES_FILE'].format(game_version=game_version))
 
     items = merge_recipe_items_in_items(items, recipes)
+    items = set_items_permalink(items, game_version=game_version)
 
     if game_version == 1:
         images = get_images(game_version=game_version)
         items = merge_images_in_items(items, images)
 
-    return render_template('home.html', items=items, game_version=game_version)
+    permalink_item = get_item_by_id(items, item_id) if item_id else None
+
+    return render_template(
+        'home.html',
+        items=items,
+        game_version=game_version,
+        permalink_item=permalink_item
+    )
 
 
 @app.route('/recipes-editor')
@@ -38,7 +48,10 @@ def recipes_editor():
         images = get_images(game_version=game_version)
         items = merge_images_in_items(items, images)
 
-    return render_template('recipes_editor/home.html', items=items)
+    return render_template(
+        'recipes_editor/home.html',
+        items=items
+    )
 
 
 @app.route('/recipes-editor/<item_id>', methods=['GET', 'POST'])
