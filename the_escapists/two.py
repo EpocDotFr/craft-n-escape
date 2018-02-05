@@ -1,6 +1,7 @@
 from unitypack.utils import BinaryReader
 from collections import OrderedDict
 from unitypack.asset import Asset
+from slugify import slugify
 from glob import glob
 import os
 
@@ -113,6 +114,7 @@ class ItemsDataExtractor:
         self._pad(buf, locale_id)
 
         item['name'] = self._get_localization(locale_id)
+        item['name_slug'] = slugify(item['name'])
 
         buf.read_int() # ItemHealth
 

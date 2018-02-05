@@ -4,7 +4,7 @@
 
 {% block meta_description -%}
     {% if permalink_item -%}
-        Details and crafting recipes for the {{ permalink_item.name.lower() }} item in {{ game_name }}.
+        Details and crafting recipes for the {{ permalink_item.name }} item in {{ game_name }}.
     {%- else -%}
         {{ super() }}
     {%- endif %}
