@@ -18,7 +18,7 @@ def home(game_version=1, item_id=None, item_slug=None):
         images = get_images(game_version=game_version)
         items = merge_images_in_items(items, images)
 
-    permalink_item = get_item_by_id(items, item_id) if item_id else None
+    permalink_item = get_item_by_id(items, item_id) if item_id is not None else None
 
     return render_template(
         'home.html',

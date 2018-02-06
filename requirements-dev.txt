@@ -3,3 +3,4 @@ mss
 unitypack
 Pillow
 python-slugify
+lxml
