@@ -1,4 +1,3 @@
-from lxml import etree
 from helpers import *
 from cne import app
 import click
@@ -86,6 +85,8 @@ def te2_extract_items_data(gamedir, datadir):
 @app.cli.command()
 def generate_sitemap():
     """Generate the sitemap.xml file."""
+    from lxml import etree
+
     click.echo('Generation started')
 
     sitemap_entries = [
