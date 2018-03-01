@@ -12,6 +12,8 @@
 
 {% set canonical_url = url_for('home', game_version=None if game_version == 1 else game_version, item_id=permalink_item.id if permalink_item else None, item_slug=permalink_item.name_slug if permalink_item else None, _external=True) %}
 
+{% set meta_image = url_for('static', filename='images/items/{game_version}/{item_id}{ext}'.format(game_version=game_version, item_id=permalink_item.id, ext=permalink_item._img_ext), _external=True) if permalink_item %}
+
 {% block content %}
     <div id="app">
         <div v-show="loading" class="txtcenter bigger"><i class="fa fa-cog fa-spin"></i> Loading...</div>
