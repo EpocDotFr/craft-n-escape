@@ -1,4 +1,4 @@
 SECRET_KEY = 'secretkeyhere'
-DEBUG = False
+ENV = 'production'
 GAUGES_SITE_ID = None
 CACHE_THRESHOLD = 200
