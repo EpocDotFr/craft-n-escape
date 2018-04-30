@@ -1,4 +1,4 @@
-from flask import g, make_response, render_template, abort
+from flask import g, make_response, render_template, abort, request
 from werkzeug.exceptions import HTTPException
 from cne import app
 import os
@@ -6,12 +6,13 @@ import os
 
 @app.before_request
 def define_globals():
-    g.UNDER_MAINTENANCE = False
+    if request.endpoint != 'static':
+        g.UNDER_MAINTENANCE = False
 
 
 @app.before_request
 def check_under_maintenance():
-    if os.path.exists('maintenance'):
+    if request.endpoint != 'static' and os.path.exists('maintenance'):
         g.UNDER_MAINTENANCE = True
 
         abort(503)
