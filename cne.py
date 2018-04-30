@@ -12,7 +12,6 @@ import logging
 app = Flask(__name__, static_url_path='')
 app.config.from_pyfile('config.py')
 
-app.config['LOGGER_HANDLER_POLICY'] = 'production'
 app.config['CACHE_TYPE'] = 'filesystem'
 app.config['CACHE_DIR'] = 'storage/cache'
 app.config['ITEMS_IMAGES_DIR'] = 'static/images/items/{game_version}'
