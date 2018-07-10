@@ -28,6 +28,7 @@
     <title>{% block meta_title %}{% endblock %}{% if self.meta_title() | trim %} • {% endif %}Craft N' Escape</title>
 
     <meta property="og:type" content="website">
+    {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}">{% endif %}
     <meta property="og:site_name" content="Craft N' Escape">
     <meta property="og:title" content="{{ self.meta_title() }}">
     <meta property="og:description" content="{{ self.meta_description() }}">
