@@ -69,7 +69,7 @@ You'll probably have to hack with this application to make it work with one of t
 
 ### Update Craft N' Escape
 
-`sh scripts/cne_updater.sh`
+`bash scripts/cne_updater.sh`
 
 ### Extracting items data
 
