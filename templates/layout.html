@@ -40,6 +40,8 @@
     <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('static', filename='opensearch_te1.xml') }}" title="Item search: The Escapists 1">
     <link rel="search" type="application/opensearchdescription+xml" href="{{ url_for('static', filename='opensearch_te2.xml') }}" title="Item search: The Escapists 2">
 
+    <link rel="author" href="{{ url_for('static', filename='humans.txt') }}" />
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.rawgit.com/alsacreations/KNACSS/6.1.2/css/knacss.css">
     {% assets 'css_app' %}<link rel="stylesheet" href="{{ ASSET_URL }}">{% endassets %}
