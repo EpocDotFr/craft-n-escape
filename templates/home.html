@@ -15,6 +15,10 @@
 {% set meta_image = url_for('static', filename='images/items/{game_version}/{item_id}{ext}'.format(game_version=game_version, item_id=permalink_item.id, ext=permalink_item._img_ext), _external=True) if permalink_item and game_version == 1 %}
 
 {% block content %}
+    {%- if game_version == 2 -%}
+        <div class="alert info pas mtm mbm w600p center txtcenter pas"><i class="fa fa-info-circle"></i> The items list shown below is <strong>out of date</strong> in addition of The Escapists 2 support being very limited at this moment.</div>
+    {%- endif -%}
+
     <div id="app">
         <div v-show="loading" class="txtcenter bigger"><i class="fa fa-cog fa-spin"></i> Loading...</div>
         <div v-cloak>
