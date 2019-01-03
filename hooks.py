@@ -1,5 +1,6 @@
 from flask import g, make_response, render_template, abort
 from werkzeug.exceptions import HTTPException
+from datetime import datetime
 from cne import app
 import os
 
@@ -15,6 +16,11 @@ def check_under_maintenance():
         g.UNDER_MAINTENANCE = True
 
         abort(503)
+
+
+@app.context_processor
+def inject_current_year():
+    return {'current_year': datetime.now().year}
 
 
 @app.errorhandler(401)
