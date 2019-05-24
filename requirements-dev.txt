@@ -5,3 +5,5 @@ unitypack
 Pillow
 python-slugify
 lxml
+flask-debugtoolbar
+python-dotenv

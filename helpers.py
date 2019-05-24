@@ -21,7 +21,7 @@ __all__ = [
 ]
 
 
-def is_local():
+def is_local(): # TODO Replace by env name check
     url = urlparse(request.url_root)
 
     if url.hostname != 'localhost':

@@ -1,3 +1,10 @@
+try:
+    from flask_debugtoolbar import DebugToolbarExtension
+
+    has_debug_toolbar_ext = True
+except ImportError:
+    has_debug_toolbar_ext = False
+
 from logging.handlers import RotatingFileHandler
 from flask_assets import Environment, Bundle
 from flask_caching import Cache
@@ -21,6 +28,9 @@ app.config['ESCAPISTS_WIKI_DOMAIN'] = 'theescapists.gamepedia.com'
 
 cache = Cache(app)
 assets = Environment(app)
+
+if has_debug_toolbar_ext:
+    toolbar = DebugToolbarExtension(app)
 
 assets.cache = 'storage/webassets-cache/'
 
