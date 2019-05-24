@@ -74,7 +74,7 @@
         {% endif %}
     </header>
 
-    {% if is_local() %}
+    {% if config['ENV'] == 'development' %}
         <div class="txtcenter">
             <a href="{{ url_for('recipes_editor') }}">Recipes editor</a>
         </div>

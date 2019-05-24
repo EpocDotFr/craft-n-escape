@@ -30,7 +30,7 @@ def home(game_version=1, item_id=None, item_slug=None):
 
 @app.route('/recipes-editor')
 def recipes_editor():
-    if not is_local(): # Can only edit crafting recipes locally
+    if not app.config['ENV'] == 'development': # Can only edit crafting recipes locally
         abort(404)
 
     game_version = 1 # TODO
@@ -56,7 +56,7 @@ def recipes_editor():
 
 @app.route('/recipes-editor/<item_id>', methods=['GET', 'POST'])
 def recipes_editor_item(item_id):
-    if not is_local(): # Can only edit crafting recipes locally
+    if not app.config['ENV'] == 'development': # Can only edit crafting recipes locally
         abort(404)
 
     game_version = 1 # TODO

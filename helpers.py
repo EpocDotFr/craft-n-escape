@@ -1,14 +1,12 @@
 from collections import OrderedDict
-from flask import request, url_for
-from urllib.parse import urlparse
 from cne import app, cache
+from flask import url_for
 from glob import glob
 import json
 import os
 
 
 __all__ = [
-    'is_local',
     'get_images',
     'load_json',
     'save_json',
@@ -19,15 +17,6 @@ __all__ = [
     'get_item_by_id',
     'set_items_permalink'
 ]
-
-
-def is_local(): # TODO Replace by env name check
-    url = urlparse(request.url_root)
-
-    if url.hostname != 'localhost':
-        return False
-
-    return True
 
 
 @cache.cached(timeout=60 * 60 * 6, key_prefix='te1_items_images')

@@ -46,8 +46,6 @@ app.logger.addHandler(handler)
 
 from helpers import *
 
-app.jinja_env.globals.update(is_local=is_local)
-
 
 # -----------------------------------------------------------
 # After-init imports
