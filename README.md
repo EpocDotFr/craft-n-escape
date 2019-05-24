@@ -29,7 +29,8 @@ _Because everyone loves it when a plan comes together_
 ## Installation
 
   1. Clone this repo somewhere
-  2. `pip install -r requirements.txt`
+  2. Copy `.env.local` to `.env`
+  3. `pip install -r requirements-dev.txt`
 
 ## Configuration
 
@@ -39,10 +40,9 @@ Available configuration parameters are:
 
   - `SECRET_KEY` Set this to a complex random value
 
-More informations about Flask config values can be found [here](http://flask.pocoo.org/docs/1.0/config/#builtin-configuration-values).
+More informations on the one above can be found [here](http://flask.pocoo.org/docs/1.0/config/#builtin-configuration-values).
 
   - `GAUGES_SITE_ID` A [Gauges](https://gaug.es/) site ID used to track visits on Craft N' Escape (optional)
-  - `CACHE_THRESHOLD` The maximum number of items the cache will store before it starts deleting some (see [here](https://pythonhosted.org/Flask-Cache/#configuring-flask-cache) for more configuration parameters related to Flask-Cache)
 
 I'll let you search yourself about how to configure a web server along uWSGI.
 
@@ -53,7 +53,7 @@ I'll let you search yourself about how to configure a web server along uWSGI.
 Run the internal web server, which will be accessible at `http://localhost:8080`:
 
 ```
-python local.py
+flask run
 ```
 
 Edit this file and change the interface/port as needed.
@@ -69,19 +69,23 @@ You'll probably have to hack with this application to make it work with one of t
 
 ### Update Craft N' Escape
 
-`bash scripts/cne_updater.sh`
+More information in the script comments.
+
+```
+bash scripts/cne_updater.sh [TYPE, default=fast, fast|full]
+```
 
 ### Extracting items data
 
 #### The Escapists 1
 
-The Flask command `flask te1_extract_items_data` is used to regenerate the items listing file, i.e when the game has been
+The Flask command `flask te1-extract-items-data` is used to regenerate the items listing file, i.e when the game has been
 updated.
 
 **This command only works on Windows**, and requires the game to be installed.
 
   1. `set FLASK_APP=cne.py`
-  2. `flask te1_extract_items_data --gamedir="{path to the game root directory}"`
+  2. `flask te1-extract-items-data --gamedir="{path to the game root directory}"`
 
 #### The Escapists 2
 
@@ -91,14 +95,14 @@ updated.
 
 #### The Escapists 1
 
-The Flask command `flask te1_extract_items_image` is used to extract items images from the game itself.
+The Flask command `flask te1-extract-items-image` is used to extract items images from the game itself.
 
 **This command only works on Windows**, and requires the game to be already running in any map without any internal game
 window opened. The game's window must be visible at all times, and must not be moved or resized.
 
   1. `pip install -r requirements-dev.txt`
   2. `set FLASK_APP=cne.py`
-  3. `flask te1_extract_items_image`
+  3. `flask te1-extract-items-image`
 
 #### The Escapists 2
 
@@ -116,10 +120,10 @@ we directly use JSON as the data storage format.
 
 #### The Escapists 1
 
-  - `storage/data/1/items.json` is built by the `flask te1_extract_items_data` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
+  - `storage/data/1/items.json` is built by the `flask te1-extract-items-data` command by parsing the game's files (the `Data/items_*.dat` ones). It contains all items information.
   - `storage/data/1/recipes.json` contains all crafting recipes of the items contained in the file above. A recipes editor (only available locally at `http://localhost:8080/recipes-editor`) is used to convert The Escapists 1 crafting recipes format (simple, unformatted, non-machine friendly text) to the Craft N' Escape one (relation to items IDs).
 
-Items images are extracted using, huh, a brutal solution. Basically, the `flask te1_extract_items_image` command edit the game's
+Items images are extracted using, huh, a brutal solution. Basically, the `flask te1-extract-items-image` command edit the game's
 process memory for each existing items by assigning them in your weapon slot. A screenshot of the current weapon is then
 taken, the background is converted to a transparent one and the final image saved at `static/images/items/1/{item ID}.png`.
 
