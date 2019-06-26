@@ -1,3 +1,3 @@
 SECRET_KEY = 'secretkeyhere'
-GAUGES_SITE_ID = None
+GA_TRACKING_ID = None
 CACHE_THRESHOLD = 800
