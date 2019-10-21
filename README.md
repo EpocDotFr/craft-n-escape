@@ -5,7 +5,7 @@
 Items and crafting recipes for The Escapists [1](https://www.team17.com/games/escapists/) & [2](https://www.team17.com/games/the-escapists-2/),
 on one filterable page. Available at [craft-n-escape.com](https://craft-n-escape.com/).
 
-_Because everyone loves it when a plan comes together_
+> Because everyone loves it when a plan comes together
 
 ## Features
 
