@@ -51,7 +51,7 @@
     <meta name="google-site-verification" content="5SnehkHAbGot_8LRmf-bSQMV__hduhMrTPLgTEXBCGQ" />
 </head>
 <body class="man pls prs pbs" itemscope itemtype="http://schema.org/WebSite">
-    <meta itemprop="url" content="{{ url_for('home') }}">
+    <meta itemprop="url" content="{{ url_for('home', _external=True) }}">
     <header class="mbs center">
         <div class="left txtcenter pas">
             <div class="txtleft prs">
@@ -95,7 +95,7 @@
 
     <footer class="small grid txtmuted pts" itemscope itemtype="http://schema.org/Organization">
         <meta itemprop="name" content="Craft N' Escape">
-        <meta itemprop="url" content="https://craft-n-escape.com/">
+        <meta itemprop="url" content="{{ url_for('home', _external=True) }}">
         <meta itemprop="logo" content="{{ url_for('static', filename='images/the_escapists_icon.png', _external=True) }}">
 
         <div>
