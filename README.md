@@ -42,8 +42,6 @@ Available configuration parameters are:
 
 More informations on the one above can be found [here](http://flask.pocoo.org/docs/1.0/config/#builtin-configuration-values).
 
-  - `GA_TRACKING_ID` A Google Analytics tracking ID used to track visits on Craft N' Escape (optional)
-
 I'll let you search yourself about how to configure a web server along uWSGI.
 
 ## Usage
