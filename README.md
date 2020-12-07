@@ -65,14 +65,6 @@ The uWSGI file you'll have to set in your uWSGI configuration is `uwsgi.py`. The
 You'll probably have to hack with this application to make it work with one of the solutions described
 [here](http://flask.pocoo.org/docs/0.12/deploying/). Send me a pull request if you make it work.
 
-### Update Craft N' Escape
-
-More information in the script comments.
-
-```
-bash scripts/cne_updater.sh [TYPE, default=fast, fast|full]
-```
-
 ### Extracting items data
 
 #### The Escapists 1
