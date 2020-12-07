@@ -107,16 +107,5 @@
             <p><a href="https://theescapists.gamepedia.com/The_Escapists_Wiki" title="The Escapists Wiki"><i class="fa fa-book fa-2x fa-fw"></i></a> <a href="https://www.reddit.com/r/theescapists/" title="The Escapists on Reddit"><i class="fa fa-reddit-alien fa-2x fa-fw"></i></a> Steam: <a href="http://steamcommunity.com/app/298630">The Escapists 1</a> • <a href="http://steamcommunity.com/app/641990">The Escapists 2</a></p>
         </div>
     </footer>
-
-    {% if config['GA_TRACKING_ID'] %}
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config['GA_TRACKING_ID'] }}"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', '{{ config['GA_TRACKING_ID'] }}');
-        </script>
-    {% endif %}
 </body>
 </html>
