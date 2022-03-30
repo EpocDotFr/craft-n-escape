@@ -8,6 +8,9 @@ from cne import app
 @app.route('/<int:game_version>')
 @app.route('/<int:game_version>/<int:item_id>-<item_slug>')
 def home(game_version=1, item_id=None, item_slug=None):
+    if game_version not in (1, 2):
+        game_version = 1
+
     items = load_json(app.config['ITEMS_FILE'].format(game_version=game_version))
     recipes = load_json(app.config['RECIPES_FILE'].format(game_version=game_version))
 
