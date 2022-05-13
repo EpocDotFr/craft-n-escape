@@ -25,9 +25,15 @@ app.config['ITEMS_IMAGES_DIR'] = 'static/images/items/{game_version}'
 app.config['ITEMS_FILE'] = 'storage/data/{game_version}/items.json'
 app.config['RECIPES_FILE'] = 'storage/data/{game_version}/recipes.json'
 app.config['ESCAPISTS_WIKI_DOMAIN'] = 'theescapists.gamepedia.com'
+app.config['COMPRESS_MIN_SIZE'] = 1024
 
 cache = Cache(app)
 assets = Environment(app)
+
+if app.config['ENV'] == 'production':
+    from flask_compress import Compress
+
+    Compress(app)
 
 if has_debug_toolbar_ext:
     toolbar = DebugToolbarExtension(app)
