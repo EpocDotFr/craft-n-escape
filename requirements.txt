@@ -1,5 +1,6 @@
-flask
-Flask-Caching
-Flask-Assets
-jsmin
-cssutils
+Flask==2.2.2
+Flask-Caching==2.0.1
+Flask-Assets==2.0
+environs==9.5.0
+jsmin==3.0.1
+cssmin==0.2.0

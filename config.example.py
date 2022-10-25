@@ -1,2 +1,0 @@
-SECRET_KEY = 'secretkeyhere'
-CACHE_THRESHOLD = 800

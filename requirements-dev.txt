@@ -1,9 +1,8 @@
 -r requirements.txt
-Pillow
-mss
-unitypack
-Pillow
-python-slugify
-lxml
-flask-debugtoolbar
-python-dotenv
+Pillow==9.2.0
+mss==6.1.0
+unitypack==0.9.0
+python-slugify==6.1.2
+lxml==4.9.1
+Flask-DebugToolbar==0.13.1
+python-dotenv==0.21.0
