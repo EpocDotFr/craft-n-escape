@@ -26,11 +26,11 @@ app = Flask(__name__, static_url_path='')
 app.config.update(
     SECRET_KEY=env.str('SECRET_KEY'),
     CACHE_TYPE='filesystem',
-    CACHE_DIR='storage/cache',
+    CACHE_DIR='instance/cache',
     CACHE_THRESHOLD=env.int('CACHE_THRESHOLD', default=800),
     ITEMS_IMAGES_DIR='static/images/items/{game_version}',
-    ITEMS_FILE='storage/data/{game_version}/items.json',
-    RECIPES_FILE='storage/data/{game_version}/recipes.json',
+    ITEMS_FILE='instance/data/{game_version}/items.json',
+    RECIPES_FILE='instance/data/{game_version}/recipes.json',
     ESCAPISTS_WIKI_DOMAIN='theescapists.gamepedia.com',
     COMPRESS_MIN_SIZE=1024,
 )
@@ -46,13 +46,13 @@ if not app.config['DEBUG']:
 if has_debug_toolbar_ext:
     toolbar = DebugToolbarExtension(app)
 
-assets.cache = 'storage/webassets-cache/'
+assets.cache = 'instance/webassets-cache/'
 
 assets.register('js_home', Bundle('js/common.js', 'js/home.js', filters='jsmin', output='js/home.min.js'))
 assets.register('js_recipes_editor', Bundle('js/common.js', 'js/recipes_editor.js', filters='jsmin', output='js/recipes_editor.min.js'))
 assets.register('css_app', Bundle('css/app.css', filters='cssutils', output='css/app.min.css'))
 
-handler = RotatingFileHandler('storage/logs/errors.log', maxBytes=10000000, backupCount=2)
+handler = RotatingFileHandler('instance/logs/errors.log', maxBytes=10000000, backupCount=2)
 handler.setLevel(logging.WARNING)
 formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 handler.setFormatter(formatter)

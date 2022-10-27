@@ -1,9 +1,9 @@
 config.py
-storage/logs/*.log
-storage/logs/*.log.*
-storage/cache
-storage/webassets-cache/*
-!storage/webassets-cache/.gitkeep
+instance/logs/*.log
+instance/logs/*.log.*
+instance/cache
+instance/webassets-cache/*
+!instance/webassets-cache/.gitkeep
 maintenance
 static/js/*.min.js
 static/css/*.min.css
