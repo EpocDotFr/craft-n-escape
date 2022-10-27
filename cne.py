@@ -50,7 +50,7 @@ assets.cache = 'storage/webassets-cache/'
 
 assets.register('js_home', Bundle('js/common.js', 'js/home.js', filters='jsmin', output='js/home.min.js'))
 assets.register('js_recipes_editor', Bundle('js/common.js', 'js/recipes_editor.js', filters='jsmin', output='js/recipes_editor.min.js'))
-assets.register('css_app', Bundle('css/app.css', filters='cssmin', output='css/app.min.css'))
+assets.register('css_app', Bundle('css/app.css', filters='cssutils', output='css/app.min.css'))
 
 handler = RotatingFileHandler('storage/logs/errors.log', maxBytes=10000000, backupCount=2)
 handler.setLevel(logging.WARNING)
