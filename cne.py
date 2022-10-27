@@ -29,8 +29,8 @@ app.config.update(
     CACHE_DIR='instance/cache',
     CACHE_THRESHOLD=env.int('CACHE_THRESHOLD', default=800),
     ITEMS_IMAGES_DIR='static/images/items/{game_version}',
-    ITEMS_FILE='instance/data/{game_version}/items.json',
-    RECIPES_FILE='instance/data/{game_version}/recipes.json',
+    ITEMS_FILE='data/{game_version}/items.json',
+    RECIPES_FILE='data/{game_version}/recipes.json',
     ESCAPISTS_WIKI_DOMAIN='theescapists.gamepedia.com',
     COMPRESS_MIN_SIZE=1024,
 )
