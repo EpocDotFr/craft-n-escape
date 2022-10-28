@@ -25,9 +25,8 @@ app = Flask(__name__, static_url_path='')
 
 app.config.update(
     SECRET_KEY=env.str('SECRET_KEY'),
-    CACHE_TYPE='filesystem',
+    CACHE_TYPE='FileSystemCache',
     CACHE_DIR='instance/cache',
-    CACHE_THRESHOLD=env.int('CACHE_THRESHOLD', default=800),
     ITEMS_IMAGES_DIR='static/images/items/{game_version}',
     ITEMS_FILE='data/{game_version}/items.json',
     RECIPES_FILE='data/{game_version}/recipes.json',
