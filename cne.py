@@ -47,6 +47,10 @@ if app.config['DEBUG']:
         from flask_debugtoolbar import DebugToolbarExtension
 
         debug_toolbar = DebugToolbarExtension(app)
+
+        app.config.update(
+            DEBUG_TB_INTERCEPT_REDIRECTS=env.bool('DEBUG_TB_INTERCEPT_REDIRECTS', False)
+        )
     except ImportError:
         pass
 
@@ -57,7 +61,7 @@ try:
     compress = Compress(app)
 
     app.config.update(
-        COMPRESS_MIN_SIZE=1024
+        COMPRESS_MIN_SIZE=env.int('COMPRESS_MIN_SIZE', 512)
     )
 except ImportError:
     pass
