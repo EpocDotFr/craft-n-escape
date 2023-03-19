@@ -66,7 +66,7 @@ try:
 except ImportError:
     pass
 
-# Flask-HTMLMIN
+# Flask-HTMLmin
 try:
     from flask_htmlmin import HTMLMIN
 
