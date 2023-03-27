@@ -20,9 +20,6 @@ app.config.update(
 
     ASSETS_CACHE=env.str('ASSETS_CACHE', default='instance/webassets-cache'),
 
-    COMPRESS_REGISTER=env.bool('COMPRESS_REGISTER', default=False),
-    MINIFY_HTML=env.bool('MINIFY_HTML', default=False),
-
     # Config values that cannot be overwritten
     ITEMS_IMAGES_DIR='static/images/items/{game_version}',
     ITEMS_FILE='data/{game_version}/items.json',
@@ -61,6 +58,7 @@ try:
     compress = Compress(app)
 
     app.config.update(
+        COMPRESS_REGISTER=env.bool('COMPRESS_REGISTER', default=False),
         COMPRESS_MIN_SIZE=env.int('COMPRESS_MIN_SIZE', 512)
     )
 except ImportError:
@@ -71,6 +69,10 @@ try:
     from flask_htmlmin import HTMLMIN
 
     htmlmin = HTMLMIN(app)
+
+    app.config.update(
+        MINIFY_HTML=env.bool('MINIFY_HTML', default=False)
+    )
 except ImportError:
     pass
 
