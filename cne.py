@@ -20,6 +20,13 @@ app.config.update(
 
     ASSETS_CACHE=env.str('ASSETS_CACHE', default='instance/webassets-cache'),
 
+    DEBUG_TB_INTERCEPT_REDIRECTS=env.bool('DEBUG_TB_INTERCEPT_REDIRECTS', False),
+
+    MINIFY_HTML=env.bool('MINIFY_HTML', default=False),
+
+    COMPRESS_REGISTER=env.bool('COMPRESS_REGISTER', default=False),
+    COMPRESS_MIN_SIZE=env.int('COMPRESS_MIN_SIZE', 512),
+
     # Config values that cannot be overwritten
     ITEMS_IMAGES_DIR='static/images/items/{game_version}',
     ITEMS_FILE='data/{game_version}/items.json',
@@ -44,10 +51,6 @@ if app.config['DEBUG']:
         from flask_debugtoolbar import DebugToolbarExtension
 
         debug_toolbar = DebugToolbarExtension(app)
-
-        app.config.update(
-            DEBUG_TB_INTERCEPT_REDIRECTS=env.bool('DEBUG_TB_INTERCEPT_REDIRECTS', False)
-        )
     except ImportError:
         pass
 
@@ -56,11 +59,6 @@ try:
     from flask_compress import Compress
 
     compress = Compress(app)
-
-    app.config.update(
-        COMPRESS_REGISTER=env.bool('COMPRESS_REGISTER', default=False),
-        COMPRESS_MIN_SIZE=env.int('COMPRESS_MIN_SIZE', 512)
-    )
 except ImportError:
     pass
 
@@ -69,10 +67,6 @@ try:
     from flask_htmlmin import HTMLMIN
 
     htmlmin = HTMLMIN(app)
-
-    app.config.update(
-        MINIFY_HTML=env.bool('MINIFY_HTML', default=False)
-    )
 except ImportError:
     pass
 
