@@ -1,4 +1,4 @@
-Flask==2.2.3
+Flask==2.3.2
 Flask-Caching==2.0.2
 Flask-Assets==2.0
 environs==9.5.0
