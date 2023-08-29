@@ -32,6 +32,7 @@ app.config.update(
     ITEMS_FILE='data/{game_version}/items.json',
     RECIPES_FILE='data/{game_version}/recipes.json',
     ESCAPISTS_WIKI_DOMAIN='theescapists.gamepedia.com',
+    CACHE_THRESHOLD=10000,
 )
 
 # -----------------------------------------------------------
