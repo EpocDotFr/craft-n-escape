@@ -1,9 +1,13 @@
 # Craft N' Escape
 
+> [!IMPORTANT]
+> This project was hosted at https://craft-n-escape.com, but no longer has anything to do with the current site and owner since it
+> has shutdown. If the current site and/or its owner claim otherwise, do NOT trust them.
+
 <img src="static/images/logo.png" align="right">
 
 Items and crafting recipes for The Escapists [1](https://www.team17.com/games/escapists/) & [2](https://www.team17.com/games/the-escapists-2/),
-on one filterable page. Available at [craft-n-escape.com](https://craft-n-escape.com/).
+on one filterable page.
 
 > Because everyone loves it when a plan comes together
 
