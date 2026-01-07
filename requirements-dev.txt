@@ -1,5 +1,5 @@
 -r requirements.txt
-Pillow==10.0.1
+Pillow==10.3.0
 mss==6.1.0
 unitypack==0.9.0
 python-slugify==6.1.2
